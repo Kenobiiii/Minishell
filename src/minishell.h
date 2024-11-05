@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 19:06:45 by paromero          #+#    #+#             */
-/*   Updated: 2024/11/05 19:36:33 by paromero         ###   ########.fr       */
+/*   Updated: 2024/11/05 19:37:37 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,7 @@ typedef struct s_data
 	pid_t	pid //- Proceso hijo y padre
 	t_env	*env //- Puntero a estructuar de env
 	t_token	*tokens //- puntero a estructura de tokens
-	t_ast	*ast //- puntero a estructura ast (Abstract Syntax Tree)
-	
+	t_ast	*ast //- puntero a estructura ast (Abstract Syntax Tree)	
 }	t_data;
 
 #endif
