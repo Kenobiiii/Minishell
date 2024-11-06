@@ -7,7 +7,7 @@ CFLAGS = -Wall -Werror -Wextra
 USER = paromero
 SRC_DIR = src
 OBJ_DIR = objs
-SRCS = $(wildcard $(SRC_DIR)/*.c)
+SRCS = src/main.c #! no se permite wildcard
 OBJS = $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRCS))
 
 NAME = minishell
