@@ -6,11 +6,17 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 17:53:02 by paromero          #+#    #+#             */
-/*   Updated: 2024/11/19 18:06:18 by paromero         ###   ########.fr       */
+/*   Updated: 2024/11/19 18:16:44 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+/**
+ * TODO comprobar si Env está vacío
+ * TODO guardar SHLVL + 1
+ * TODO si env está vacío se guarda -=/usr/bin/env, PWD, SHLVL = 1
+ */
 
 t_env	*create_node(const char *valor)
 {
@@ -68,10 +74,12 @@ int	init_data(t_data *data, char **env)
 	data->cwd = getcwd(cwd, sizeof(cwd)));
 	data->tokens = NULL;
 	data->ast = NULL;
+	rl_clear_history();
 	if (!init_env(data, env))
 	{
 		printf("Error initializing env");
 		free(data->cwd);
 		return (0);
 	}
+	return (1);
 }
