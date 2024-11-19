@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 19:06:45 by paromero          #+#    #+#             */
-/*   Updated: 2024/11/19 17:36:29 by paromero         ###   ########.fr       */
+/*   Updated: 2024/11/19 18:02:31 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@
 # include <sys/ioctl.h>
 # include <curses.h>
 # include <ncurses.h>
+# include <linux/limits.h>
 # include "../libft/libft.h"
 
 typedef enum e_type
