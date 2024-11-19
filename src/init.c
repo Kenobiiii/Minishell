@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 17:53:02 by paromero          #+#    #+#             */
-/*   Updated: 2024/11/19 17:30:58 by paromero         ###   ########.fr       */
+/*   Updated: 2024/11/19 18:06:18 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,13 +37,13 @@ int	init_env(t_data *data, char *env[])
 	if (env == NULL || env[0] == NULL)
 	{
 		printf("El entorno está vacío.\n");
-		data->env_head = NULL;
+		data->env = NULL;
 		return (1);
 	}
-	data->env_head = create_node(env[0]);
-	if (!data->env_head)
+	data->env = create_node(env[0]);
+	if (!data->env)
 		return (0);
-	current = data->env_head;
+	current = data->env;
 	i = 1;
 	while (env[i])
 	{
@@ -58,12 +58,20 @@ int	init_env(t_data *data, char *env[])
 
 int	init_data(t_data *data, char **env)
 {
+	char	cwd[PATH_MAX];
+
 	data->line = NULL;
 	data->last_exit_status = 0;
 	data->signal_received = 0;
 	data->pid = -1;
 	data->prompt = "$Minishell> ";
-	data->cwd = getcwd;
+	data->cwd = getcwd(cwd, sizeof(cwd)));
 	data->tokens = NULL;
 	data->ast = NULL;
+	if (!init_env(data, env))
+	{
+		printf("Error initializing env");
+		free(data->cwd);
+		return (0);
+	}
 }
