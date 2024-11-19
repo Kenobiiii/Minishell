@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 19:06:45 by paromero          #+#    #+#             */
-/*   Updated: 2024/11/07 17:49:57 by paromero         ###   ########.fr       */
+/*   Updated: 2024/11/19 17:36:29 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@
 # include <sys/ioctl.h>
 # include <curses.h>
 # include <ncurses.h>
+# include "../libft/libft.h"
 
 typedef enum e_type
 {
@@ -73,7 +74,7 @@ typedef struct s_tokens
 {
 	t_type		type;
 	char		*value;
-	t_tokens	*next;
+	struct	s_tokens	*next;
 }	t_tokens;
 
 typedef struct s_env
