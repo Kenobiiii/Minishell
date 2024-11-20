@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/25 10:34:11 by paromero          #+#    #+#             */
-/*   Updated: 2024/06/04 09:51:43 by paromero         ###   ########.fr       */
+/*   Updated: 2024/11/20 18:29:01 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,7 @@ char	*ft_read(int fd, char *str);
 char	*ft_line(char *str);
 char	*ft_save(char	*str);
 char	*get_next_line(int fd);
+char	*ft_strcat(char *src, char *dst);
 
 //bonus
 t_list	*ft_lstnew(void *content);
