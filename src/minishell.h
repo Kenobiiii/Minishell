@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 19:06:45 by paromero          #+#    #+#             */
-/*   Updated: 2024/11/19 18:02:31 by paromero         ###   ########.fr       */
+/*   Updated: 2024/11/20 17:35:26 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,12 @@ typedef struct s_data
 	t_tokens	*tokens; //- puntero a estructura de tokens
 	t_ast		*ast; //- puntero a estructura ast (Abstract Syntax Tree)	
 }	t_data;
+
+//! init.c //
+int	init_data(t_data *data, char **env);
+int	init_env(t_data *data, char *env[]);
+t_env	*create_node(const char *valor);
+
 
 #endif
 /**

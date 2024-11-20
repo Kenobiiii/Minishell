@@ -7,7 +7,7 @@ CFLAGS = -Wall -Werror -Wextra
 USER = paromero
 SRC_DIR = src
 OBJ_DIR = objs
-SRCS = src/main.c #! no se permite wildcard
+SRCS = src/main.c src/init.c #! no se permite wildcard
 OBJS = $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRCS))
 
 NAME = minishell
@@ -15,8 +15,8 @@ NAME = minishell
 # Configuración para libft
 LIBFT_DIR = libft
 LIBFT = $(LIBFT_DIR)/libft.a
-INCLUDES = -I./$(LIBFT_DIR)
-LIBS = -L./$(LIBFT_DIR) -lft
+INCLUDES = -I./$(LIBFT_DIR) -I/usr/include/readline
+LIBS = -L./$(LIBFT_DIR) -lft -lreadline -lncurses
 
 # Colores
 GREEN = \033[1;32m
