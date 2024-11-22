@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 17:53:02 by paromero          #+#    #+#             */
-/*   Updated: 2024/11/20 18:36:55 by paromero         ###   ########.fr       */
+/*   Updated: 2024/11/22 01:20:25 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,36 @@ t_env	*create_node(const char *valor)
 	new_node->next = (NULL);
 	return (new_node);
 }
+
+void	increment_shlvl(t_env *env)
+{
+	t_env	*current;
+	char	*new_value;
+	int		shlvl;
+	//char	*str;
+
+	current = env;
+	while (current)
+	{
+		if (ft_strncmp(current->value, "SHLVL=", 6) == 0)
+		{
+			shlvl = ft_atoi(current->value + 6);
+			shlvl++;
+			new_value = malloc(7 + (ft_strlen(current->value) + 1));
+			if (!new_value)
+			{
+				printf("Error asignando memoria para SHLVL");
+				return;
+			}
+			new_value = ft_strcat("SHLVL=", ft_itoa(shlvl));
+			free(current->value);
+			current->value = new_value;
+			return ;
+		}
+		current = current->next;
+	}
+}
+
 
 int	init_env(t_data *data, char *env[])
 {
@@ -97,9 +127,7 @@ int	init_data(t_data *data, char **env)
 	data->ast = NULL;
 	rl_clear_history();
 	if (env == NULL || env[0] == NULL)
-	{
 		init_empty_env(data);
-	}
 	else
 	{
 		if (!init_env(data, env))
@@ -108,6 +136,7 @@ int	init_data(t_data *data, char **env)
 			free(data->env);
 			return (0);
 		}
+		increment_shlvl(data->env);
 	}
 	if (!print_env(data->env)) //! Borrar trás pruebas (guardar más bien)
 	{
