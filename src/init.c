@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 17:53:02 by paromero          #+#    #+#             */
-/*   Updated: 2024/11/22 01:20:25 by paromero         ###   ########.fr       */
+/*   Updated: 2024/11/24 20:07:43 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,6 @@ void	increment_shlvl(t_env *env)
 	t_env	*current;
 	char	*new_value;
 	int		shlvl;
-	//char	*str;
 
 	current = env;
 	while (current)
@@ -118,8 +117,8 @@ int	init_data(t_data *data, char **env)
 	char	cwd[PATH_MAX];
 
 	data->line = NULL;
+	data->exit = 0;
 	data->last_exit_status = 0;
-	data->signal_received = 0;
 	data->pid = -1;
 	data->prompt = "$Minishell> ";
 	data->cwd = ft_strdup(getcwd(cwd, sizeof(cwd)));
@@ -138,13 +137,13 @@ int	init_data(t_data *data, char **env)
 		}
 		increment_shlvl(data->env);
 	}
-	if (!print_env(data->env)) //! Borrar trás pruebas (guardar más bien)
-	{
-		printf("Error printing env\n");
-		return (0);
-	}
 	return (1);
 }
+	// if (!print_env(data->env)) //! Borrar trás pruebas (guardar más bien)
+	// {
+	// 	printf("Error printing env\n");
+	// 	return (0);
+	// }
 
 /**
  * TODO Mensaje de error custom, depende de lo que le pase salte un error u otro
