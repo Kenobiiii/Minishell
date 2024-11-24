@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 19:06:45 by paromero          #+#    #+#             */
-/*   Updated: 2024/11/20 17:35:26 by paromero         ###   ########.fr       */
+/*   Updated: 2024/11/24 20:07:58 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,8 +89,8 @@ typedef struct s_data
 	char		*line; //- linea comando actual
 	char		*prompt; //- Promp de salida de la minishell (ej: minishell> )
 	char		*cwd; //- directorio actual
-	int			last_exit_status; //- salida ultimo comando ejecutado ($?)
-	int			signal_received; //- manejo de las señales
+	int			exit; //- Manejo de salida
+	int			last_exit_status; //-salida ultimo comando ejecutado ($?)
 	pid_t		pid; //- Proceso hijo y padre
 	t_env		*env; //- Puntero a estructuar de env
 	t_tokens	*tokens; //- puntero a estructura de tokens
