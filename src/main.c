@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 17:54:48 by paromero          #+#    #+#             */
-/*   Updated: 2024/11/25 18:01:20 by paromero         ###   ########.fr       */
+/*   Updated: 2024/11/25 20:33:49 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,11 +27,20 @@ int main(int ac, char **av, char **env)
     init_data(&data, env);    
     while (data.exit == 0)
 	{
+		//TODO Signal handler (Importante!!!!)
 		read = readline(data.prompt);
 		if (read == NULL)
 			break;
 		if (ft_strlen(read) == 0)
 			continue;
 		add_history(read);
+		if (ft_strncmp(read, "exit", 5) == 0)
+			data.exit = 1;
+		if (read) //TODO && sintax_handler)
+		{
+			ft_tokens(read);
+			//TODO func parseo
+			//TODO func ejecutable
+		}
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 19:06:45 by paromero          #+#    #+#             */
-/*   Updated: 2024/11/24 20:07:58 by paromero         ###   ########.fr       */
+/*   Updated: 2024/11/25 20:33:58 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,6 +101,9 @@ typedef struct s_data
 int	init_data(t_data *data, char **env);
 int	init_env(t_data *data, char *env[]);
 t_env	*create_node(const char *valor);
+
+//! parse.c //
+void	ft_tokens(char *str);
 
 
 #endif
