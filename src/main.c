@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 17:54:48 by paromero          #+#    #+#             */
-/*   Updated: 2024/11/20 17:48:40 by paromero         ###   ########.fr       */
+/*   Updated: 2024/11/25 18:01:20 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 int main(int ac, char **av, char **env)
 {
     t_data data;
-    //char *read;
-    
+    char *read;
+
     if (ac != 1)
     {
         printf("Error: More than one argument");
@@ -25,4 +25,13 @@ int main(int ac, char **av, char **env)
     (void)ac;
     (void)av;
     init_data(&data, env);    
+    while (data.exit == 0)
+	{
+		read = readline(data.prompt);
+		if (read == NULL)
+			break;
+		if (ft_strlen(read) == 0)
+			continue;
+		add_history(read);
+	}
 }
