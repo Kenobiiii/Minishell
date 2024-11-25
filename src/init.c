@@ -6,15 +6,11 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 17:53:02 by paromero          #+#    #+#             */
-/*   Updated: 2024/11/24 20:07:43 by paromero         ###   ########.fr       */
+/*   Updated: 2024/11/25 19:18:52 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-/**
- * TODO guardar SHLVL + 1
- */
 
 int	print_env(t_env *env) //! Borrar trás pruebas (guardar más bien)
 {
