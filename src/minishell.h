@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 19:06:45 by paromero          #+#    #+#             */
-/*   Updated: 2024/11/25 20:33:58 by paromero         ###   ########.fr       */
+/*   Updated: 2024/11/26 17:34:22 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,8 +109,9 @@ void	ft_tokens(char *str);
 #endif
 /**
  * - explicación
- * * Importante
+ * * importante
  * ! alertas
- * ? Dudas
+ * ? dudas
  * TODO por hacer
+ * DONE hecho
  */
