@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 20:08:34 by paromero          #+#    #+#             */
-/*   Updated: 2024/11/28 16:45:13 by paromero         ###   ########.fr       */
+/*   Updated: 2024/11/28 17:56:38 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,9 @@
 /**
  * DONE arreglar segfault llega hasta 3 palabras y luego segfault
  * DONE función que te dice el tipo
- * TODO func separador
- * TODO func de tokens
+ * DONE func separador
+ * DONE func de tokens
+ * TODO arreglar core dumped con este ejemplo "                                                                           ls | cmd <<asd<><<asd && | | & &"
  * TODO func de ast
  */
 
@@ -77,7 +78,8 @@ char	*ft_spaces(char *line)
 		{
 			result[j++] = ' ';
 			result[j++] = line[i];
-			if (ft_types(line + i) == REDOUT2 || ft_types(line + i) == REDIN2)
+			if (ft_types(line + i) == REDOUT2 || ft_types(line + i) == REDIN2
+			 || ft_types(line + i) == AND || ft_types(line + i) == OR)
 				result[j++] = line[++i];
 			result[j++] = ' ';
 		}
@@ -89,15 +91,50 @@ char	*ft_spaces(char *line)
 	return (result);
 }
 
-void	ft_tokens(char *str)
+t_tokens	*ft_new_token(char	*str)
 {
+	t_tokens	*new_node;
+
+	new_node = (t_tokens *)malloc(sizeof(t_tokens));
+	if (!new_node)
+		return (NULL);
+	new_node->value = ft_strdup(str);
+	if (!new_node->value)
+	{
+		free(new_node);
+		return (NULL);
+	}
+	new_node->next = (NULL);
+	return (new_node);
+}
+
+int	ft_tokens(t_data *data, char *str)
+{
+	t_tokens	*current;
 	char	**result;
 	int		i;
 
-	i = 0;
 	result = ft_split(str, ' ');
-	while (result[i] != NULL)
+	data->tokens = ft_new_token(result[0]);
+	if (!data->tokens)
+		return (0);
+	current = data->tokens;
+	i = 1;
+	while (result[i])
 	{
+		current->type = ft_types(result[i - 1]);
+		current->next = ft_new_token(result[i]);
+		if (!current->next)
+		{
+			ft_free_split(result);
+			ft_free_tokens(data->tokens);
+			return (0);
+		}
+		current = current->next;
 		i++;
 	}
+	current->type = ft_types(result[i - 1]);
+	ft_free_split(result);
+	return (1);
 }
+
