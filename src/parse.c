@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 20:08:34 by paromero          #+#    #+#             */
-/*   Updated: 2024/11/28 17:56:38 by paromero         ###   ########.fr       */
+/*   Updated: 2024/11/28 18:45:59 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@
  * DONE función que te dice el tipo
  * DONE func separador
  * DONE func de tokens
- * TODO arreglar core dumped con este ejemplo "                                                                           ls | cmd <<asd<><<asd && | | & &"
  * TODO func de ast
  */
 
@@ -61,6 +60,14 @@ size_t	ft_spacestrlen(char *line)
 	return (j);
 }
 
+int	ft_dobletype(t_type	type)
+{
+	if (type == REDOUT2 || type == REDIN2
+		|| type == AND || type == OR)
+		return (1);
+	return (0);
+}
+
 char	*ft_spaces(char *line)
 {
 	int		i;
@@ -78,8 +85,7 @@ char	*ft_spaces(char *line)
 		{
 			result[j++] = ' ';
 			result[j++] = line[i];
-			if (ft_types(line + i) == REDOUT2 || ft_types(line + i) == REDIN2
-			 || ft_types(line + i) == AND || ft_types(line + i) == OR)
+			if (ft_dobletype(ft_types(line + i)))
 				result[j++] = line[++i];
 			result[j++] = ' ';
 		}
@@ -111,8 +117,8 @@ t_tokens	*ft_new_token(char	*str)
 int	ft_tokens(t_data *data, char *str)
 {
 	t_tokens	*current;
-	char	**result;
-	int		i;
+	char		**result;
+	int			i;
 
 	result = ft_split(str, ' ');
 	data->tokens = ft_new_token(result[0]);
@@ -126,8 +132,7 @@ int	ft_tokens(t_data *data, char *str)
 		current->next = ft_new_token(result[i]);
 		if (!current->next)
 		{
-			ft_free_split(result);
-			ft_free_tokens(data->tokens);
+			ft_free_error_token(data, result);
 			return (0);
 		}
 		current = current->next;
@@ -137,4 +142,3 @@ int	ft_tokens(t_data *data, char *str)
 	ft_free_split(result);
 	return (1);
 }
-
