@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 17:24:13 by paromero          #+#    #+#             */
-/*   Updated: 2024/11/28 17:29:08 by paromero         ###   ########.fr       */
+/*   Updated: 2024/11/28 18:46:09 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	ft_free_split(char **split)
 	int	i;
 
 	if (!split)
-		return;
+		return ;
 	i = 0;
 	while (split[i])
 	{
@@ -38,4 +38,10 @@ void	ft_free_tokens(t_tokens *tokens)
 		free(temp->value);
 		free(temp);
 	}
+}
+
+void	ft_free_error_token(t_data	*data, char **result)
+{
+	ft_free_split(result);
+	ft_free_tokens(data->tokens);
 }
