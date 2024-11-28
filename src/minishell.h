@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 19:06:45 by paromero          #+#    #+#             */
-/*   Updated: 2024/11/28 18:50:20 by paromero         ###   ########.fr       */
+/*   Updated: 2024/11/28 18:51:54 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,19 +101,19 @@ typedef struct s_data
 }	t_data;
 
 //! init.c //
-int		init_data(t_data *data, char **env);
-int		init_env(t_data *data, char *env[]);
-t_env	*create_node(const char *valor);
+int			init_data(t_data *data, char **env);
+int			init_env(t_data *data, char *env[]);
+t_env		*create_node(const char *valor);
 
 //! parse.c //
-int		ft_types(char	*value);
-int		ft_tokens(t_data *data, char *str);
-char	*ft_spaces(char *line);
+int			ft_types(char	*value);
+int			ft_tokens(t_data *data, char *str);
+char		*ft_spaces(char *line);
 
 //! ft_free_parse.c //
-void	ft_free_split(char **split);
-void	ft_free_tokens(t_tokens *tokens);
-void	ft_free_error_token(t_data	*data, char **result);
+void		ft_free_split(char **split);
+void		ft_free_tokens(t_tokens *tokens);
+void		ft_free_error_token(t_data	*data, char **result);
 
 //! ft_parse_utils.c //
 size_t		ft_spacestrlen(char *line);

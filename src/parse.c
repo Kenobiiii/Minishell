@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 20:08:34 by paromero          #+#    #+#             */
-/*   Updated: 2024/11/28 18:48:41 by paromero         ###   ########.fr       */
+/*   Updated: 2024/11/28 18:52:24 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,6 @@ int	ft_types(char	*value)
 		return (OR);
 	return (CMD);
 }
-
 
 char	*ft_spaces(char *line)
 {
