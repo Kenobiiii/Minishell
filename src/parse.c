@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 20:08:34 by paromero          #+#    #+#             */
-/*   Updated: 2024/11/28 18:52:24 by paromero         ###   ########.fr       */
+/*   Updated: 2024/11/28 20:16:51 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,5 +94,34 @@ int	ft_tokens(t_data *data, char *str)
 	}
 	current->type = ft_types(result[i - 1]);
 	ft_free_split(result);
+	return (1);
+}
+
+int	ft_syntax(t_data *data)
+{
+	t_tokens	*current;
+	t_tokens	*previous;
+
+	current = data->tokens;
+	if (current->type != CMD) 
+	{
+		printf("Syntax error\n");
+		return (0);
+	}
+	while (current)
+	{
+		if (previous && previous->type != CMD && current->type != CMD)
+		{
+			printf("Syntax error\n");
+			return (0);
+		}
+		previous = current;
+		current = current->next;
+	}
+	if (previous && previous->type != CMD)
+	{
+		printf("Syntax error\n");
+		return (0);
+	}
 	return (1);
 }

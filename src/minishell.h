@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 19:06:45 by paromero          #+#    #+#             */
-/*   Updated: 2024/11/28 18:51:54 by paromero         ###   ########.fr       */
+/*   Updated: 2024/11/28 19:58:48 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,6 +109,7 @@ t_env		*create_node(const char *valor);
 int			ft_types(char	*value);
 int			ft_tokens(t_data *data, char *str);
 char		*ft_spaces(char *line);
+int	ft_syntax(t_data *data);
 
 //! ft_free_parse.c //
 void		ft_free_split(char **split);

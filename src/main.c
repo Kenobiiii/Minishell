@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 17:54:48 by paromero          #+#    #+#             */
-/*   Updated: 2024/11/28 19:25:27 by paromero         ###   ########.fr       */
+/*   Updated: 2024/11/28 20:02:30 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,10 +63,10 @@ int	minishell(char **env)
 		add_history(data.line);
 		if (ft_strncmp(data.line, "exit", 5) == 0)
 			data.exit = 1;
-		if (data.line) //TODO && sintax_handler)
+		data.line = ft_spaces(data.line);
+		ft_tokens(&data, data.line);
+		if (data.line && ft_syntax(&data))
 		{
-			data.line = ft_spaces(data.line);
-			ft_tokens(&data, data.line);
 			print_tokens(data.tokens);
 			//TODO func parseo
 			//TODO func ejecutable
