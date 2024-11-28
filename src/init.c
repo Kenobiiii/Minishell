@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 17:53:02 by paromero          #+#    #+#             */
-/*   Updated: 2024/11/25 19:18:52 by paromero         ###   ########.fr       */
+/*   Updated: 2024/11/28 16:43:48 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ void	increment_shlvl(t_env *env)
 			if (!new_value)
 			{
 				printf("Error asignando memoria para SHLVL");
-				return;
+				return ;
 			}
 			new_value = ft_strcat("SHLVL=", ft_itoa(shlvl));
 			free(current->value);
@@ -66,7 +66,6 @@ void	increment_shlvl(t_env *env)
 		current = current->next;
 	}
 }
-
 
 int	init_env(t_data *data, char *env[])
 {
@@ -98,13 +97,13 @@ int	init_empty_env(t_data *data)
 		return (0);
 	current = data->env;
 	current->next = create_node("SHLVL=1");
-		if (!current->next)
-			return (0);
-		current = current->next;
+	if (!current->next)
+		return (0);
+	current = current->next;
 	current->next = create_node("_=/usr/bin/env");
-		if (!current->next)
-			return (0);
-		current = current->next;
+	if (!current->next)
+		return (0);
+	current = current->next;
 	return (1);
 }
 
@@ -135,13 +134,7 @@ int	init_data(t_data *data, char **env)
 	}
 	return (1);
 }
-	// if (!print_env(data->env)) //! Borrar trás pruebas (guardar más bien)
-	// {
-	// 	printf("Error printing env\n");
-	// 	return (0);
-	// }
 
 /**
  * TODO Mensaje de error custom, depende de lo que le pase salte un error u otro
  */
-
