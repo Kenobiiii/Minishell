@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 19:06:45 by paromero          #+#    #+#             */
-/*   Updated: 2024/11/26 17:34:22 by paromero         ###   ########.fr       */
+/*   Updated: 2024/11/28 16:44:29 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,10 @@
 typedef enum e_type
 {
 	CMD,
-	REDIRECT,
+	REDIRECT_OUT,
+	REDIRECT_IN,
+	REDIN2,
+	REDOUT2,
 	PIPE,
 	AND,
 	OR
@@ -73,9 +76,9 @@ typedef struct s_ast
 
 typedef struct s_tokens
 {
-	t_type		type;
-	char		*value;
-	struct	s_tokens	*next;
+	t_type			type;
+	char			*value;
+	struct s_tokens	*next;
 }	t_tokens;
 
 typedef struct s_env
@@ -98,13 +101,13 @@ typedef struct s_data
 }	t_data;
 
 //! init.c //
-int	init_data(t_data *data, char **env);
-int	init_env(t_data *data, char *env[]);
+int		init_data(t_data *data, char **env);
+int		init_env(t_data *data, char *env[]);
 t_env	*create_node(const char *valor);
 
 //! parse.c //
 void	ft_tokens(char *str);
-
+char	*ft_spaces(char *line);
 
 #endif
 /**

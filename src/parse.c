@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 20:08:34 by paromero          #+#    #+#             */
-/*   Updated: 2024/11/27 19:13:33 by paromero         ###   ########.fr       */
+/*   Updated: 2024/11/28 16:45:13 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,14 +22,19 @@
 
 int	ft_types(char	*value)
 {
-	if (ft_strncmp(value, "|", 2) == 0)
+	if (value[0] == '|' && value[1] != '|')
 		return (PIPE);
-	if (ft_strncmp(value, ">", 2) == 0 || ft_strncmp(value, ">>", 3) == 0
-		|| ft_strncmp(value, "<", 2) == 0 || ft_strncmp(value, "<<", 3) == 0)
-		return (REDIRECT);
-	if (ft_strncmp(value, "&&", 2) == 0)
+	if (value[0] == '>' && value[1] == '>')
+		return (REDOUT2);
+	if (value[0] == '>')
+		return (REDIRECT_OUT);
+	if (value[0] == '<' && value[1] == '<')
+		return (REDIN2);
+	if (value[0] == '<')
+		return (REDIRECT_IN);
+	if (value[0] == '&' && value[1] == '&')
 		return (AND);
-	if (ft_strncmp(value, "||", 2) == 0)
+	if (value[0] == '|' && value[1] == '|')
 		return (OR);
 	return (CMD);
 }
@@ -48,7 +53,7 @@ size_t	ft_spacestrlen(char *line)
 		{
 			j += 2;
 			if (line[i + 1] && line[i + 1] == line[i])
-                i++;	
+				i++;
 		}
 		i++;
 	}
@@ -72,20 +77,17 @@ char	*ft_spaces(char *line)
 		{
 			result[j++] = ' ';
 			result[j++] = line[i];
-			if (ft_types(line[i + 1]) == REDIRECT)
+			if (ft_types(line + i) == REDOUT2 || ft_types(line + i) == REDIN2)
 				result[j++] = line[++i];
 			result[j++] = ' ';
 		}
 		else
-		{
 			result[j++] = line[i];
-		}
 		i++;
 	}
 	result[j] = '\0';
 	return (result);
 }
-
 
 void	ft_tokens(char *str)
 {
@@ -94,11 +96,8 @@ void	ft_tokens(char *str)
 
 	i = 0;
 	result = ft_split(str, ' ');
-	if (ft_types(str) == REDIRECT)
-		printf("pipe\n");
 	while (result[i] != NULL)
 	{
-		printf("palabra %d: %s\n", i, result[i]);
 		i++;
 	}
 }
