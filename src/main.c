@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 17:54:48 by paromero          #+#    #+#             */
-/*   Updated: 2024/11/28 17:36:51 by paromero         ###   ########.fr       */
+/*   Updated: 2024/11/28 19:25:27 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,12 +47,36 @@ int	print_tokens(t_tokens *token)
 	return (1);
 }
 
+int	minishell(char **env)
+{
+	t_data data;
+
+	init_data(&data, env);
+	while (data.exit == 0)
+	{
+		//TODO Signal handler (Importante!!!!)
+		data.line = readline(data.prompt);
+		if (data.line == NULL)
+			break ;
+		if (ft_strlen(data.line) == 0)
+			continue ;
+		add_history(data.line);
+		if (ft_strncmp(data.line, "exit", 5) == 0)
+			data.exit = 1;
+		if (data.line) //TODO && sintax_handler)
+		{
+			data.line = ft_spaces(data.line);
+			ft_tokens(&data, data.line);
+			print_tokens(data.tokens);
+			//TODO func parseo
+			//TODO func ejecutable
+		}
+	}
+	return (0);
+}
 
 int	main(int ac, char **av, char **env)
 {
-	t_data	data;
-	char	*read;
-
 	if (ac != 1)
 	{
 		printf("Error: More than one argument");
@@ -60,25 +84,6 @@ int	main(int ac, char **av, char **env)
 	}
 	(void)ac;
 	(void)av;
-	init_data(&data, env);
-	while (data.exit == 0)
-	{
-		//TODO Signal handler (Importante!!!!)
-		read = readline(data.prompt);
-		if (read == NULL)
-			break ;
-		if (ft_strlen(read) == 0)
-			continue ;
-		add_history(read);
-		if (ft_strncmp(read, "exit", 5) == 0)
-			data.exit = 1;
-		if (read) //TODO && sintax_handler)
-		{
-			read = ft_spaces(read);
-			ft_tokens(&data, read);
-			print_tokens(data.tokens);
-			//TODO func parseo
-			//TODO func ejecutable
-		}
-	}
+	minishell(env);
+	return (0);
 }
