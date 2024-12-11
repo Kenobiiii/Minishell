@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 19:06:45 by paromero          #+#    #+#             */
-/*   Updated: 2024/11/28 19:58:48 by paromero         ###   ########.fr       */
+/*   Updated: 2024/12/11 18:14:10 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include <unistd.h>
 # include <stdio.h>
+# include <signal.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <stdlib.h>
@@ -47,24 +48,13 @@ typedef struct s_cmd
 	char	**args;
 }	t_cmd;
 
-//- struct para manejar la redirección
-typedef struct s_redirect
-{
-	t_type			type; //- guarda el tipo de redirección que es
-	struct s_ast	*left; //- guarda el comando de la izquierda
-	char			*file; //- guarda el archivo al que se va a añadir
-}	t_redirect;
-
 typedef struct s_ast
 {
 	t_type			type;
+	char			*value;
+	char			**args;
 	struct s_ast	*left;
 	struct s_ast	*right;
-	union
-	{
-		t_cmd		cmd;
-		t_redirect	redirect;
-	} u_uniond;
 }	t_ast;
 
 /**
@@ -109,7 +99,7 @@ t_env		*create_node(const char *valor);
 int			ft_types(char	*value);
 int			ft_tokens(t_data *data, char *str);
 char		*ft_spaces(char *line);
-int	ft_syntax(t_data *data);
+int			ft_syntax(t_data *data);
 
 //! ft_free_parse.c //
 void		ft_free_split(char **split);
@@ -120,6 +110,11 @@ void		ft_free_error_token(t_data	*data, char **result);
 size_t		ft_spacestrlen(char *line);
 t_tokens	*ft_new_token(char	*str);
 int			ft_dobletype(t_type	type);
+
+//! ft_ast.c //
+
+//! ft_signals.c //
+void	configure_signals(void);
 
 #endif
 /**
