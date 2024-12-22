@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 17:54:48 by paromero          #+#    #+#             */
-/*   Updated: 2024/11/28 20:02:30 by paromero         ###   ########.fr       */
+/*   Updated: 2024/12/10 18:15:14 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,6 @@ void	print_type(t_tokens *token)
 		printf("UNKNOWN TYPE\n");
 }
 
-
 int	print_tokens(t_tokens *token)
 {
 	while (token)
@@ -46,15 +45,64 @@ int	print_tokens(t_tokens *token)
 	}
 	return (1);
 }
+void	print_ast(t_ast *node, int level)
+{
+	int i;
+
+	if (!node)
+		return;
+
+	// Indentar según el nivel en el árbol
+	for (i = 0; i < level; i++)
+		printf("  ");
+
+	// Imprimir el tipo del nodo
+	if (node->type == CMD)
+		printf("Node Type: CMD, Value: %s, Args: ", node->value);
+	else if (node->type == PIPE)
+		printf("Node Type: PIPE\n");
+	else if (node->type == REDIRECT_IN)
+		printf("Node Type: REDIRECT_IN, File: %s\n", node->value);
+	else if (node->type == REDIRECT_OUT)
+		printf("Node Type: REDIRECT_OUT, File: %s\n", node->value);
+	else if (node->type == REDIN2)
+		printf("Node Type: REDIN2, File: %s\n", node->value);
+	else if (node->type == REDOUT2)
+		printf("Node Type: REDOUT2, File: %s\n", node->value);
+	else if (node->type == AND)
+		printf("Node Type: AND\n");
+	else if (node->type == OR)
+		printf("Node Type: OR\n");
+	else
+		printf("Node Type: UNKNOWN\n");
+
+	// Imprimir los argumentos si el nodo es un comando
+	if (node->type == CMD && node->args)
+	{
+		for (i = 0; node->args[i]; i++)
+		{
+			if (i > 0)
+				printf(", ");
+			printf("%s", node->args[i]);
+		}
+		printf("\n");
+	}
+
+	// Recursivamente imprimir el subárbol izquierdo y derecho
+	print_ast(node->left, level + 1);
+	print_ast(node->right, level + 1);
+}
+
 
 int	minishell(char **env)
 {
-	t_data data;
+	t_data	data;
 
 	init_data(&data, env);
 	while (data.exit == 0)
 	{
 		//TODO Signal handler (Importante!!!!)
+		configure_signals();
 		data.line = readline(data.prompt);
 		if (data.line == NULL)
 			break ;
@@ -67,8 +115,11 @@ int	minishell(char **env)
 		ft_tokens(&data, data.line);
 		if (data.line && ft_syntax(&data))
 		{
-			print_tokens(data.tokens);
+			//print_tokens(data.tokens);
 			//TODO func parseo
+			//ft_ast(&data);
+			print_ast(data.ast, 0);
+
 			//TODO func ejecutable
 		}
 	}
