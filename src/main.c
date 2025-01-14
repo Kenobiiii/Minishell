@@ -6,11 +6,42 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 17:54:48 by paromero          #+#    #+#             */
-/*   Updated: 2024/12/10 18:15:14 by paromero         ###   ########.fr       */
+/*   Updated: 2025/01/14 18:51:08 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void print_ast(t_ast *node, int level)
+{
+    if (!node)
+        return;
+
+    // Indentación para mostrar la profundidad del nodo
+    for (int i = 0; i < level; i++)
+        printf("  ");
+
+    // Imprimir el tipo y el valor del nodo
+    if (node->type == CMD)
+        printf("CMD: %s\n", node->value);
+    else
+        printf("OPERATOR: %s\n", node->value);
+
+    // Imprimir los argumentos si es un nodo de comando
+    if (node->type == CMD && node->args)
+    {
+        for (int i = 0; node->args[i]; i++)
+        {
+            for (int j = 0; j < level + 1; j++)
+                printf("  ");
+            printf("ARG: %s\n", node->args[i]);
+        }
+    }
+
+    // Recursivamente imprimir los nodos hijos
+    print_ast(node->left, level + 1);
+    print_ast(node->right, level + 1);
+}
 
 void	print_type(t_tokens *token)
 {
@@ -45,58 +76,11 @@ int	print_tokens(t_tokens *token)
 	}
 	return (1);
 }
-void	print_ast(t_ast *node, int level)
-{
-	int i;
-
-	if (!node)
-		return;
-
-	// Indentar según el nivel en el árbol
-	for (i = 0; i < level; i++)
-		printf("  ");
-
-	// Imprimir el tipo del nodo
-	if (node->type == CMD)
-		printf("Node Type: CMD, Value: %s, Args: ", node->value);
-	else if (node->type == PIPE)
-		printf("Node Type: PIPE\n");
-	else if (node->type == REDIRECT_IN)
-		printf("Node Type: REDIRECT_IN, File: %s\n", node->value);
-	else if (node->type == REDIRECT_OUT)
-		printf("Node Type: REDIRECT_OUT, File: %s\n", node->value);
-	else if (node->type == REDIN2)
-		printf("Node Type: REDIN2, File: %s\n", node->value);
-	else if (node->type == REDOUT2)
-		printf("Node Type: REDOUT2, File: %s\n", node->value);
-	else if (node->type == AND)
-		printf("Node Type: AND\n");
-	else if (node->type == OR)
-		printf("Node Type: OR\n");
-	else
-		printf("Node Type: UNKNOWN\n");
-
-	// Imprimir los argumentos si el nodo es un comando
-	if (node->type == CMD && node->args)
-	{
-		for (i = 0; node->args[i]; i++)
-		{
-			if (i > 0)
-				printf(", ");
-			printf("%s", node->args[i]);
-		}
-		printf("\n");
-	}
-
-	// Recursivamente imprimir el subárbol izquierdo y derecho
-	print_ast(node->left, level + 1);
-	print_ast(node->right, level + 1);
-}
-
 
 int	minishell(char **env)
 {
 	t_data	data;
+	t_ast	*root = NULL;
 
 	init_data(&data, env);
 	while (data.exit == 0)
@@ -117,8 +101,8 @@ int	minishell(char **env)
 		{
 			//print_tokens(data.tokens);
 			//TODO func parseo
-			//ft_ast(&data);
-			print_ast(data.ast, 0);
+			root = ft_build_ast(data.tokens);
+			print_ast(root, 1);
 
 			//TODO func ejecutable
 		}
