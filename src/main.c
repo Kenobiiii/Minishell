@@ -6,13 +6,13 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 17:54:48 by paromero          #+#    #+#             */
-/*   Updated: 2025/01/14 18:51:08 by paromero         ###   ########.fr       */
+/*   Updated: 2025/01/14 19:10:47 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void print_ast(t_ast *node, int level)
+void print_ast(t_ast *node, int level) //! BORRAR AL ACABAR (TESTEO)
 {
     if (!node)
         return;
@@ -43,7 +43,7 @@ void print_ast(t_ast *node, int level)
     print_ast(node->right, level + 1);
 }
 
-void	print_type(t_tokens *token)
+void	print_type(t_tokens *token) //! BORRAR AL ACABAR (TESTEO)
 {
 	if (token->type == CMD)
 		printf("CMD\n");
@@ -65,7 +65,7 @@ void	print_type(t_tokens *token)
 		printf("UNKNOWN TYPE\n");
 }
 
-int	print_tokens(t_tokens *token)
+int	print_tokens(t_tokens *token) //! BORRAR AL ACABAR (TESTEO)
 {
 	while (token)
 	{

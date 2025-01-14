@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 20:08:34 by paromero          #+#    #+#             */
-/*   Updated: 2024/11/28 20:16:51 by paromero         ###   ########.fr       */
+/*   Updated: 2025/01/14 19:12:18 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
  * DONE función que te dice el tipo
  * DONE func separador
  * DONE func de tokens
- * TODO func de ast
+ * DONE func de ast
  */
 
 int	ft_types(char	*value)

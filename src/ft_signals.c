@@ -6,12 +6,13 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 18:08:47 by paromero          #+#    #+#             */
-/*   Updated: 2024/12/11 17:43:57 by paromero         ###   ########.fr       */
+/*   Updated: 2025/01/14 19:12:09 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+//! NO FUNCION/HAY QUE REHACERLO
 void signal_handler(int sig)
 {
     if (sig == SIGINT) // Ctrl-C
