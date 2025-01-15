@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 20:08:34 by paromero          #+#    #+#             */
-/*   Updated: 2025/01/14 19:12:18 by paromero         ###   ########.fr       */
+/*   Updated: 2025/01/15 17:51:08 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,7 @@ int	ft_syntax(t_data *data)
 	t_tokens	*previous;
 
 	current = data->tokens;
-	if (current->type != CMD) 
+	if (current->type != CMD)
 	{
 		printf("Syntax error\n");
 		return (0);

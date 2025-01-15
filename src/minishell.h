@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 19:06:45 by paromero          #+#    #+#             */
-/*   Updated: 2025/01/14 18:12:07 by paromero         ###   ########.fr       */
+/*   Updated: 2025/01/15 17:51:35 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,11 +112,10 @@ t_tokens	*ft_new_token(char	*str);
 int			ft_dobletype(t_type	type);
 
 //! ft_ast.c //
-t_ast	*ft_build_ast(t_tokens *tokens);
-void	ft_add_argument(t_ast *cmd_node, char *arg);
+t_ast		*ft_build_ast(t_tokens *tokens);
+void		ft_add_argument(t_ast *cmd_node, char *arg);
 
 //! ft_signals.c //
-void	configure_signals(void);
 
 #endif
 /**
