@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: anggalle <anggalle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 17:53:02 by paromero          #+#    #+#             */
-/*   Updated: 2025/01/14 19:11:38 by paromero         ###   ########.fr       */
+/*   Updated: 2025/01/20 17:29:17 by anggalle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	print_env(t_env *env) //! cambiar de sitio (func para printear el entorno (e
 	}
 	return (1);
 }
-
+ 
 t_env	*create_node(const char *valor)
 {
 	t_env	*new_node;
