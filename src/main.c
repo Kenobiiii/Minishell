@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: anggalle <anggalle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 17:54:48 by paromero          #+#    #+#             */
-/*   Updated: 2025/01/14 19:10:47 by paromero         ###   ########.fr       */
+/*   Updated: 2025/01/20 19:52:54 by anggalle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,14 +80,14 @@ int	print_tokens(t_tokens *token) //! BORRAR AL ACABAR (TESTEO)
 int	minishell(char **env)
 {
 	t_data	data;
-	t_ast	*root = NULL;
 
 	init_data(&data, env);
 	while (data.exit == 0)
 	{
 		//TODO Signal handler (Importante!!!!)
-		configure_signals();
+		//configure_signals();
 		data.line = readline(data.prompt);
+		printf("Llega aqui\n");
 		if (data.line == NULL)
 			break ;
 		if (ft_strlen(data.line) == 0)
@@ -101,10 +101,12 @@ int	minishell(char **env)
 		{
 			//print_tokens(data.tokens);
 			//TODO func parseo
-			root = ft_build_ast(data.tokens);
-			print_ast(root, 1);
+			data.ast = ft_build_ast(data.tokens);
+			print_ast(data.ast, 1);
 
 			//TODO func ejecutable
+			exec_func(&data);
+			continue;
 		}
 	}
 	return (0);

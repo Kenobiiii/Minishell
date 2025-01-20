@@ -6,7 +6,7 @@
 /*   By: anggalle <anggalle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 17:53:02 by paromero          #+#    #+#             */
-/*   Updated: 2025/01/20 17:29:17 by anggalle         ###   ########.fr       */
+/*   Updated: 2025/01/20 17:31:27 by anggalle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	print_env(t_env *env) //! cambiar de sitio (func para printear el entorno (e
 	}
 	return (1);
 }
- 
+
 t_env	*create_node(const char *valor)
 {
 	t_env	*new_node;

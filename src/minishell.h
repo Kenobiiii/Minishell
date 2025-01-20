@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: anggalle <anggalle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 19:06:45 by paromero          #+#    #+#             */
-/*   Updated: 2025/01/15 17:51:35 by paromero         ###   ########.fr       */
+/*   Updated: 2025/01/20 18:47:45 by anggalle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,11 +43,6 @@ typedef enum e_type
 	OR
 }	t_type;
 //- struct para guardar los comandos simples
-typedef struct s_cmd
-{
-	char	**args;
-}	t_cmd;
-
 typedef struct s_ast
 {
 	t_type			type;
@@ -116,6 +111,12 @@ t_ast		*ft_build_ast(t_tokens *tokens);
 void		ft_add_argument(t_ast *cmd_node, char *arg);
 
 //! ft_signals.c //
+
+
+// exec.c
+void	create_command(char **cmd, char *argv);
+void analyse_status(int wstatus);
+void exec_func(t_data *data);
 
 #endif
 /**

@@ -2,12 +2,12 @@ LIB = ar rcs
 RM = rm -f
 
 CC = clang
-CFLAGS = -Wall -Werror -Wextra
+CFLAGS = -g -Wall -Werror -Wextra
 
 USER = paromero
 SRC_DIR = src
 OBJ_DIR = objs
-SRCS = src/main.c src/init.c src/parse.c src/ft_free_parse.c src/ft_parse_utils.c src/ft_signals.c src/ft_ast.c #! no se permite wildcard
+SRCS = src/main.c src/init.c src/parse.c src/ft_free_parse.c src/ft_parse_utils.c src/ft_signals.c src/ft_ast.c src/exec.c #! no se permite wildcard
 OBJS = $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRCS))
 
 NAME = minishell
