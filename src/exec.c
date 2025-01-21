@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 17:42:48 by anggalle          #+#    #+#             */
-/*   Updated: 2025/01/21 11:31:09 by paromero         ###   ########.fr       */
+/*   Updated: 2025/01/21 11:48:17 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,6 @@ void exec_func(t_data *data)
 	int wstatus;
 	char	*path = ft_strcat("/bin/", data->ast->value);
 
-	
 	pid_fork = fork();
 	if (pid_fork < 0)
 	{
@@ -56,10 +55,10 @@ void exec_func(t_data *data)
 		execve(path, data->ast->args, NULL);
 		perror("Errror en el execve");
 		exit(-1);
-	}else if (pid_fork > 0) //Proceso padre
+	}
+	else if (pid_fork > 0) //Proceso padre
 	{
 		pid_wait = waitpid(pid_fork, &wstatus, WUNTRACED);
-		
 		if (pid_wait < 0)
 		{
 			perror("Error en el waitpid");
