@@ -6,7 +6,7 @@
 /*   By: anggalle <anggalle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 17:09:01 by anggalle          #+#    #+#             */
-/*   Updated: 2025/01/21 19:25:43 by anggalle         ###   ########.fr       */
+/*   Updated: 2025/01/21 20:04:22 by anggalle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,29 @@
 
 int	echo_builtin(t_data *data)
 {
-	if (data->ast->args[0][0])
+	int i;
+	int	print_new_line;
+
+	print_new_line = 0;
+	i = 0;
+	while (data->ast->args[i])
 	{
-		ft_putchar_fd()
+		if (ft_strncmp(data->ast->args[i], "-n", 2) == 0)
+		{
+			if (ft_strncmp(data->ast->args[i], "-n", ft_strlen(data->ast->args[i])) == 0)
+				print_new_line = 1;
+			else
+			{
+				ft_putstr_fd(data->ast->args[i], STDOUT_FILENO);
+				print_new_line = 0;
+			}
+		}
+		else
+		{
+			ft_putstr_fd(data->ast->args[i], STDOUT_FILENO);
+			if (print_new_line)
+				ft_putchar_fd("\n", STDOUT_FILENO);
+		}
+		i ++;
 	}
 }
