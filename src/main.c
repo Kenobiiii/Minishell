@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anggalle <anggalle@student.42.fr>          +#+  +:+       +#+        */
+/*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 17:54:48 by paromero          #+#    #+#             */
-/*   Updated: 2025/01/20 19:52:54 by anggalle         ###   ########.fr       */
+/*   Updated: 2025/01/21 10:44:44 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,22 @@ int	print_tokens(t_tokens *token) //! BORRAR AL ACABAR (TESTEO)
 	return (1);
 }
 
+int	ft_isSpace(char	*line)
+{
+	int	i;
+
+	i = 0;
+	if (ft_strlen(line) == 0)
+		return (0);
+	while (line[i])
+	{
+		if (line[i] != ' ')
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
 int	minishell(char **env)
 {
 	t_data	data;
@@ -90,7 +106,7 @@ int	minishell(char **env)
 		printf("Llega aqui\n");
 		if (data.line == NULL)
 			break ;
-		if (ft_strlen(data.line) == 0)
+		if (!ft_isSpace(data.line))
 			continue ;
 		add_history(data.line);
 		if (ft_strncmp(data.line, "exit", 5) == 0)
