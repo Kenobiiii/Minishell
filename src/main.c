@@ -6,7 +6,7 @@
 /*   By: anggalle <anggalle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 17:54:48 by paromero          #+#    #+#             */
-/*   Updated: 2025/01/21 13:52:12 by anggalle         ###   ########.fr       */
+/*   Updated: 2025/01/21 19:31:33 by anggalle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,7 @@ int	minishell(char **env)
 		if (!ft_isSpace(data.line))
 			continue ;
 		add_history(data.line);
-		if (ft_strncmp(data.line, "exit", 5) == 0)
+		if (ft_strncmp(data.line, "exit", 5) == 0) //TODO quitarlo
 			data.exit = 1;
 		data.line = ft_delete_spaces(data.line);
 		ft_tokens(&data, data.line);

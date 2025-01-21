@@ -6,7 +6,7 @@
 /*   By: anggalle <anggalle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 17:42:48 by anggalle          #+#    #+#             */
-/*   Updated: 2025/01/21 14:06:54 by anggalle         ###   ########.fr       */
+/*   Updated: 2025/01/21 16:36:26 by anggalle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,16 +24,16 @@ void analyse_status(int wstatus)
 {
 	if (WIFSTOPPED(wstatus))
 	{
-		ft_printf("Proceso suspendido\n");
+		//ft_printf("Proceso suspendido\n");
 	}else if (WIFCONTINUED(wstatus))
 	{
-		ft_printf("Proceso continuado\n");
+		//ft_printf("Proceso continuado\n");
 	}else if (WIFSIGNALED(wstatus))
 	{
-		ft_printf("Proceso parado por una señal\n");
+		//ft_printf("Proceso parado por una señal\n");
 	}else
 	{
-		ft_printf("El proceso finalizó correctamente\n");
+		//ft_printf("El proceso finalizó correctamente\n");
 	}
 }
 

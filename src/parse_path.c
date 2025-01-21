@@ -6,7 +6,7 @@
 /*   By: anggalle <anggalle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 12:59:22 by anggalle          #+#    #+#             */
-/*   Updated: 2025/01/21 13:50:25 by anggalle         ###   ########.fr       */
+/*   Updated: 2025/01/21 19:13:48 by anggalle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ char	*find_path_in_env(t_data *data)
 	aux_env = data->env;
 	while (aux_env->value)
 	{
-		if (ft_strncmp(aux_env->value, "PATH", 4) == 0)
+		if (ft_strncmp(aux_env->value, "PATH=", 5) == 0)
 		{
 			return (aux_env->value);
 		}
