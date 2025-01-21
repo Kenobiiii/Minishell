@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anggalle <anggalle@student.42.fr>          +#+  +:+       +#+        */
+/*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 20:08:34 by paromero          #+#    #+#             */
-/*   Updated: 2025/01/21 12:45:20 by anggalle         ###   ########.fr       */
+/*   Updated: 2025/01/21 19:55:42 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,24 @@ int	ft_tokens(t_data *data, char *str)
 	current->type = ft_types(result[i - 1]);
 	ft_free_split(result);
 	return (1);
+}
+
+int	opencoms(char	*line)
+{
+	int i;
+	int count;
+
+	count = 0;
+	i = 0;
+	while(line[i])
+	{
+		if (line[i] == '"' || line[i] == '\'')
+			count++;
+		i++;
+	}
+	if (count % 2 == 0)
+		return (1);
+	return (0);
 }
 
 int	ft_syntax(t_data *data)

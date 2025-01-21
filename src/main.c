@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anggalle <anggalle@student.42.fr>          +#+  +:+       +#+        */
+/*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 17:54:48 by paromero          #+#    #+#             */
-/*   Updated: 2025/01/21 19:31:33 by anggalle         ###   ########.fr       */
+/*   Updated: 2025/01/21 19:50:50 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,7 @@ int	ft_isSpace(char	*line)
 	return (0);
 }
 
+
 int	minishell(char **env)
 {
 	t_data	data;
@@ -109,6 +110,11 @@ int	minishell(char **env)
 		add_history(data.line);
 		if (ft_strncmp(data.line, "exit", 5) == 0) //TODO quitarlo
 			data.exit = 1;
+		if (!opencoms(data.line))
+		{
+			printf("Syntax error\n");
+			continue ;
+		}
 		data.line = ft_delete_spaces(data.line);
 		ft_tokens(&data, data.line);
 		if (data.line && ft_syntax(&data))
@@ -116,10 +122,10 @@ int	minishell(char **env)
 			//print_tokens(data.tokens);
 			//TODO func parseo
 			data.ast = ft_build_ast(data.tokens);
-			//print_ast(data.ast, 1);
+			print_ast(data.ast, 1);
 
 			//TODO func ejecutable
-			exec_func(&data);
+			//exec_func(&data);
 			continue;
 		}
 	}
