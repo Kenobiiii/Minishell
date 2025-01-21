@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_ast.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: anggalle <anggalle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 17:26:30 by paromero          #+#    #+#             */
-/*   Updated: 2025/01/15 17:49:57 by paromero         ###   ########.fr       */
+/*   Updated: 2025/01/21 14:56:39 by anggalle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,19 +97,20 @@ void	ft_add_argument(t_ast *cmd_node, char *arg)
 	char	**new_args;
 
 	i = 0;
-	j = 0;
+	j = 1;
 	while (cmd_node->args && cmd_node->args[i])
 		i++;
 	new_args = malloc(sizeof(char *) * (i + 2));
 	if (!new_args)
 		return ;
-	while (j < i)
+	new_args[0] = ft_strdup(cmd_node->value);
+	while (j < i + 1)
 	{
 		new_args[j] = cmd_node->args[j];
 		j++;
 	}
-	new_args[i] = ft_strdup(arg);
-	new_args[i + 1] = NULL;
+	new_args[i + 1] = ft_strdup(arg);
+	new_args[i + 2] = NULL;
 	free(cmd_node->args);
 	cmd_node->args = new_args;
 }

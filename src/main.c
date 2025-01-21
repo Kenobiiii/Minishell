@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: anggalle <anggalle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 17:54:48 by paromero          #+#    #+#             */
-/*   Updated: 2025/01/21 10:47:23 by paromero         ###   ########.fr       */
+/*   Updated: 2025/01/21 13:52:12 by anggalle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,6 @@ int	minishell(char **env)
 	{
 		//TODO Signal handler (Importante!!!!)
 		data.line = readline(data.prompt);
-		printf("Llega aqui\n");
 		if (data.line == NULL)
 			break ;
 		if (!ft_isSpace(data.line))
@@ -110,14 +109,14 @@ int	minishell(char **env)
 		add_history(data.line);
 		if (ft_strncmp(data.line, "exit", 5) == 0)
 			data.exit = 1;
-		data.line = ft_spaces(data.line);
+		data.line = ft_delete_spaces(data.line);
 		ft_tokens(&data, data.line);
 		if (data.line && ft_syntax(&data))
 		{
 			//print_tokens(data.tokens);
 			//TODO func parseo
 			data.ast = ft_build_ast(data.tokens);
-			print_ast(data.ast, 1);
+			//print_ast(data.ast, 1);
 
 			//TODO func ejecutable
 			exec_func(&data);

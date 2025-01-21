@@ -6,7 +6,7 @@
 /*   By: anggalle <anggalle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 19:06:45 by paromero          #+#    #+#             */
-/*   Updated: 2025/01/20 18:47:45 by anggalle         ###   ########.fr       */
+/*   Updated: 2025/01/21 14:07:59 by anggalle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ t_env		*create_node(const char *valor);
 //! parse.c //
 int			ft_types(char	*value);
 int			ft_tokens(t_data *data, char *str);
-char		*ft_spaces(char *line);
+char		*ft_delete_spaces(char *line);
 int			ft_syntax(t_data *data);
 
 //! ft_free_parse.c //
@@ -112,11 +112,18 @@ void		ft_add_argument(t_ast *cmd_node, char *arg);
 
 //! ft_signals.c //
 
+//! parse_path //
+char	*find_path_in_env(t_data *data);
+char	*get_cmd_path(t_data *data, char *cmd);
 
-// exec.c
+//! exec.c //
 void	create_command(char **cmd, char *argv);
 void analyse_status(int wstatus);
 void exec_func(t_data *data);
+
+//!	exec_utils.c //
+const char **list_to_array(t_env *head);
+void free_array(const char **array); 
 
 #endif
 /**
