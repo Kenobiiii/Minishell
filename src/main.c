@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 17:54:48 by paromero          #+#    #+#             */
-/*   Updated: 2025/01/21 10:44:44 by paromero         ###   ########.fr       */
+/*   Updated: 2025/01/21 10:47:23 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,6 @@ int	minishell(char **env)
 	while (data.exit == 0)
 	{
 		//TODO Signal handler (Importante!!!!)
-		//configure_signals();
 		data.line = readline(data.prompt);
 		printf("Llega aqui\n");
 		if (data.line == NULL)

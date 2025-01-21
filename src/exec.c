@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anggalle <anggalle@student.42.fr>          +#+  +:+       +#+        */
+/*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 17:42:48 by anggalle          #+#    #+#             */
-/*   Updated: 2025/01/20 20:17:00 by anggalle         ###   ########.fr       */
+/*   Updated: 2025/01/21 11:31:09 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ void exec_func(t_data *data)
 	int pid_fork;
 	int pid_wait;
 	int wstatus;
+	char	*path = ft_strcat("/bin/", data->ast->value);
 
 	
 	pid_fork = fork();
@@ -52,7 +53,7 @@ void exec_func(t_data *data)
 	}
 	else if (pid_fork == 0) //proceso hijo
 	{
-		execve("/bin/sh", data->ast->args, NULL);
+		execve(path, data->ast->args, NULL);
 		perror("Errror en el execve");
 		exit(-1);
 	}else if (pid_fork > 0) //Proceso padre
