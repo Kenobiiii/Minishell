@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo_builtin.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: anggalle <anggalle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 17:09:01 by anggalle          #+#    #+#             */
-/*   Updated: 2025/01/22 14:03:16 by paromero         ###   ########.fr       */
+/*   Updated: 2025/01/22 14:37:39 by anggalle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 int	echo_builtin(t_data *data)
 {
 	int i;
+	int j;
 	int	print_new_line;
 
 	print_new_line = 1;
@@ -29,10 +30,19 @@ int	echo_builtin(t_data *data)
 					print_new_line = 0;
 				else
 				{
-					ft_putstr_fd(data->ast->args[i], STDOUT_FILENO);
-					if (data->ast->args[i + 1])
-						ft_putstr_fd(" ", STDOUT_FILENO);
-					print_new_line = 1;
+					j = 2;
+					while (data->ast->args[i][j] == 'n')
+						j ++;
+					if (data->ast->args[i][j])
+					{
+						ft_putstr_fd(data->ast->args[i], STDOUT_FILENO);
+						if (data->ast->args[i + 1])
+							ft_putstr_fd(" ", STDOUT_FILENO);
+						print_new_line = 1;
+					}else
+					{
+						print_new_line = 0;
+					}
 				}
 			}
 			else
@@ -45,8 +55,6 @@ int	echo_builtin(t_data *data)
 		}
 		if (print_new_line)
 			ft_putstr_fd("\n", STDOUT_FILENO);
-		else
-			ft_putstr_fd("%\n", STDOUT_FILENO);
 	}
 	return (1);
 }

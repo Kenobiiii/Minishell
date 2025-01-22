@@ -6,7 +6,7 @@
 /*   By: anggalle <anggalle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 12:59:22 by anggalle          #+#    #+#             */
-/*   Updated: 2025/01/22 13:26:20 by anggalle         ###   ########.fr       */
+/*   Updated: 2025/01/22 14:21:15 by anggalle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,13 +31,15 @@ char	*find_path_in_env(t_data *data) //EN TEORÍA QUITAR
 char	*find_variable_in_env(t_data *data, char *var)
 {
 	t_env	*aux_env;
+	char	*env_var;
 
 	aux_env = data->env;
 	while (aux_env->value)
 	{
 		if (ft_strncmp(aux_env->value, var, ft_strlen(var)) == 0)
 		{
-			return (aux_env->value);
+			env_var = ft_strdup(aux_env->value + ft_strlen(var));
+			return (env_var);
 		}
 		aux_env = aux_env->next;
 	}

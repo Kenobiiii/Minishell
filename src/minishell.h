@@ -6,7 +6,7 @@
 /*   By: anggalle <anggalle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 19:06:45 by paromero          #+#    #+#             */
-/*   Updated: 2025/01/22 13:32:54 by anggalle         ###   ########.fr       */
+/*   Updated: 2025/01/22 14:14:14 by anggalle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,10 +126,11 @@ void 	exec_func(t_data *data);
 //!	exec_utils.c //
 const char **list_to_array(t_env *head);
 void free_array(const char **array);
-int	echo_builtin(t_data *data);
 
 //!	builtin.c //
 int	is_builtins(t_data *data);
+int	echo_builtin(t_data *data);
+int	pwd_builtin(t_data *data);
 
 #endif
 /**

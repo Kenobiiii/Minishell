@@ -1,29 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   builtin.c                                          :+:      :+:    :+:   */
+/*   pwd_builtin.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: anggalle <anggalle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/21 19:17:47 by anggalle          #+#    #+#             */
-/*   Updated: 2025/01/22 14:13:52 by anggalle         ###   ########.fr       */
+/*   Created: 2025/01/22 14:08:21 by anggalle          #+#    #+#             */
+/*   Updated: 2025/01/22 14:30:19 by anggalle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	is_builtins(t_data *data)
+int	pwd_builtin(t_data *data)
 {
-	int ret;
+	char	*path;
 
-	ret = 0;
-	if (ft_strncmp(data->ast->value, "echo", ft_strlen(data->ast->value)) == 0)
+	if (data->ast->args[1])
 	{
-		ret = echo_builtin(data);
+		printf("Syntax error\n");
+		return (1);
 	}
-	else if (ft_strncmp(data->ast->value, "pwd", ft_strlen(data->ast->value)) == 0)
-	{
-		ret = pwd_builtin(data);
-	}
-	return (ret);
+	path = find_variable_in_env(data, "PWD=");
+	ft_putstr_fd(path, STDOUT_FILENO);
+	ft_putstr_fd("\n", STDOUT_FILENO);
+	return (1);
 }
