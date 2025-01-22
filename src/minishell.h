@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: anggalle <anggalle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 19:06:45 by paromero          #+#    #+#             */
-/*   Updated: 2025/01/21 19:56:02 by paromero         ###   ########.fr       */
+/*   Updated: 2025/01/21 20:12:59 by anggalle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,7 +124,8 @@ void exec_func(t_data *data);
 
 //!	exec_utils.c //
 const char **list_to_array(t_env *head);
-void free_array(const char **array); 
+void free_array(const char **array);
+int	echo_builtin(t_data *data);
 
 #endif
 /**

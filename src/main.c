@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: anggalle <anggalle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 17:54:48 by paromero          #+#    #+#             */
-/*   Updated: 2025/01/21 19:50:50 by paromero         ###   ########.fr       */
+/*   Updated: 2025/01/21 20:13:41 by anggalle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,9 +122,10 @@ int	minishell(char **env)
 			//print_tokens(data.tokens);
 			//TODO func parseo
 			data.ast = ft_build_ast(data.tokens);
-			print_ast(data.ast, 1);
+			//print_ast(data.ast, 1);
 
 			//TODO func ejecutable
+			echo_builtin(&data);
 			//exec_func(&data);
 			continue;
 		}
