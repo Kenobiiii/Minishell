@@ -6,7 +6,7 @@
 /*   By: anggalle <anggalle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 17:09:01 by anggalle          #+#    #+#             */
-/*   Updated: 2025/01/21 20:27:50 by anggalle         ###   ########.fr       */
+/*   Updated: 2025/01/22 13:27:42 by anggalle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,6 @@ int	echo_builtin(t_data *data)
 
 	print_new_line = 1;
 	i = 1;
-	printf("%s", data->ast->args[0]);
-	printf("A\n");
 	while (data->ast->args[i])
 	{
 		if (ft_strncmp(data->ast->args[i], "-n", 2) == 0)

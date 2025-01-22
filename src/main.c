@@ -6,7 +6,7 @@
 /*   By: anggalle <anggalle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 17:54:48 by paromero          #+#    #+#             */
-/*   Updated: 2025/01/21 20:13:41 by anggalle         ###   ########.fr       */
+/*   Updated: 2025/01/22 13:30:25 by anggalle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,8 +125,11 @@ int	minishell(char **env)
 			//print_ast(data.ast, 1);
 
 			//TODO func ejecutable
-			echo_builtin(&data);
-			//exec_func(&data);
+			if (is_builtins(&data) == 1)
+			{
+				continue;
+			}
+			exec_func(&data);
 			continue;
 		}
 	}

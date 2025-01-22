@@ -6,13 +6,13 @@
 /*   By: anggalle <anggalle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 12:59:22 by anggalle          #+#    #+#             */
-/*   Updated: 2025/01/21 19:13:48 by anggalle         ###   ########.fr       */
+/*   Updated: 2025/01/22 13:26:20 by anggalle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*find_path_in_env(t_data *data)
+char	*find_path_in_env(t_data *data) //EN TEORÍA QUITAR
 {
 	t_env	*aux_env;
 
@@ -20,6 +20,22 @@ char	*find_path_in_env(t_data *data)
 	while (aux_env->value)
 	{
 		if (ft_strncmp(aux_env->value, "PATH=", 5) == 0)
+		{
+			return (aux_env->value);
+		}
+		aux_env = aux_env->next;
+	}
+	return (NULL);
+}
+
+char	*find_variable_in_env(t_data *data, char *var)
+{
+	t_env	*aux_env;
+
+	aux_env = data->env;
+	while (aux_env->value)
+	{
+		if (ft_strncmp(aux_env->value, var, ft_strlen(var)) == 0)
 		{
 			return (aux_env->value);
 		}
@@ -71,7 +87,7 @@ char	*get_cmd_path(t_data *data, char *cmd)
 	
 	if (!cmd)
 		return (NULL);
-	cmd_path = ft_split(find_path_in_env(data), ':');
+	cmd_path = ft_split(find_variable_in_env(data, "PATH="), ':');
 	if (!cmd_path)
 		return (NULL);
 	total_cmd = ft_strcat("/", cmd);

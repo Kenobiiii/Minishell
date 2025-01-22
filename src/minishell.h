@@ -6,7 +6,7 @@
 /*   By: anggalle <anggalle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 19:06:45 by paromero          #+#    #+#             */
-/*   Updated: 2025/01/21 20:12:59 by anggalle         ###   ########.fr       */
+/*   Updated: 2025/01/22 13:32:54 by anggalle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,17 +115,21 @@ void		ft_add_argument(t_ast *cmd_node, char *arg);
 
 //! parse_path //
 char	*find_path_in_env(t_data *data);
+char	*find_variable_in_env(t_data *data, char *var);
 char	*get_cmd_path(t_data *data, char *cmd);
 
 //! exec.c //
 void	create_command(char **cmd, char *argv);
-void analyse_status(int wstatus);
-void exec_func(t_data *data);
+void 	analyse_status(int wstatus);
+void 	exec_func(t_data *data);
 
 //!	exec_utils.c //
 const char **list_to_array(t_env *head);
 void free_array(const char **array);
 int	echo_builtin(t_data *data);
+
+//!	builtin.c //
+int	is_builtins(t_data *data);
 
 #endif
 /**
