@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo_builtin.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anggalle <anggalle@student.42.fr>          +#+  +:+       +#+        */
+/*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 17:09:01 by anggalle          #+#    #+#             */
-/*   Updated: 2025/01/22 13:27:42 by anggalle         ###   ########.fr       */
+/*   Updated: 2025/01/22 14:03:16 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,25 +19,34 @@ int	echo_builtin(t_data *data)
 
 	print_new_line = 1;
 	i = 1;
-	while (data->ast->args[i])
+	if (data->ast->args[1])
 	{
-		if (ft_strncmp(data->ast->args[i], "-n", 2) == 0)
+		while (data->ast->args[i])
 		{
-			if (ft_strncmp(data->ast->args[i], "-n", ft_strlen(data->ast->args[i])) == 0)
-				print_new_line = 0;
+			if (ft_strncmp(data->ast->args[i], "-n", 2) == 0)
+			{
+				if (ft_strncmp(data->ast->args[i], "-n", ft_strlen(data->ast->args[i])) == 0)
+					print_new_line = 0;
+				else
+				{
+					ft_putstr_fd(data->ast->args[i], STDOUT_FILENO);
+					if (data->ast->args[i + 1])
+						ft_putstr_fd(" ", STDOUT_FILENO);
+					print_new_line = 1;
+				}
+			}
 			else
 			{
 				ft_putstr_fd(data->ast->args[i], STDOUT_FILENO);
-				print_new_line = 1;
+				if (data->ast->args[i + 1])
+						ft_putstr_fd(" ", STDOUT_FILENO);
 			}
+			i ++;
 		}
+		if (print_new_line)
+			ft_putstr_fd("\n", STDOUT_FILENO);
 		else
-		{
-			ft_putstr_fd(data->ast->args[i], STDOUT_FILENO);
-			if (print_new_line)
-				ft_putstr_fd("\n", STDOUT_FILENO);
-		}
-		i ++;
+			ft_putstr_fd("%\n", STDOUT_FILENO);
 	}
 	return (1);
 }
