@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_ast.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anggalle <anggalle@student.42.fr>          +#+  +:+       +#+        */
+/*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 17:26:30 by paromero          #+#    #+#             */
-/*   Updated: 2025/01/21 14:56:39 by anggalle         ###   ########.fr       */
+/*   Updated: 2025/01/22 13:50:18 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,22 +27,28 @@ t_ast	*ft_create_ast_node(t_type type, char *value)
 	return (node);
 }
 
-void	ft_handle_command_node(t_ast **root, t_ast **current_cmd,
-	t_ast **last_operator, t_tokens *tokens)
+void    ft_handle_command_node(t_ast **root, t_ast **current_cmd,
+    t_ast **last_operator, t_tokens *tokens)
 {
-	t_ast	*new_node;
+    t_ast   *new_node;
 
-	new_node = ft_create_ast_node(CMD, tokens->value);
-	if (*current_cmd)
-		ft_add_argument(*current_cmd, tokens->value);
-	else
-	{
-		*current_cmd = new_node;
-		if (!*root)
-			*root = *current_cmd;
-		else if (*last_operator)
-			(*last_operator)->right = *current_cmd;
-	}
+    new_node = ft_create_ast_node(CMD, tokens->value);
+    if (*current_cmd)
+        ft_add_argument(*current_cmd, tokens->value);
+    else
+    {
+        new_node->args = malloc(sizeof(char *) * 2);
+        if (new_node->args)
+        {
+            new_node->args[0] = ft_strdup(tokens->value);
+            new_node->args[1] = NULL;
+        }
+        *current_cmd = new_node;
+        if (!*root)
+            *root = *current_cmd;
+        else if (*last_operator)
+            (*last_operator)->right = *current_cmd;
+    }
 }
 
 void	ft_handle_operator_node(t_ast **root, t_ast **current_cmd,
@@ -109,8 +115,9 @@ void	ft_add_argument(t_ast *cmd_node, char *arg)
 		new_args[j] = cmd_node->args[j];
 		j++;
 	}
-	new_args[i + 1] = ft_strdup(arg);
-	new_args[i + 2] = NULL;
+	new_args[i] = ft_strdup(arg);
+	new_args[i + 1] = NULL;
 	free(cmd_node->args);
+	cmd_node->args = NULL;
 	cmd_node->args = new_args;
 }
