@@ -7,7 +7,7 @@ CFLAGS = -Wall -Werror -Wextra
 USER = paromero
 SRC_DIR = src src/init
 OBJ_DIR = objs
-SRCS = src/main.c src/init/init.c src/parse/ft_tokens.c src/parse/ft_free_parse.c src/parse/ft_parse_utils.c src/parse/ft_ast.c src/execution/exec.c src/parse/ft_parse_path.c src/execution/exec_utils.c src/builts_ins/echo_builtin.c src/builts_ins/builtin.c src/builts_ins/pwd_builtin.c src/parse/ft_quotesplit.c#! no se permite wildcard
+SRCS = src/main.c src/init/init.c src/parse/ft_tokens.c src/parse/ft_free_parse.c src/parse/ft_parse_utils.c src/parse/ft_ast.c src/execution/exec.c src/parse/ft_parse_path.c src/execution/exec_utils.c src/builts_ins/echo_builtin.c src/builts_ins/builtin.c src/builts_ins/pwd_builtin.c src/parse/ft_quotesplit.c src/builts_ins/cd_builtin.c#! no se permite wildcard
 OBJS = $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRCS))
 
 NAME = minishell

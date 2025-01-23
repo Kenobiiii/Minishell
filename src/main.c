@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: anggalle <anggalle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 17:54:48 by paromero          #+#    #+#             */
-/*   Updated: 2025/01/23 11:33:27 by paromero         ###   ########.fr       */
+/*   Updated: 2025/01/23 12:57:20 by anggalle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,11 +56,10 @@ int	minishell(char **env)
 			//print_tokens(data.tokens);
 			data.ast = ft_build_ast(data.tokens);
 			//print_ast(data.ast, 1);
-			if (is_builtins(&data) == 1)
+			if (is_builtins(&data) == 0)
 			{
-				continue;
+				exec_func(&data);
 			}
-			exec_func(&data);
 			continue;
 		}
 	}
