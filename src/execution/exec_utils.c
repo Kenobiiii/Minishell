@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: anggalle <anggalle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 13:59:23 by anggalle          #+#    #+#             */
-/*   Updated: 2025/01/23 11:36:29 by paromero         ###   ########.fr       */
+/*   Updated: 2025/01/23 14:28:47 by anggalle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,10 @@ static size_t count_nodes(t_env *head)
 }
 
 // Función para convertir la lista enlazada a matriz
-const char **list_to_array(t_env *head)
+char **list_to_array(t_env *head)
 {
     size_t count = count_nodes(head);
-    const char **array = malloc((count + 1) * sizeof(char *));
+	char	**array = malloc((count + 1) * sizeof(char *));
     if (!array)
         return NULL;
 

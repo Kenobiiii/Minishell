@@ -7,19 +7,20 @@ CFLAGS = -Wall -Werror -Wextra
 USER = paromero
 OBJ_DIR = objs
 SRCS = src/main.c \
-        src/init/init.c \
-        src/parse/ft_tokens.c \
-        src/parse/ft_free_parse.c \
-        src/parse/ft_parse_utils.c \
-        src/parse/ft_ast.c \
-        src/execution/exec.c \
-        src/parse/ft_parse_path.c \
-        src/execution/exec_utils.c \
-        src/builts_ins/echo_builtin.c \
-        src/builts_ins/builtin.c \
-        src/builts_ins/pwd_builtin.c \
-        src/parse/ft_quotesplit.c \
-        src/builts_ins/cd_builtin.c
+		src/init/init.c \
+		src/parse/ft_tokens.c \
+		src/parse/ft_free_parse.c \
+		src/parse/ft_parse_utils.c \
+		src/parse/ft_ast.c \
+		src/execution/exec.c \
+		src/parse/ft_parse_path.c \
+		src/execution/exec_utils.c \
+		src/builts_ins/echo_builtin.c \
+		src/builts_ins/builtin.c \
+		src/builts_ins/pwd_builtin.c \
+		src/parse/ft_quotesplit.c \
+		src/builts_ins/cd_builtin.c \
+		src/builts_ins/export_builtin.c
 
 OBJS = $(patsubst src/%.c, $(OBJ_DIR)/%.o, $(SRCS))  # src/main.c → objs/main.o
 
