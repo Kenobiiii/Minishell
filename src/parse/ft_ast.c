@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 17:26:30 by paromero          #+#    #+#             */
-/*   Updated: 2025/01/23 11:36:29 by paromero         ###   ########.fr       */
+/*   Updated: 2025/01/23 11:50:19 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,28 +27,28 @@ t_ast	*ft_create_ast_node(t_type type, char *value)
 	return (node);
 }
 
-void    ft_handle_command_node(t_ast **root, t_ast **current_cmd,
-    t_ast **last_operator, t_tokens *tokens)
+void	ft_handle_command_node(t_ast **root, t_ast **current_cmd,
+	t_ast **last_operator, t_tokens *tokens)
 {
-    t_ast   *new_node;
+	t_ast	*new_node;
 
-    new_node = ft_create_ast_node(CMD, tokens->value);
-    if (*current_cmd)
-        ft_add_argument(*current_cmd, tokens->value);
-    else
-    {
-        new_node->args = malloc(sizeof(char *) * 2);
-        if (new_node->args)
-        {
-            new_node->args[0] = ft_strdup(tokens->value);
-            new_node->args[1] = NULL;
-        }
-        *current_cmd = new_node;
-        if (!*root)
-            *root = *current_cmd;
-        else if (*last_operator)
-            (*last_operator)->right = *current_cmd;
-    }
+	new_node = ft_create_ast_node(CMD, tokens->value);
+	if (*current_cmd)
+		ft_add_argument(*current_cmd, tokens->value);
+	else
+	{
+		new_node->args = malloc(sizeof(char *) * 2);
+		if (new_node->args)
+		{
+			new_node->args[0] = ft_strdup(tokens->value);
+			new_node->args[1] = NULL;
+		}
+		*current_cmd = new_node;
+		if (!*root)
+			*root = *current_cmd;
+		else if (*last_operator)
+			(*last_operator)->right = *current_cmd;
+	}
 }
 
 void	ft_handle_operator_node(t_ast **root, t_ast **current_cmd,

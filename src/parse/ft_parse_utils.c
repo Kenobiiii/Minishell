@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 18:47:59 by paromero          #+#    #+#             */
-/*   Updated: 2025/01/23 11:36:29 by paromero         ###   ########.fr       */
+/*   Updated: 2025/01/23 11:50:57 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,14 +43,14 @@ size_t	ft_spacestrlen(char *line)
 
 int	openquotes(char	*line)
 {
-	int i;
-	int count_double;
-	int count_single;
+	int	i;
+	int	count_double;
+	int	count_single;
 
 	count_single = 0;
-	count_double  = 0;
+	count_double = 0;
 	i = 0;
-	while(line[i])
+	while (line[i])
 	{
 		if (line[i] == '"')
 			count_double++;

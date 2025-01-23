@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 12:59:22 by anggalle          #+#    #+#             */
-/*   Updated: 2025/01/23 11:36:29 by paromero         ###   ########.fr       */
+/*   Updated: 2025/01/23 11:48:50 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ char	*find_variable_in_env(t_data *data, char *var)
 
 void	free_cmd(char **cmd_path)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (cmd_path[i])
@@ -62,7 +62,7 @@ void	free_cmd(char **cmd_path)
 char	*find_valid_path(char **cmd_path, char *total_cmd)
 {
 	char	*total_cmd_path;
-	int i;
+	int		i;
 
 	i = 0;
 	total_cmd_path = NULL;
@@ -86,7 +86,7 @@ char	*get_cmd_path(t_data *data, char *cmd)
 	char	**cmd_path;
 	char	*total_cmd;
 	char	*valid_path;
-	
+
 	if (!cmd)
 		return (NULL);
 	cmd_path = ft_split(find_variable_in_env(data, "PATH="), ':');

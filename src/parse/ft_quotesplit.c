@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/18 09:38:49 by paromero          #+#    #+#             */
-/*   Updated: 2025/01/23 11:36:29 by paromero         ###   ########.fr       */
+/*   Updated: 2025/01/23 11:49:30 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ static int	count_substr(char const *s, char c)
 	quotecount = 0;
 	i = 0;
 	count = 0;
-
 	while (s[i] != '\0')
 	{
 		while (s[i] == c && s[i] != '\0')
@@ -67,7 +66,7 @@ static int	allocate_substr(char **array, char const *s, char c)
 				i++;
 		}
 		else
-		{	
+		{
 			while (s[i] != c && s[i] != '\0')
 				i++;
 		}
@@ -116,4 +115,3 @@ char	**ft_quotesplit(char const *s, char c)
 	}
 	return (array);
 }
-
