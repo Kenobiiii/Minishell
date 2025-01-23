@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/18 09:38:49 by paromero          #+#    #+#             */
-/*   Updated: 2025/01/23 11:26:22 by paromero         ###   ########.fr       */
+/*   Updated: 2025/01/23 11:28:53 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,8 +64,6 @@ static int	allocate_substr(char **array, char const *s, char c)
 			i++;
 			start = i;
 			while (s[i] != quote && s[i] != '\0')
-				i++;
-			if (s[i] == quote)
 				i++;
 		}
 		else
