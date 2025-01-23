@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 11:31:07 by paromero          #+#    #+#             */
-/*   Updated: 2025/01/23 11:41:50 by paromero         ###   ########.fr       */
+/*   Updated: 2025/01/23 14:00:32 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	printmatrix(char **matrix)
 
 	while (matrix[i])
 	{
-		printf("token %d : %s\n", i, matrix[i]);
+		printf("token %d : %s -final\n", i, matrix[i]);
 		i++;
 	}
 }

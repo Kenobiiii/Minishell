@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 18:47:59 by paromero          #+#    #+#             */
-/*   Updated: 2025/01/23 12:47:38 by paromero         ###   ########.fr       */
+/*   Updated: 2025/01/23 15:01:14 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,8 @@ int	openquotes(char	*line)
 	count_single = 0;
 	count_double = 0;
 	i = 0;
+	if (line[i] == '"' || line[0] == '\'')
+		return (0);
 	while (line[i])
 	{
 		if (line[i] == '"' && count_single % 2 == 0)
