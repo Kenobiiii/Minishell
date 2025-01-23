@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/18 09:38:49 by paromero          #+#    #+#             */
-/*   Updated: 2025/01/23 12:33:56 by paromero         ###   ########.fr       */
+/*   Updated: 2025/01/23 14:38:23 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,8 @@ static int	allocate_substr(char **array, char const *s, char c)
 				return (-1);
 			j++;
 		}
+		if (s[i] == quote)
+			i++;
 	}
 	array[j] = NULL;
 	return (0);
