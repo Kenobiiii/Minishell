@@ -5,10 +5,23 @@ CC = clang
 CFLAGS = -Wall -Werror -Wextra
 
 USER = paromero
-SRC_DIR = src src/init
 OBJ_DIR = objs
-SRCS = src/main.c src/init/init.c src/parse/ft_tokens.c src/parse/ft_free_parse.c src/parse/ft_parse_utils.c src/parse/ft_ast.c src/execution/exec.c src/parse/ft_parse_path.c src/execution/exec_utils.c src/builts_ins/echo_builtin.c src/builts_ins/builtin.c src/builts_ins/pwd_builtin.c src/parse/ft_quotesplit.c src/builts_ins/cd_builtin.c#! no se permite wildcard
-OBJS = $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRCS))
+SRCS = src/main.c \
+        src/init/init.c \
+        src/parse/ft_tokens.c \
+        src/parse/ft_free_parse.c \
+        src/parse/ft_parse_utils.c \
+        src/parse/ft_ast.c \
+        src/execution/exec.c \
+        src/parse/ft_parse_path.c \
+        src/execution/exec_utils.c \
+        src/builts_ins/echo_builtin.c \
+        src/builts_ins/builtin.c \
+        src/builts_ins/pwd_builtin.c \
+        src/parse/ft_quotesplit.c \
+        src/builts_ins/cd_builtin.c
+
+OBJS = $(patsubst src/%.c, $(OBJ_DIR)/%.o, $(SRCS))  # src/main.c → objs/main.o
 
 NAME = minishell
 
@@ -29,8 +42,10 @@ $(NAME): $(OBJS)
 	@$(CC) $(CFLAGS) $(OBJS) $(LIBS) -o $(NAME)
 	@echo "$(GREEN)Executable created: $(NAME)$(RESET)"
 
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)
+# Regla corregida: sin SRC_DIR y creando subdirectorios
+$(OBJ_DIR)/%.o: src/%.c | $(OBJ_DIR)
 	@echo "$(GREEN)Compiling $<...$(RESET)"
+	@mkdir -p $(dir $@)  # Crea subdirectorios (ej: objs/parse/)
 	@$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 	@echo "$(GREEN)$< compiled!$(RESET)"
 
