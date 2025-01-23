@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 11:31:07 by paromero          #+#    #+#             */
-/*   Updated: 2025/01/23 11:32:35 by paromero         ###   ########.fr       */
+/*   Updated: 2025/01/23 11:41:50 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,4 +86,14 @@ void print_ast(t_ast *node, int level) //! BORRAR AL ACABAR (TESTEO)
     // Recursivamente imprimir los nodos hijos
     print_ast(node->left, level + 1);
     print_ast(node->right, level + 1);
+}
+
+int	print_env(t_env *env) //! cambiar de sitio (func para printear el entorno (env))
+{
+	while (env)
+	{
+		printf("%s\n", env->value);
+		env = env->next;
+	}
+	return (1);
 }

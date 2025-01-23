@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 19:06:45 by paromero          #+#    #+#             */
-/*   Updated: 2025/01/23 11:33:27 by paromero         ###   ########.fr       */
+/*   Updated: 2025/01/23 11:47:46 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,55 +85,65 @@ typedef struct s_data
 	t_ast		*ast; //- puntero a estructura ast (Abstract Syntax Tree)	
 }	t_data;
 
+//* 				INIT					//
+
 //! init.c //
 int			init_data(t_data *data, char **env);
 int			init_env(t_data *data, char *env[]);
 t_env		*create_node(const char *valor);
 
-//! parse.c //
+//* 				PARSE					//
+
+//! ft_tokens.c //
 int			ft_types(char	*value);
+t_tokens	*ft_new_token(char	*str);
 int			ft_tokens(t_data *data, char *str);
+
+//! ft_parse_utils.c //
 char		*ft_delete_spaces(char *line);
 int			ft_syntax(t_data *data);
 int			openquotes(char	*line);
+size_t		ft_spacestrlen(char *line);
+int			ft_dobletype(t_type	type);
 
 //! ft_free_parse.c //
 void		ft_free_split(char **split);
 void		ft_free_tokens(t_tokens *tokens);
 void		ft_free_error_token(t_data	*data, char **result);
 
-//! ft_parse_utils.c //
-size_t		ft_spacestrlen(char *line);
-t_tokens	*ft_new_token(char	*str);
-int			ft_dobletype(t_type	type);
-
 //! ft_ast.c //
 t_ast		*ft_build_ast(t_tokens *tokens);
 void		ft_add_argument(t_ast *cmd_node, char *arg);
 
-//! ft_signals.c //
-
 //! parse_path //
-char	*find_path_in_env(t_data *data);
-char	*find_variable_in_env(t_data *data, char *var);
-char	*get_cmd_path(t_data *data, char *cmd);
-
-//! exec.c //
-void	create_command(char **cmd, char *argv);
-void 	analyse_status(int wstatus);
-void 	exec_func(t_data *data);
-
-//!	exec_utils.c //
-const char **list_to_array(t_env *head);
-void free_array(const char **array);
-
-//!	builtin.c //
-int	is_builtins(t_data *data);
-int	echo_builtin(t_data *data);
-int	pwd_builtin(t_data *data);
+char		*find_path_in_env(t_data *data);
+char		*find_variable_in_env(t_data *data, char *var);
+char		*get_cmd_path(t_data *data, char *cmd);
 
 //! ft_quotesplit.c //
-char	**ft_quotesplit(char const *s, char c);
+char		**ft_quotesplit(char const *s, char c);
+
+//* 				EXECUTION					//
+
+//! exec.c //
+void		create_command(char **cmd, char *argv);
+void		analyse_status(int wstatus);
+void		exec_func(t_data *data);
+
+//!	exec_utils.c //
+const		char	**list_to_array(t_env *head);
+void		free_array(const char **array);
+
+//* 				BUILTS_IN					//
+
+//!	builtin.c //
+int			is_builtins(t_data *data);
+
+//! echo_builtin.c //
+int			echo_builtin(t_data *data);
+
+//! pwd_builtint.c //
+int			pwd_builtin(t_data *data);
 
 #endif
 /**
