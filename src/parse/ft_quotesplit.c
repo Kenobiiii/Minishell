@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/18 09:38:49 by paromero          #+#    #+#             */
-/*   Updated: 2025/01/23 11:49:30 by paromero         ###   ########.fr       */
+/*   Updated: 2025/01/23 12:33:56 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,14 @@ static int	count_substr(char const *s, char c)
 		if (s[i] != c && s[i] != '\0')
 			count++;
 		while (s[i] != c && s[i] != '\0' && quotecount % 2 != 0)
+		{
+			if (s[i] == '"' || s[i] == '\'')
+			{
+				quotecount++;
+				i++;
+			}
 			i++;
+		}
 		if (quotecount % 2 == 0)
 		{
 			i++;
