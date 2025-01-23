@@ -6,7 +6,7 @@
 /*   By: anggalle <anggalle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 19:06:45 by paromero          #+#    #+#             */
-/*   Updated: 2025/01/23 12:38:30 by anggalle         ###   ########.fr       */
+/*   Updated: 2025/01/23 14:28:26 by anggalle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,7 +131,7 @@ void		analyse_status(int wstatus);
 void		exec_func(t_data *data);
 
 //!	exec_utils.c //
-const		char	**list_to_array(t_env *head);
+char		**list_to_array(t_env *head);
 void		free_array(const char **array);
 
 //* 				BUILTS_IN					//
@@ -147,6 +147,13 @@ int			pwd_builtin(t_data *data);
 
 //! cd_builtint.c //
 int			cd_builtin(t_data *data);
+
+//! export_builtint.c //
+int			export_builtin(t_data *data);
+void		print_env_sorted(char **env_matrix);
+void		print_matrix(char **matrix);
+void		sort_matrix(char **matrix);
+
 
 #endif
 /**
