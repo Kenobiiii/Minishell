@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   pwd_builtin.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anggalle <anggalle@student.42.fr>          +#+  +:+       +#+        */
+/*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 14:08:21 by anggalle          #+#    #+#             */
-/*   Updated: 2025/01/22 14:30:19 by anggalle         ###   ########.fr       */
+/*   Updated: 2025/01/23 11:36:29 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
 int	pwd_builtin(t_data *data)
 {

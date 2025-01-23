@@ -6,11 +6,11 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/18 09:38:49 by paromero          #+#    #+#             */
-/*   Updated: 2025/01/23 11:28:53 by paromero         ###   ########.fr       */
+/*   Updated: 2025/01/23 11:36:29 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
 static int	count_substr(char const *s, char c)
 {
@@ -116,17 +116,4 @@ char	**ft_quotesplit(char const *s, char c)
 	}
 	return (array);
 }
-/*int main()
-{
-    char str[] = "buenos días";
-    char **result = ft_split(str, ' ');
 
-    if (result)
-    {
-        for (int i = 0; result[i] != NULL; i++)
-        {
-            printf("palabra %d: %s\n", i, result[i]);
-        }
-    }
-    return 0;
-}*/

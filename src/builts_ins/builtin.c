@@ -1,47 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_free_parse.c                                    :+:      :+:    :+:   */
+/*   builtin.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/28 17:24:13 by paromero          #+#    #+#             */
-/*   Updated: 2025/01/14 19:12:29 by paromero         ###   ########.fr       */
+/*   Created: 2025/01/21 19:17:47 by anggalle          #+#    #+#             */
+/*   Updated: 2025/01/23 11:36:29 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 
-void	ft_free_split(char **split)
+int	is_builtins(t_data *data)
 {
-	int	i;
+	int ret;
 
-	if (!split)
-		return ;
-	i = 0;
-	while (split[i])
+	ret = 0;
+	if (ft_strncmp(data->ast->value, "echo", ft_strlen(data->ast->value)) == 0)
 	{
-		free(split[i]);
-		i++;
+		ret = echo_builtin(data);
 	}
-	free(split);
-}
-
-void	ft_free_tokens(t_tokens *tokens)
-{
-	t_tokens	*temp;
-
-	while (tokens)
+	else if (ft_strncmp(data->ast->value, "pwd", ft_strlen(data->ast->value)) == 0)
 	{
-		temp = tokens;
-		tokens = tokens->next;
-		free(temp->value);
-		free(temp);
+		ret = pwd_builtin(data);
 	}
-}
-
-void	ft_free_error_token(t_data	*data, char **result)
-{
-	ft_free_split(result);
-	ft_free_tokens(data->tokens);
+	return (ret);
 }
