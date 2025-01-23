@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 20:08:34 by paromero          #+#    #+#             */
-/*   Updated: 2025/01/21 19:55:42 by paromero         ###   ########.fr       */
+/*   Updated: 2025/01/23 11:26:53 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,13 +68,52 @@ char	*ft_delete_spaces(char *line)
 	return (result);
 }
 
+void	printmatrix(char **matrix)
+{
+	int i = 0;
+
+	while (matrix[i])
+	{
+		printf("token %d : %s\n", i, matrix[i]);
+		i++;
+	}
+}
+
+// void	comsannex(char **matrix)
+// {
+// 	int i;
+// 	int j;
+// 	int z;
+// 	char	*line;
+
+// 	z = 0;
+// 	j = 0;
+// 	i = 0;
+// 	while(matrix[i])
+// 	{
+// 		if (matrix[i][0] == '"' || matrix[i][0] == '\'')
+// 		{
+// 			i++;
+// 			while (matrix[i][0] != '"' || matrix[i][0] != '\'')
+// 			{
+// 				while ()
+// 					line[z] = matrix[i][j]
+// 			}
+// 		}
+// 		i++;
+// 	}
+// }
+
 int	ft_tokens(t_data *data, char *str)
 {
 	t_tokens	*current;
 	char		**result;
 	int			i;
 
-	result = ft_split(str, ' ');
+	//printf("linea %s\n", str);
+	result = ft_quotesplit(str, ' ');
+	//printmatrix(result);
+	//comsannex(result);
 	data->tokens = ft_new_token(result[0]);
 	if (!data->tokens)
 		return (0);
@@ -100,17 +139,21 @@ int	ft_tokens(t_data *data, char *str)
 int	opencoms(char	*line)
 {
 	int i;
-	int count;
+	int count_double;
+	int count_single;
 
-	count = 0;
+	count_single = 0;
+	count_double  = 0;
 	i = 0;
 	while(line[i])
 	{
-		if (line[i] == '"' || line[i] == '\'')
-			count++;
+		if (line[i] == '"')
+			count_double++;
+		if (line[i] == '\'')
+			count_single++;
 		i++;
 	}
-	if (count % 2 == 0)
+	if (count_double % 2 == 0 && count_single % 2 == 0)
 		return (1);
 	return (0);
 }

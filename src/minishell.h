@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anggalle <anggalle@student.42.fr>          +#+  +:+       +#+        */
+/*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 19:06:45 by paromero          #+#    #+#             */
-/*   Updated: 2025/01/22 14:14:14 by anggalle         ###   ########.fr       */
+/*   Updated: 2025/01/23 11:09:04 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,6 +131,9 @@ void free_array(const char **array);
 int	is_builtins(t_data *data);
 int	echo_builtin(t_data *data);
 int	pwd_builtin(t_data *data);
+
+//! ft_quotesplit.c //
+char	**ft_quotesplit(char const *s, char c);
 
 #endif
 /**
