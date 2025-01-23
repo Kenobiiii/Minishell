@@ -2,7 +2,7 @@ LIB = ar rcs
 RM = rm -f
 
 CC = clang
-CFLAGS = -g -Wall -Werror -Wextra
+CFLAGS = -Wall -Werror -Wextra
 
 USER = paromero
 SRC_DIR = src src/init
