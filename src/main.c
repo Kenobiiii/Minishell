@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 17:54:48 by paromero          #+#    #+#             */
-/*   Updated: 2025/01/24 11:27:16 by paromero         ###   ########.fr       */
+/*   Updated: 2025/01/23 15:07:44 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,11 +39,6 @@ char	*deletefirstspaces(char	*line)
 	while (line[i] == ' ')
 		i++;
 	new_line = (char *)malloc(sizeof(char) * (ft_strlen(line) - i + 1));
-	if (!new_line)
-	{
-		free (line);
-		return (NULL);
-	}
 	while (line[i] != '\0')
 	{
 		new_line[j] = line[i];
