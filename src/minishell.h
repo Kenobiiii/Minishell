@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: anggalle <anggalle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 19:06:45 by paromero          #+#    #+#             */
-/*   Updated: 2025/01/24 11:34:05 by paromero         ###   ########.fr       */
+/*   Updated: 2025/01/23 14:28:26 by anggalle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,6 @@ int			ft_dobletype(t_type	type);
 void		ft_free_split(char **split);
 void		ft_free_tokens(t_tokens *tokens);
 void		ft_free_error_token(t_data	*data, char **result);
-void		cleanup_resources(t_data *data);
 
 //! ft_ast.c //
 t_ast		*ft_build_ast(t_tokens *tokens);
