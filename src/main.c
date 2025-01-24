@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 17:54:48 by paromero          #+#    #+#             */
-/*   Updated: 2025/01/24 11:27:16 by paromero         ###   ########.fr       */
+/*   Updated: 2025/01/24 11:34:32 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,9 +87,11 @@ int	minishell(char **env)
 			{
 				exec_func(&data);
 			}
+			cleanup_resources(&data);
 			continue;
 		}
 	}
+	cleanup_resources(&data);
 	return (0);
 }
 

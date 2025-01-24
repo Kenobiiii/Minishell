@@ -6,13 +6,13 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 12:59:22 by anggalle          #+#    #+#             */
-/*   Updated: 2025/01/23 11:48:50 by paromero         ###   ########.fr       */
+/*   Updated: 2025/01/24 11:29:32 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-char	*find_path_in_env(t_data *data) //EN TEORÍA QUITAR
+char	*find_path_in_env(t_data *data) //! EN TEORÍA QUITAR
 {
 	t_env	*aux_env;
 
