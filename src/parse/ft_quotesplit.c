@@ -6,104 +6,83 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/18 09:38:49 by paromero          #+#    #+#             */
-/*   Updated: 2025/01/23 14:38:23 by paromero         ###   ########.fr       */
+/*   Updated: 2025/01/28 12:19:59 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-static int	count_substr(char const *s, char c)
+static int count_substr(char const *s, char c)
 {
-	size_t	i;
-	size_t	count;
-	int		quotecount;
+	size_t i = 0;
+	size_t count = 0;
+	int quotecount = 0;
 
-	quotecount = 0;
-	i = 0;
-	count = 0;
-	while (s[i] != '\0')
+	while (s[i])
 	{
-		while (s[i] == c && s[i] != '\0')
+		while (s[i] == c && s[i])
 			i++;
+		if (!s[i])
+			break;
+		count++;
 		if (s[i] == '"' || s[i] == '\'')
 		{
 			quotecount++;
-			i++;
-		}
-		if (s[i] != c && s[i] != '\0')
-			count++;
-		while (s[i] != c && s[i] != '\0' && quotecount % 2 != 0)
-		{
-			if (s[i] == '"' || s[i] == '\'')
+			char quote = s[i++];
+			while (s[i] && (s[i] != quote || quotecount % 2 != 0))
 			{
-				quotecount++;
+				if (s[i] == quote)
+					quotecount++;
 				i++;
 			}
-			i++;
+			if (s[i] == quote)
+				i++;
 		}
-		if (quotecount % 2 == 0)
+		else
 		{
-			i++;
-			quotecount = 0;
+			while (s[i] && s[i] != c)
+				i++;
 		}
 	}
 	return (count);
 }
 
-static int	allocate_substr(char **array, char const *s, char c)
+static int allocate_substr(char **array, char const *s, char c)
 {
-	size_t	i;
-	size_t	j;
-	size_t	start;
-	char	quote;
+	size_t i;
+	size_t j;
+	size_t end;
+	char quote;
 
 	i = 0;
 	j = 0;
-	while (s[i] != '\0')
+	while (s[i])
 	{
-		while (s[i] == c && s[i] != '\0')
+		while (s[i] == c && s[i])
 			i++;
-		start = i;
-		if (s[i] == '"' || s[i] == '\'')
-		{
-			quote = s[i];
-			i++;
+		if (!s[i])
+			break ;
+		size_t start = i;
+		if (s[i] == '"' || s[i] == '\'') {
+			quote = s[i++];
 			start = i;
-			while (s[i] != quote && s[i] != '\0')
+			while (s[i] && s[i] != quote)
 				i++;
+			end = i;
+			if (s[i] == quote)
+				i++;
+			array[j] = ft_substr(s, start, end - start);
 		}
 		else
 		{
-			while (s[i] != c && s[i] != '\0')
+			while (s[i] && s[i] != c)
 				i++;
-		}
-		if (i > start)
-		{
 			array[j] = ft_substr(s, start, i - start);
-			if (array[j] == NULL)
-				return (-1);
-			j++;
 		}
-		if (s[i] == quote)
-			i++;
+		j++;
 	}
 	array[j] = NULL;
 	return (0);
-}
-
-static void	free_mem(char **array)
-{
-	size_t	i;
-
-	i = 0;
-	if (array == NULL)
-		return ;
-	while (array[i] != NULL)
-	{
-		free(array[i]);
-		i++;
-	}
-	free(array);
 }
 
 char	**ft_quotesplit(char const *s, char c)
@@ -119,7 +98,7 @@ char	**ft_quotesplit(char const *s, char c)
 		return (NULL);
 	if (allocate_substr(array, s, c) == -1)
 	{
-		free_mem(array);
+		free_split(array);
 		return (NULL);
 	}
 	return (array);

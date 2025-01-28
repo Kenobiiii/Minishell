@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 20:08:34 by paromero          #+#    #+#             */
-/*   Updated: 2025/01/23 11:36:29 by paromero         ###   ########.fr       */
+/*   Updated: 2025/01/28 12:16:23 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ int	ft_tokens(t_data *data, char *str)
 		i++;
 	}
 	current->type = ft_types(result[i - 1]);
-	ft_free_split(result);
+	free_split(result);
 	return (1);
 }
 

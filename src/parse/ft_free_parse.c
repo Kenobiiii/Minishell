@@ -6,25 +6,25 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 17:24:13 by paromero          #+#    #+#             */
-/*   Updated: 2025/01/23 11:36:29 by paromero         ###   ########.fr       */
+/*   Updated: 2025/01/28 12:17:04 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	ft_free_split(char **split)
+void	free_split(char **array)
 {
-	int	i;
+	size_t	i;
 
-	if (!split)
-		return ;
 	i = 0;
-	while (split[i])
+	if (array == NULL)
+		return ;
+	while (array[i] != NULL)
 	{
-		free(split[i]);
+		free(array[i]);
 		i++;
 	}
-	free(split);
+	free(array);
 }
 
 void	ft_free_tokens(t_tokens *tokens)
@@ -42,6 +42,6 @@ void	ft_free_tokens(t_tokens *tokens)
 
 void	ft_free_error_token(t_data	*data, char **result)
 {
-	ft_free_split(result);
+	free_split(result);
 	ft_free_tokens(data->tokens);
 }

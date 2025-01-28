@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 17:54:48 by paromero          #+#    #+#             */
-/*   Updated: 2025/01/23 15:07:44 by paromero         ###   ########.fr       */
+/*   Updated: 2025/01/28 12:43:57 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,25 +28,15 @@ int	ft_isSpace(char	*line)
 	return (0);
 }
 
-char	*deletefirstspaces(char	*line)
-{
+char *deletefirstspaces(char *line) {
 	char	*new_line;
 	int		i;
-	int		j;
-	
+
 	i = 0;
-	j = 0;
 	while (line[i] == ' ')
 		i++;
-	new_line = (char *)malloc(sizeof(char) * (ft_strlen(line) - i + 1));
-	while (line[i] != '\0')
-	{
-		new_line[j] = line[i];
-		i++;
-		j++;
-	}
-	free (line);
-	new_line[j] = '\0';
+	new_line = ft_strdup(line + i);
+	free(line);
 	return (new_line);
 }
 
@@ -82,6 +72,8 @@ int	minishell(char **env)
 			{
 				exec_func(&data);
 			}
+			ft_free_tokens(data.tokens);
+			data.tokens = NULL;
 			continue;
 		}
 	}

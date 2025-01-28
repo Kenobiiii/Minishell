@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anggalle <anggalle@student.42.fr>          +#+  +:+       +#+        */
+/*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 19:06:45 by paromero          #+#    #+#             */
-/*   Updated: 2025/01/23 14:28:26 by anggalle         ###   ########.fr       */
+/*   Updated: 2025/01/28 12:16:15 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,7 @@ size_t		ft_spacestrlen(char *line);
 int			ft_dobletype(t_type	type);
 
 //! ft_free_parse.c //
-void		ft_free_split(char **split);
+void		free_split(char **array);
 void		ft_free_tokens(t_tokens *tokens);
 void		ft_free_error_token(t_data	*data, char **result);
 
@@ -154,6 +154,9 @@ void		print_env_sorted(char **env_matrix);
 void		print_matrix(char **matrix);
 void		sort_matrix(char **matrix);
 
+//! printfuncs //
+int	print_tokens(t_tokens *token);
+void	print_type(t_tokens *token);
 
 #endif
 /**
