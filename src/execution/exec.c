@@ -6,7 +6,7 @@
 /*   By: anggalle <anggalle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 17:42:48 by anggalle          #+#    #+#             */
-/*   Updated: 2025/01/23 14:27:51 by anggalle         ###   ########.fr       */
+/*   Updated: 2025/01/24 12:36:21 by anggalle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ void exec_func(t_data *data)
 	}
 	else if (pid_fork == 0) //proceso hijo
 	{
+		printf("El arg es: %s\n", data->ast->args[1]);
 		execve(path, data->ast->args, (char **)list_to_array(data->env));
 		perror("Errror en el execve");
 		exit(-1);

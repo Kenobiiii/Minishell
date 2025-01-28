@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_quotesplit.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: anggalle <anggalle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/18 09:38:49 by paromero          #+#    #+#             */
-/*   Updated: 2025/01/28 13:13:06 by paromero         ###   ########.fr       */
+/*   Updated: 2025/01/28 14:13:02 by anggalle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ static int count_substr(char const *s, char c)
 {
 	size_t i = 0;
 	size_t count = 0;
-	int quotecount = 0;
+	char	quote;
 
 	while (s[i])
 	{
@@ -27,16 +27,10 @@ static int count_substr(char const *s, char c)
 		count++;
 		if (s[i] == '"' || s[i] == '\'')
 		{
-			quotecount++;
-			char quote = s[i++];
-			while (s[i] && (s[i] != quote || quotecount % 2 != 0))
-			{
-				if (s[i] == quote)
-					quotecount++;
+			quote = s[i++];
+			while (s[i] && (s[i] != quote))
 				i++;
-			}
-			if (s[i] == quote)
-				i++;
+			i++;
 		}
 		else
 		{
@@ -62,7 +56,7 @@ static int allocate_substr(char **array, char const *s, char c)
 		while (s[i] == c && s[i])
 			i++;
 		if (!s[i])
-			break ;
+			break;
 		start = i;
 		if (s[i] == '"' || s[i] == '\'')
 		{
@@ -74,12 +68,16 @@ static int allocate_substr(char **array, char const *s, char c)
 			if (s[i] == quote)
 				i++;
 			array[j] = ft_substr(s, start, end - start);
+			if (!array[j])
+				return(-1);
 		}
 		else
 		{
 			while (s[i] && s[i] != c)
 				i++;
 			array[j] = ft_substr(s, start, i - start);
+			if (!array[j])
+				return(-1);
 		}
 		j++;
 	}
