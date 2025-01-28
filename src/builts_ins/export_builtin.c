@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_builtin.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: anggalle <anggalle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 13:34:49 by anggalle          #+#    #+#             */
-/*   Updated: 2025/01/24 12:16:55 by paromero         ###   ########.fr       */
+/*   Updated: 2025/01/28 15:01:10 by anggalle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

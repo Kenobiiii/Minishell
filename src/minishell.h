@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: anggalle <anggalle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 19:06:45 by paromero          #+#    #+#             */
-/*   Updated: 2025/01/28 12:16:15 by paromero         ###   ########.fr       */
+/*   Updated: 2025/01/28 15:14:11 by anggalle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,9 +154,12 @@ void		print_env_sorted(char **env_matrix);
 void		print_matrix(char **matrix);
 void		sort_matrix(char **matrix);
 
+//! unset_builtint.c //
+int			unset_builtin(t_data *data);
+
 //! printfuncs //
-int	print_tokens(t_tokens *token);
-void	print_type(t_tokens *token);
+int			print_tokens(t_tokens *token);
+void		print_type(t_tokens *token);
 
 #endif
 /**
