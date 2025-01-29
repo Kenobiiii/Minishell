@@ -6,7 +6,7 @@
 /*   By: anggalle <anggalle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 19:06:45 by paromero          #+#    #+#             */
-/*   Updated: 2025/01/28 15:14:11 by anggalle         ###   ########.fr       */
+/*   Updated: 2025/01/29 18:11:40 by anggalle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,12 +154,17 @@ void		print_env_sorted(char **env_matrix);
 void		print_matrix(char **matrix);
 void		sort_matrix(char **matrix);
 
+//! env_builtin.c //
+int			print_env(t_env *env);
+int			env_builtin(t_data *data);
+
 //! unset_builtint.c //
 int			unset_builtin(t_data *data);
 
 //! printfuncs //
 int			print_tokens(t_tokens *token);
 void		print_type(t_tokens *token);
+
 
 #endif
 /**
