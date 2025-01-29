@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_tokens.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anggalle <anggalle@student.42.fr>          +#+  +:+       +#+        */
+/*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 20:08:34 by paromero          #+#    #+#             */
-/*   Updated: 2025/01/28 13:49:10 by anggalle         ###   ########.fr       */
+/*   Updated: 2025/01/29 18:16:11 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ int	ft_tokens(t_data *data, char *str)
 		i++;
 	}
 	current->type = ft_types(result[i - 1]);
-	free_split(result);
+	free_matrix(result);
 	return (1);
 }
 

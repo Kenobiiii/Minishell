@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_quotesplit.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anggalle <anggalle@student.42.fr>          +#+  +:+       +#+        */
+/*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/18 09:38:49 by paromero          #+#    #+#             */
-/*   Updated: 2025/01/28 14:13:02 by anggalle         ###   ########.fr       */
+/*   Updated: 2025/01/29 18:16:11 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,7 @@ char	**ft_quotesplit(char const *s, char c)
 		return (NULL);
 	if (allocate_substr(array, s, c) == -1)
 	{
-		free_split(array);
+		free_matrix(array);
 		return (NULL);
 	}
 	return (array);

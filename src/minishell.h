@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anggalle <anggalle@student.42.fr>          +#+  +:+       +#+        */
+/*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 19:06:45 by paromero          #+#    #+#             */
-/*   Updated: 2025/01/29 18:11:40 by anggalle         ###   ########.fr       */
+/*   Updated: 2025/01/29 18:20:31 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,10 +106,14 @@ int			openquotes(char	*line);
 size_t		ft_spacestrlen(char *line);
 int			ft_dobletype(t_type	type);
 
+//! ft_free.c //
+void		free_innerwhile(t_data  *data);
+
 //! ft_free_parse.c //
-void		free_split(char **array);
+void		free_matrix(char **array);
 void		ft_free_tokens(t_tokens *tokens);
 void		ft_free_error_token(t_data	*data, char **result);
+void		ft_free_ast(t_ast	*ast);
 
 //! ft_ast.c //
 t_ast		*ft_build_ast(t_tokens *tokens);
