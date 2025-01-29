@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: anggalle <anggalle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 17:53:02 by paromero          #+#    #+#             */
-/*   Updated: 2025/01/29 19:33:49 by paromero         ###   ########.fr       */
+/*   Updated: 2025/01/29 21:11:36 by anggalle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ void	increment_shlvl(t_env *env)
 	t_env	*current;
 	char	*new_value;
 	int		shlvl;
+	char	*shell_level;
 
 	current = env;
 	while (current)
@@ -42,13 +43,9 @@ void	increment_shlvl(t_env *env)
 		{
 			shlvl = ft_atoi(current->value + 6);
 			shlvl++;
-			new_value = malloc(7 + (ft_strlen(current->value) + 1));
-			if (!new_value)
-			{
-				printf("Error asignando memoria para SHLVL");
-				return ;
-			}
-			new_value = ft_strcat("SHLVL=", ft_itoa(shlvl));
+			shell_level = ft_itoa(shlvl);
+			new_value = ft_strcat("SHLVL=", shell_level);
+			free(shell_level);
 			free(current->value);
 			current->value = new_value;
 			return ;
