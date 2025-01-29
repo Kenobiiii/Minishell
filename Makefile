@@ -23,6 +23,7 @@ SRCS = src/main.c \
 		src/builts_ins/export_builtin.c \
 		src/builts_ins/unset_builtin.c \
 		src/builts_ins/env_builtin.c \
+		src/builts_ins/exit_builtin.c \
 		src/prints_funcs.c
 
 OBJS = $(patsubst src/%.c, $(OBJ_DIR)/%.o, $(SRCS))  # src/main.c → objs/main.o
