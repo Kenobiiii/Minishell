@@ -25,6 +25,8 @@ SRCS = src/main.c \
 		src/builts_ins/env_builtin.c \
 		src/prints_funcs.c \
 		src/parse/ft_free.c
+		src/prints_funcs.c \
+		src/parse/ft_free.c
 
 OBJS = $(patsubst src/%.c, $(OBJ_DIR)/%.o, $(SRCS))  # src/main.c → objs/main.o
 

@@ -6,7 +6,7 @@
 /*   By: anggalle <anggalle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 17:42:48 by anggalle          #+#    #+#             */
-/*   Updated: 2025/01/28 14:43:21 by anggalle         ###   ########.fr       */
+/*   Updated: 2025/01/29 19:32:33 by anggalle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,13 +24,13 @@ void analyse_status(int wstatus)
 {
 	if (WIFSTOPPED(wstatus))
 	{
-		//ft_printf("Proceso suspendido\n");
+		ft_printf("Proceso suspendido\n");
 	}else if (WIFCONTINUED(wstatus))
 	{
 		//ft_printf("Proceso continuado\n");
 	}else if (WIFSIGNALED(wstatus))
 	{
-		//ft_printf("Proceso parado por una señal\n");
+		ft_printf("Proceso parado por una señal\n");
 	}else
 	{
 		//ft_printf("El proceso finalizó correctamente\n");
@@ -53,6 +53,8 @@ void exec_func(t_data *data)
 	}
 	else if (pid_fork == 0) //proceso hijo
 	{
+		signal(SIGINT, SIG_DFL);  // Comportamiento por defecto (terminar)
+        signal(SIGQUIT, SIG_DFL); // Comportamiento por defecto (core dump)
 		execve(path, data->ast->args, (char **)list_to_array(data->env));
 		perror("Errror en el execve");
 		exit(-1);
@@ -65,6 +67,6 @@ void exec_func(t_data *data)
 			perror("Error en el waitpid");
 			exit(-1);
 		}
-		analyse_status(wstatus);
+		//analyse_status(wstatus);
 	}
 }

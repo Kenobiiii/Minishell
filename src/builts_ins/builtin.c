@@ -6,7 +6,7 @@
 /*   By: anggalle <anggalle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 19:17:47 by anggalle          #+#    #+#             */
-/*   Updated: 2025/01/29 18:08:21 by anggalle         ###   ########.fr       */
+/*   Updated: 2025/01/29 18:17:55 by anggalle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,10 @@ int	is_builtins(t_data *data)
 	else if (ft_strncmp(data->ast->value, "env", ft_strlen(data->ast->value)) == 0)
 	{
 		ret = env_builtin(data);
+	}
+	else if (ft_strncmp(data->ast->value, "exit", ft_strlen(data->ast->value)) == 0)
+	{
+		ret = exit_builtin(data);
 	}
 	return (ret);
 }
