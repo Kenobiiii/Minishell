@@ -6,7 +6,7 @@
 /*   By: anggalle <anggalle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 19:06:45 by paromero          #+#    #+#             */
-/*   Updated: 2025/01/29 18:18:50 by anggalle         ###   ########.fr       */
+/*   Updated: 2025/01/29 19:38:13 by anggalle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,9 @@ typedef struct s_data
 	t_tokens	*tokens; //- puntero a estructura de tokens
 	t_ast		*ast; //- puntero a estructura ast (Abstract Syntax Tree)	
 }	t_data;
+
+
+extern sig_atomic_t g_sigint_received;
 
 //* 				INIT					//
 
@@ -164,10 +167,18 @@ int			unset_builtin(t_data *data);
 //! exit_builtint.c //
 int			exit_builtin(t_data *data);
 
+
 //! printfuncs //
 int			print_tokens(t_tokens *token);
 void		print_type(t_tokens *token);
 
+//! signals.c //
+void	handle_sigint(int sig);
+void	setup_signals(void);
+
+
+//! Minishell_Function //
+int	minishell(char **env);
 
 #endif
 /**
