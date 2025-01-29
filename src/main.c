@@ -6,11 +6,13 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 17:54:48 by paromero          #+#    #+#             */
-/*   Updated: 2025/01/29 20:23:45 by paromero         ###   ########.fr       */
+/*   Updated: 2025/01/29 20:30:51 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+sig_atomic_t g_sigint_received = 0;
 
 int	ft_isSpace(char	*line)
 {
@@ -45,8 +47,15 @@ int	minishell(char **env)
 	t_data	data;
 
 	init_data(&data, env);
+	setup_signals(); // Configurar señales al inicio
 	while (data.exit == 0)
 	{
+		if (g_sigint_received)
+		{
+			g_sigint_received = 0;
+			free(data.line);
+			data.line = NULL;
+		}
 		data.line = readline(data.prompt);
 		if (data.line == NULL)
 			break ;

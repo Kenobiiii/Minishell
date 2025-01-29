@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 19:06:45 by paromero          #+#    #+#             */
-/*   Updated: 2025/01/29 20:24:12 by paromero         ###   ########.fr       */
+/*   Updated: 2025/01/29 20:32:37 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,9 @@ typedef struct s_data
 	t_tokens	*tokens; //- puntero a estructura de tokens
 	t_ast		*ast; //- puntero a estructura ast (Abstract Syntax Tree)	
 }	t_data;
+
+
+extern sig_atomic_t g_sigint_received;
 
 //* 				INIT					//
 
@@ -164,13 +167,22 @@ void		sort_matrix(char **matrix);
 int			print_env(t_env *env);
 int			env_builtin(t_data *data);
 
+//! exit_builtin.c //
+int			exit_builtin(t_data *data);
+
 //! unset_builtint.c //
 int			unset_builtin(t_data *data);
 
 //! printfuncs //
-int			print_tokens(t_tokens *token);
-void		print_type(t_tokens *token);
+// int			print_tokens(t_tokens *token);
+// void		print_type(t_tokens *token);
 
+//! signals.c //
+void	handle_sigint(int sig);
+void	setup_signals(void);
+
+//! Minishell_Function //
+int	minishell(char **env);
 
 #endif
 /**
