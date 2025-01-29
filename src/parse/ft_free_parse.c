@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 17:24:13 by paromero          #+#    #+#             */
-/*   Updated: 2025/01/29 18:19:47 by paromero         ###   ########.fr       */
+/*   Updated: 2025/01/29 18:52:16 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,19 +42,28 @@ void	ft_free_tokens(t_tokens *tokens)
 
 void	ft_free_ast(t_ast	*ast)
 {
-	t_ast	*temp;
+	if (!ast)
+		return;
+	ft_free_ast(ast->left);
+	ft_free_ast(ast->right);
+	free (ast->value);
+	if (ast->args)
+		free_matrix(ast->args);
+	free (ast);
+}
 
-	while (ast)
+void	ft_free_env(t_env	*env)
+{
+	t_env	*temp;
+
+	while (env)
 	{
-		temp = ast;
-		ast = ast->right;
+		temp = env;
+		env = env->next;
 		free(temp->value);
-		if (ast->args)
-			free_matrix(ast->args);
 		free(temp);
 	}
 }
-
 void	ft_free_error_token(t_data	*data, char **result)
 {
 	free_matrix(result);

@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 19:06:45 by paromero          #+#    #+#             */
-/*   Updated: 2025/01/29 18:20:31 by paromero         ###   ########.fr       */
+/*   Updated: 2025/01/29 18:51:11 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,11 +108,13 @@ int			ft_dobletype(t_type	type);
 
 //! ft_free.c //
 void		free_innerwhile(t_data  *data);
+void		free_minishell(t_data  *data);
 
 //! ft_free_parse.c //
 void		free_matrix(char **array);
 void		ft_free_tokens(t_tokens *tokens);
 void		ft_free_error_token(t_data	*data, char **result);
+void		ft_free_env(t_env	*env);
 void		ft_free_ast(t_ast	*ast);
 
 //! ft_ast.c //
