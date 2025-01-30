@@ -3,23 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anggalle <anggalle@student.42.fr>          +#+  +:+       +#+        */
+/*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 17:53:02 by paromero          #+#    #+#             */
-/*   Updated: 2025/01/29 21:11:36 by anggalle         ###   ########.fr       */
+/*   Updated: 2025/01/30 11:23:40 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-t_env	*create_node(const char *valor)
+t_env	*create_env_node(const char *value)
 {
 	t_env	*new_node;
 
 	new_node = (t_env *)malloc(sizeof(t_env));
 	if (!new_node)
 		return (NULL);
-	new_node->value = ft_strdup(valor);
+	new_node->value = ft_strdup(value);
 	if (!new_node->value)
 	{
 		free(new_node);
@@ -59,14 +59,14 @@ int	init_env(t_data *data, char *env[])
 	t_env	*current;
 	int		i;
 
-	data->env = create_node(env[0]);
+	data->env = create_env_node(env[0]);
 	if (!data->env)
 		return (0);
 	current = data->env;
 	i = 1;
 	while (env[i])
 	{
-		current->next = create_node(env[i]);
+		current->next = create_env_node(env[i]);
 		if (!current->next)
 			return (0);
 		current = current->next;
@@ -79,15 +79,15 @@ int	init_empty_env(t_data *data)
 {
 	t_env	*current;
 
-	data->env = create_node(ft_strcat("PWD=", data->cwd));
+	data->env = create_env_node(ft_strcat("PWD=", data->cwd));
 	if (!data->env)
 		return (0);
 	current = data->env;
-	current->next = create_node("SHLVL=1");
+	current->next = create_env_node("SHLVL=1");
 	if (!current->next)
 		return (0);
 	current = current->next;
-	current->next = create_node("_=/usr/bin/env");
+	current->next = create_env_node("_=/usr/bin/env");
 	if (!current->next)
 		return (0);
 	current = current->next;

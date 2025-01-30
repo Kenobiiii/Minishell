@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 17:54:48 by paromero          #+#    #+#             */
-/*   Updated: 2025/01/29 20:30:51 by paromero         ###   ########.fr       */
+/*   Updated: 2025/01/30 11:37:43 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,27 @@ int	ft_isSpace(char	*line)
 		i++;
 	}
 	return (0);
+}
+
+int	update_pwd(t_data	*data)
+{
+	char	*new_pwd;
+	char	cwd[PATH_MAX];
+	t_env	*tmp;
+
+	new_pwd = getcwd(cwd, sizeof(cwd));
+	tmp = data->env;
+	while (ft_strncmp(tmp->value, "PWD=", 4) != 0)
+		tmp = tmp->next;
+	if (tmp)
+	{
+		free (tmp->value);
+		tmp->value = ft_strcat("PWD=", new_pwd);
+	}
+	free (data->cwd);
+	data->cwd = ft_strdup(new_pwd);
+	
+	return (1);
 }
 
 char *deletefirstspaces(char *line) {
@@ -56,6 +77,7 @@ int	minishell(char **env)
 			free(data.line);
 			data.line = NULL;
 		}
+		update_pwd(&data);
 		data.line = readline(data.prompt);
 		if (data.line == NULL)
 			break ;
@@ -75,6 +97,8 @@ int	minishell(char **env)
 		if (data.line && ft_syntax(&data))
 		{
 			//print_tokens(data.tokens);
+			if (ft_strncmp(data.line, "pwd", 3) == 0)
+				printf("%s\n", data.cwd);
 			data.ast = ft_build_ast(data.tokens);
 			//print_ast(data.ast, 1);
 			if (is_builtins(&data) == 0)

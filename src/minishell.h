@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anggalle <anggalle@student.42.fr>          +#+  +:+       +#+        */
+/*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 19:06:45 by paromero          #+#    #+#             */
-/*   Updated: 2025/01/29 20:51:38 by anggalle         ###   ########.fr       */
+/*   Updated: 2025/01/30 11:25:23 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ extern sig_atomic_t g_sigint_received;
 //! init.c //
 int			init_data(t_data *data, char **env);
 int			init_env(t_data *data, char *env[]);
-t_env		*create_node(const char *valor);
+t_env		*create_env_node(const char *value);
 
 //* 				PARSE					//
 

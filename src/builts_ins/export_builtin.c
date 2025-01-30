@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_builtin.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anggalle <anggalle@student.42.fr>          +#+  +:+       +#+        */
+/*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 13:34:49 by anggalle          #+#    #+#             */
-/*   Updated: 2025/01/28 15:01:10 by anggalle         ###   ########.fr       */
+/*   Updated: 2025/01/30 11:27:15 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,7 +116,7 @@ void	add_or_update_env(t_env	**env, char *args)
 	}
 	else
 	{
-		new_node = create_node(ft_strdup(args));
+		new_node = create_env_node(ft_strdup(args));
 		if (!*env)
 		{
 			*env = new_node;
