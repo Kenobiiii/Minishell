@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 19:06:45 by paromero          #+#    #+#             */
-/*   Updated: 2025/01/30 12:21:17 by paromero         ###   ########.fr       */
+/*   Updated: 2025/01/30 13:03:46 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,9 +102,11 @@ int			ft_types(char	*value);
 t_tokens	*ft_new_token(char	*str);
 int			ft_tokens(t_data *data, char *str);
 
+//! ft_errors.c //
+int 		syntax_error(void);
+
 //! ft_parse_utils.c //
 char		*ft_delete_spaces(char *line);
-int			ft_syntax(t_data *data);
 int			openquotes(char	*line);
 size_t		ft_spacestrlen(char *line);
 int			ft_dobletype(t_type	type);
