@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 17:54:48 by paromero          #+#    #+#             */
-/*   Updated: 2025/01/30 11:37:43 by paromero         ###   ########.fr       */
+/*   Updated: 2025/01/30 12:21:50 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,8 +84,6 @@ int	minishell(char **env)
 		if (!ft_isSpace(data.line))
 			continue ;
 		add_history(data.line);
-		if (ft_strncmp(data.line, "exit", 5) == 0) //TODO quitarlo
-			data.exit = 1;
 		data.line = deletefirstspaces(data.line);
 		if (!openquotes(data.line))
 		{
@@ -93,14 +91,12 @@ int	minishell(char **env)
 			continue ;
 		}
 		data.line = ft_delete_spaces(data.line);
+		if (!handle_invslash_pcomma(data.line))
+			continue ;
 		ft_tokens(&data, data.line);
 		if (data.line && ft_syntax(&data))
 		{
-			//print_tokens(data.tokens);
-			if (ft_strncmp(data.line, "pwd", 3) == 0)
-				printf("%s\n", data.cwd);
 			data.ast = ft_build_ast(data.tokens);
-			//print_ast(data.ast, 1);
 			if (is_builtins(&data) == 0)
 			{
 				exec_func(&data);

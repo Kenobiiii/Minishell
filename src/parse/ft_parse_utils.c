@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 18:47:59 by paromero          #+#    #+#             */
-/*   Updated: 2025/01/29 17:39:46 by paromero         ###   ########.fr       */
+/*   Updated: 2025/01/30 12:23:49 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,28 @@ int	openquotes(char	*line)
 	if (count_double % 2 == 0 && count_single % 2 == 0)
 		return (1);
 	return (0);
+}
+
+int	handle_invslash_pcomma(char *line)
+{
+	int	i;
+	char	quote;
+
+	i = 0;
+	while (line[i])
+	{
+		if (line[i] == '"' || line[i] == '\'')
+			quote = line[i];
+		while (line[i] != quote && quote)
+			i++;
+		if (line[i] == '\\' || line[i] == ';')
+		{
+			printf("Syntax error\n");
+			return (0);
+		}
+		i++;
+	}
+	return (1);
 }
 
 int	ft_syntax(t_data *data)

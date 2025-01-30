@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 11:31:07 by paromero          #+#    #+#             */
-/*   Updated: 2025/01/29 20:32:06 by paromero         ###   ########.fr       */
+/*   Updated: 2025/01/30 12:08:17 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,31 +59,31 @@ void	print_type(t_tokens *token) //! BORRAR AL ACABAR (TESTEO)
 
 void print_ast(t_ast *node, int level) //! BORRAR AL ACABAR (TESTEO)
 {
-    if (!node)
-        return;
+	if (!node)
+		return;
 
-    // Indentación para mostrar la profundidad del nodo
-    for (int i = 0; i < level; i++)
-        printf("  ");
+	// Indentación para mostrar la profundidad del nodo
+	for (int i = 0; i < level; i++)
+		printf("  ");
 
-    // Imprimir el tipo y el valor del nodo
-    if (node->type == CMD)
-        printf("CMD: %s\n", node->value);
-    else
-        printf("OPERATOR: %s\n", node->value);
+	// Imprimir el tipo y el valor del nodo
+	if (node->type == CMD)
+		printf("CMD: %s\n", node->value);
+	else
+		printf("OPERATOR: %s\n", node->value);
 
-    // Imprimir los argumentos si es un nodo de comando
-    if (node->type == CMD && node->args)
-    {
-        for (int i = 0; node->args[i]; i++)
-        {
-            for (int j = 0; j < level + 1; j++)
-                printf("  ");
-            printf("ARG: %s\n", node->args[i]);
-        }
-    }
+	// Imprimir los argumentos si es un nodo de comando
+	if (node->type == CMD && node->args)
+	{
+		for (int i = 0; node->args[i]; i++)
+		{
+			for (int j = 0; j < level + 1; j++)
+				printf("  ");
+			printf("ARG: %s\n", node->args[i]);
+		}
+	}
 
-    // Recursivamente imprimir los nodos hijos
-    print_ast(node->left, level + 1);
-    print_ast(node->right, level + 1);
+	// Recursivamente imprimir los nodos hijos
+	print_ast(node->left, level + 1);
+	print_ast(node->right, level + 1);
 }

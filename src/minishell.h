@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 19:06:45 by paromero          #+#    #+#             */
-/*   Updated: 2025/01/30 11:25:23 by paromero         ###   ########.fr       */
+/*   Updated: 2025/01/30 12:21:17 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,6 +108,7 @@ int			ft_syntax(t_data *data);
 int			openquotes(char	*line);
 size_t		ft_spacestrlen(char *line);
 int			ft_dobletype(t_type	type);
+int			handle_invslash_pcomma(char *line); //! MOVER
 
 //! ft_free.c //
 void		free_innerwhile(t_data  *data);
