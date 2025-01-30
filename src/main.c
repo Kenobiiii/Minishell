@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 17:54:48 by paromero          #+#    #+#             */
-/*   Updated: 2025/01/30 14:07:56 by paromero         ###   ########.fr       */
+/*   Updated: 2025/01/30 14:32:22 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,24 @@ char	*deletefirstspaces(char *line)
 	return (new_line);
 }
 
+int	line_syntax(t_data	*data)
+{
+	add_history(data->line);
+	if (!ft_isspace(data->line))
+		return (0);
+	if (!openquotes(data->line))
+	{
+		printf("Syntax error\n");
+		return (0);
+	}
+	if (!handle_invslash_pcomma(data->line))
+		return (0);
+	data->line = ft_delete_spaces(data->line);
+	ft_tokens(data, data->line);
+	data->ast = ft_build_ast(data->tokens);
+	return (1);
+}
+
 int	minishell(char **env)
 {
 	t_data	data;
@@ -81,20 +99,8 @@ int	minishell(char **env)
 		data.line = readline(data.prompt);
 		if (data.line == NULL)
 			break ;
-		add_history(data.line);
-		if (!ft_isspace(data.line))
+		if (!line_syntax(&data))
 			continue ;
-		data.line = deletefirstspaces(data.line);
-		if (!openquotes(data.line))
-		{
-			printf("Syntax error\n");
-			continue ;
-		}
-		if (!handle_invslash_pcomma(data.line))
-			continue ;
-		data.line = ft_delete_spaces(data.line);
-		ft_tokens(&data, data.line);
-		data.ast = ft_build_ast(data.tokens);
 		if (is_builtins(&data) == 0)
 			exec_func(&data);
 		free_innerwhile(&data);
