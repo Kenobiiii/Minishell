@@ -6,24 +6,26 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/18 09:38:49 by paromero          #+#    #+#             */
-/*   Updated: 2025/01/29 18:16:11 by paromero         ###   ########.fr       */
+/*   Updated: 2025/01/30 13:06:46 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-static int count_substr(char const *s, char c)
+static	int	count_substr(char const	*s, char c)
 {
-	size_t i = 0;
-	size_t count = 0;
+	size_t	i;
+	size_t	count;
 	char	quote;
 
+	count = 0;
+	i = 0;
 	while (s[i])
 	{
 		while (s[i] == c && s[i])
 			i++;
 		if (!s[i])
-			break;
+			break ;
 		count++;
 		if (s[i] == '"' || s[i] == '\'')
 		{
@@ -41,13 +43,13 @@ static int count_substr(char const *s, char c)
 	return (count);
 }
 
-static int allocate_substr(char **array, char const *s, char c)
+static	int	allocate_substr(char **array, char const *s, char c)
 {
-	size_t i;
-	size_t j;
-	size_t end;
-	size_t start;
-	char quote;
+	size_t	i;
+	size_t	j;
+	size_t	end;
+	size_t	start;
+	char	quote;
 
 	i = 0;
 	j = 0;
@@ -56,7 +58,7 @@ static int allocate_substr(char **array, char const *s, char c)
 		while (s[i] == c && s[i])
 			i++;
 		if (!s[i])
-			break;
+			break ;
 		start = i;
 		if (s[i] == '"' || s[i] == '\'')
 		{
@@ -69,7 +71,7 @@ static int allocate_substr(char **array, char const *s, char c)
 				i++;
 			array[j] = ft_substr(s, start, end - start);
 			if (!array[j])
-				return(-1);
+				return (-1);
 		}
 		else
 		{
@@ -77,7 +79,7 @@ static int allocate_substr(char **array, char const *s, char c)
 				i++;
 			array[j] = ft_substr(s, start, i - start);
 			if (!array[j])
-				return(-1);
+				return (-1);
 		}
 		j++;
 	}

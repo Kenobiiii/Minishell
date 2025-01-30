@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 18:47:59 by paromero          #+#    #+#             */
-/*   Updated: 2025/01/30 12:23:49 by paromero         ###   ########.fr       */
+/*   Updated: 2025/01/30 13:03:42 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ int	openquotes(char	*line)
 
 int	handle_invslash_pcomma(char *line)
 {
-	int	i;
+	int		i;
 	char	quote;
 
 	i = 0;
@@ -78,41 +78,8 @@ int	handle_invslash_pcomma(char *line)
 		while (line[i] != quote && quote)
 			i++;
 		if (line[i] == '\\' || line[i] == ';')
-		{
-			printf("Syntax error\n");
-			return (0);
-		}
+			return (syntax_error());
 		i++;
-	}
-	return (1);
-}
-
-int	ft_syntax(t_data *data)
-{
-	t_tokens	*current;
-	t_tokens	*previous;
-
-	previous = NULL;
-	current = data->tokens;
-	if (current->type != CMD)
-	{
-		printf("Syntax error\n");
-		return (0);
-	}
-	while (current)
-	{
-		if (previous && previous->type != CMD && current->type != CMD)
-		{
-			printf("Syntax error\n");
-			return (0);
-		}
-		previous = current;
-		current = current->next;
-	}
-	if (previous && previous->type != CMD)
-	{
-		printf("Syntax error\n");
-		return (0);
 	}
 	return (1);
 }

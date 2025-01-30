@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 12:59:22 by anggalle          #+#    #+#             */
-/*   Updated: 2025/01/29 19:40:48 by paromero         ###   ########.fr       */
+/*   Updated: 2025/01/30 12:51:24 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,17 +46,10 @@ char	*find_variable_in_env(t_data *data, char *var)
 	return (NULL);
 }
 
-void	free_cmd(char **cmd_path)
+void	free_cmd_path(char	**matrix,	char	*cmd)
 {
-	int	i;
-
-	i = 0;
-	while (cmd_path[i])
-	{
-		free(cmd_path[i]);
-		i ++;
-	}
-	free(cmd_path);
+	free_matrix(matrix);
+	free (cmd);
 }
 
 char	*find_valid_path(char **cmd_path, char *total_cmd)
@@ -95,18 +88,15 @@ char	*get_cmd_path(t_data *data, char *cmd)
 	total_cmd = ft_strcat("/", cmd);
 	if (!total_cmd)
 	{
-		free_cmd(cmd_path);
-		free(total_cmd);
+		free_cmd_path(cmd_path, total_cmd);
 		return (NULL);
 	}
 	valid_path = find_valid_path(cmd_path, total_cmd);
 	if (!valid_path)
 	{
-		free_cmd(cmd_path);
-		free(total_cmd);
+		free_cmd_path(cmd_path, total_cmd);
 		return (NULL);
 	}
-	free_cmd(cmd_path);
-	free(total_cmd);
+	free_cmd_path(cmd_path, total_cmd);
 	return (valid_path);
 }
