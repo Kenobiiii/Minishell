@@ -6,15 +6,15 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 17:54:48 by paromero          #+#    #+#             */
-/*   Updated: 2025/01/30 12:21:50 by paromero         ###   ########.fr       */
+/*   Updated: 2025/01/30 14:07:56 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-sig_atomic_t g_sigint_received = 0;
+sig_atomic_t	g_sigint_received = 0;
 
-int	ft_isSpace(char	*line)
+int	ft_isspace(char	*line)
 {
 	int	i;
 
@@ -47,11 +47,11 @@ int	update_pwd(t_data	*data)
 	}
 	free (data->cwd);
 	data->cwd = ft_strdup(new_pwd);
-	
 	return (1);
 }
 
-char *deletefirstspaces(char *line) {
+char	*deletefirstspaces(char *line)
+{
 	char	*new_line;
 	int		i;
 
@@ -68,7 +68,7 @@ int	minishell(char **env)
 	t_data	data;
 
 	init_data(&data, env);
-	setup_signals(); // Configurar señales al inicio
+	setup_signals(); //- Configurar señales al inicio
 	while (data.exit == 0)
 	{
 		if (g_sigint_received)
@@ -81,29 +81,24 @@ int	minishell(char **env)
 		data.line = readline(data.prompt);
 		if (data.line == NULL)
 			break ;
-		if (!ft_isSpace(data.line))
-			continue ;
 		add_history(data.line);
+		if (!ft_isspace(data.line))
+			continue ;
 		data.line = deletefirstspaces(data.line);
 		if (!openquotes(data.line))
 		{
 			printf("Syntax error\n");
 			continue ;
 		}
-		data.line = ft_delete_spaces(data.line);
 		if (!handle_invslash_pcomma(data.line))
 			continue ;
+		data.line = ft_delete_spaces(data.line);
 		ft_tokens(&data, data.line);
-		if (data.line && ft_syntax(&data))
-		{
-			data.ast = ft_build_ast(data.tokens);
-			if (is_builtins(&data) == 0)
-			{
-				exec_func(&data);
-			}
-			free_innerwhile(&data);
-			continue;
-		}
+		data.ast = ft_build_ast(data.tokens);
+		if (is_builtins(&data) == 0)
+			exec_func(&data);
+		free_innerwhile(&data);
+		continue ;
 	}
 	free_minishell(&data);
 	return (0);
