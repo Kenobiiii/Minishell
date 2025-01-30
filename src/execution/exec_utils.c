@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: anggalle <anggalle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 13:59:23 by anggalle          #+#    #+#             */
-/*   Updated: 2025/01/29 18:56:45 by paromero         ###   ########.fr       */
+/*   Updated: 2025/01/30 14:01:18 by anggalle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,8 @@ char **list_to_array(t_env *head)
         return NULL;
 
     size_t i = 0;
-    while (head) {
+    while (head)
+	{
         array[i] = strdup(head->value); // Copia el valor a la matriz
         if (!array[i]) {
             // Liberar memoria en caso de error

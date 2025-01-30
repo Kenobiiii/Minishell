@@ -6,67 +6,75 @@
 /*   By: anggalle <anggalle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 17:42:48 by anggalle          #+#    #+#             */
-/*   Updated: 2025/01/29 19:32:33 by anggalle         ###   ########.fr       */
+/*   Updated: 2025/01/30 14:27:31 by anggalle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	create_command(char **cmd, char *argv)
+void exec_logical_or(t_data *data, t_ast *node)
 {
-	cmd[0] = "/bin/sh";
-	cmd[1] = "-c";
-	cmd[2] = argv;
-	cmd[3] = NULL;
+	exec_ast(data, node->left);
+	if (WEXITSTATUS(data->wstatus) != 0)
+	{
+		exec_ast(data, node->right);
+	}
+}
+void exec_logical_and(t_data *data, t_ast *node)
+{
+	exec_ast(data, node->left);
+	if (WEXITSTATUS(data->wstatus) == 0)
+	{
+		exec_ast(data, node->right);
+	}
 }
 
-void analyse_status(int wstatus)
+void exec_simple_cmd(t_data *data, t_ast *node)
 {
-	if (WIFSTOPPED(wstatus))
+	char *path;
+	pid_t pid;
+
+	path = get_cmd_path(data, node->value);
+	pid = fork();
+	if (pid == 0)
 	{
-		ft_printf("Proceso suspendido\n");
-	}else if (WIFCONTINUED(wstatus))
+		signal(SIGINT, SIG_DFL);
+		signal(SIGQUIT, SIG_DFL);
+		execve(path, node->args, (char **)list_to_array(data->env));
+		perror("Error en execve");
+		exit(EXIT_FAILURE);
+	} else if (pid > 0)
 	{
-		//ft_printf("Proceso continuado\n");
-	}else if (WIFSIGNALED(wstatus))
+		waitpid(pid, &data->wstatus, 0);
+	} else
 	{
-		ft_printf("Proceso parado por una señal\n");
-	}else
-	{
-		//ft_printf("El proceso finalizó correctamente\n");
+		perror("Error en fork");
 	}
+}
+
+void exec_ast(t_data *data, t_ast *node)
+{
+	if (!node)
+		return;
+	if (node->type == CMD)
+		exec_simple_cmd(data, node);
+	else if (node->type == REDIRECT_OUT)
+		exec_redirect_out(data, node);
+	else if (node->type == REDIRECT_IN)
+		exec_redirect_in(data, node);
+	else if (node->type == REDIN2)
+		exec_redirect_append(data, node);
+	else if (node->type == REDOUT2)
+		exec_heredoc(node);
+	else if (node->type == PIPE)
+		return;
+	else if (node->type == AND)
+		exec_logical_and(data, node);
+	else if (node->type == OR)
+		exec_logical_or(data, node);
 }
 
 void exec_func(t_data *data)
 {
-	int pid_fork;
-	int pid_wait;
-	int wstatus;
-	char	*path;
-
-	path = get_cmd_path(data, data->ast->value);
-	pid_fork = fork();
-	if (pid_fork < 0)
-	{
-		perror("Error en el fork");
-		exit(-1);
-	}
-	else if (pid_fork == 0) //proceso hijo
-	{
-		signal(SIGINT, SIG_DFL);  // Comportamiento por defecto (terminar)
-        signal(SIGQUIT, SIG_DFL); // Comportamiento por defecto (core dump)
-		execve(path, data->ast->args, (char **)list_to_array(data->env));
-		perror("Errror en el execve");
-		exit(-1);
-	}
-	else if (pid_fork > 0) //Proceso padre
-	{
-		pid_wait = waitpid(pid_fork, &wstatus, WUNTRACED);
-		if (pid_wait < 0)
-		{
-			perror("Error en el waitpid");
-			exit(-1);
-		}
-		//analyse_status(wstatus);
-	}
+	exec_ast(data, data->ast);
 }

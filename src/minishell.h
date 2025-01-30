@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: anggalle <anggalle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 19:06:45 by paromero          #+#    #+#             */
-/*   Updated: 2025/01/30 13:03:46 by paromero         ###   ########.fr       */
+/*   Updated: 2025/01/30 14:30:03 by anggalle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,7 @@ typedef struct s_data
 	char		*cwd; //- directorio actual
 	int			exit; //- Manejo de salida
 	int			last_exit_status; //-salida ultimo comando ejecutado ($?)
+	int			wstatus;
 	pid_t		pid; //- Proceso hijo y padre
 	t_env		*env; //- Puntero a estructuar de env
 	t_tokens	*tokens; //- puntero a estructura de tokens
@@ -138,13 +139,22 @@ char		**ft_quotesplit(char const *s, char c);
 //* 				EXECUTION					//
 
 //! exec.c //
-void		create_command(char **cmd, char *argv);
-void		analyse_status(int wstatus);
-void		exec_func(t_data *data);
+void exec_func(t_data *data);
+void exec_ast(t_data *data, t_ast *node);
+void exec_simple_cmd(t_data *data, t_ast *node);
+void exec_logical_and(t_data *data, t_ast *node);
+void exec_logical_or(t_data *data, t_ast *node);
+
 
 //!	exec_utils.c //
 char		**list_to_array(t_env *head);
 void		free_array(const char **array);
+
+//! redirections.c //
+void		exec_redirect_out(t_data *data, t_ast *node);
+void		exec_redirect_in(t_data *data, t_ast *node);
+void		exec_redirect_append(t_data *data, t_ast *node);
+void		exec_heredoc(t_ast *node);
 
 //* 				BUILTS_IN					//
 
