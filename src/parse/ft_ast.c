@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 17:26:30 by paromero          #+#    #+#             */
-/*   Updated: 2025/01/23 11:50:19 by paromero         ###   ########.fr       */
+/*   Updated: 2025/01/31 13:47:07 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,11 @@ void	ft_handle_command_node(t_ast **root, t_ast **current_cmd,
 
 	new_node = ft_create_ast_node(CMD, tokens->value);
 	if (*current_cmd)
+	{
 		ft_add_argument(*current_cmd, tokens->value);
+		if ((*current_cmd)->type == REDIN2)
+			*current_cmd = NULL;
+	}
 	else
 	{
 		new_node->args = malloc(sizeof(char *) * 2);
@@ -63,15 +67,16 @@ void	ft_handle_operator_node(t_ast **root, t_ast **current_cmd,
 		*root = new_node;
 		*last_operator = new_node;
 		if (*current_cmd)
-		{
-			(*last_operator)->right = *current_cmd;
 			*current_cmd = NULL;
-		}
+		if ((*last_operator)->type == REDIN2)
+			*current_cmd = *last_operator;
 	}
 	else
 	{
 		*root = new_node;
 		*last_operator = new_node;
+		if ((*last_operator)->type == REDIN2)
+			*current_cmd = *last_operator;
 	}
 }
 
