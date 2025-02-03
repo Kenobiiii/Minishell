@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 19:06:45 by paromero          #+#    #+#             */
-/*   Updated: 2025/01/31 11:49:37 by paromero         ###   ########.fr       */
+/*   Updated: 2025/02/03 20:15:00 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,6 @@ typedef struct s_tokens
 {
 	t_type			type;
 	char			*value;
-	char			quote;
 	struct s_tokens	*next;
 }	t_tokens;
 
@@ -92,6 +91,7 @@ extern sig_atomic_t g_sigint_received;
 
 //* 				INIT					//
 
+void print_ast(t_ast *node, int level);
 //! init.c //
 int			init_data(t_data *data, char **env);
 int			init_env(t_data *data, char *env[]);
@@ -155,7 +155,7 @@ void		free_array(const char **array);
 void		exec_redirect_out(t_data *data, t_ast *node);
 void		exec_redirect_in(t_data *data, t_ast *node);
 void		exec_redirect_append(t_data *data, t_ast *node);
-void		exec_heredoc(t_ast *node);
+void		exec_heredoc(t_data	*data, t_ast *node);
 
 //* 				BUILTS_IN					//
 
