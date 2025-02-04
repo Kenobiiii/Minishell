@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 18:47:59 by paromero          #+#    #+#             */
-/*   Updated: 2025/01/30 14:18:33 by paromero         ###   ########.fr       */
+/*   Updated: 2025/02/04 12:39:33 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,31 +85,3 @@ int	handle_invslash_pcomma(char *line)
 	return (1);
 }
 
-char	*ft_delete_spaces(char *line)
-{
-	int		i;
-	int		j;
-	char	*result;
-
-	i = 0;
-	j = 0;
-	result = (char *)malloc(sizeof(char) * (ft_spacestrlen(line) + 1));
-	if (!result)
-		return (NULL);
-	while (line[i] != '\0')
-	{
-		if (ft_types(line + i) != CMD)
-		{
-			result[j++] = ' ';
-			result[j++] = line[i];
-			if (ft_dobletype(ft_types(line + i)))
-				result[j++] = line[++i];
-			result[j++] = ' ';
-		}
-		else
-			result[j++] = line[i];
-		i++;
-	}
-	result[j] = '\0';
-	return (result);
-}

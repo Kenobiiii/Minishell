@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anggalle <anggalle@student.42.fr>          +#+  +:+       +#+        */
+/*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 17:54:48 by paromero          #+#    #+#             */
-/*   Updated: 2025/02/04 11:17:37 by anggalle         ###   ########.fr       */
+/*   Updated: 2025/02/04 12:39:26 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,6 @@ int	line_syntax(t_data	*data)
 	}
 	if (!handle_invslash_pcomma(data->line))
 		return (0);
-	data->line = ft_delete_spaces(data->line);
 	ft_tokens(data, data->line);
 	data->ast = ft_build_ast(data->tokens);
 	return (1);
