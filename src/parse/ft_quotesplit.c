@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/18 09:38:49 by paromero          #+#    #+#             */
-/*   Updated: 2025/02/04 13:17:23 by paromero         ###   ########.fr       */
+/*   Updated: 2025/02/04 13:23:13 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,15 +35,13 @@ static	int	count_substr(char const	*s, char c)
 			i++;
 		}
 		else
-		{
 			while (s[i] && s[i] != c)
 				i++;
-		}
 	}
 	return (count);
 }
 
-static int allocate_substr(char **array, char const *s, char c)
+static int	allocate_substr(char **array, char const *s, char c)
 {
 	size_t	i;
 	size_t	j;
@@ -76,11 +74,12 @@ static int allocate_substr(char **array, char const *s, char c)
 				i++;
 		}
 		array[j] = ft_substr(s, start, i - start);
-		if (!array[j]) return -1;
+		if (!array[j])
+			return (-1);
 		j++;
 	}
 	array[j] = NULL;
-	return 0;
+	return (0);
 }
 
 char	**ft_quotesplit(char const *s, char c, t_data	*data)
