@@ -6,7 +6,7 @@
 /*   By: anggalle <anggalle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 18:42:47 by anggalle          #+#    #+#             */
-/*   Updated: 2025/01/29 20:21:07 by anggalle         ###   ########.fr       */
+/*   Updated: 2025/02/04 11:14:03 by anggalle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ void handle_sigint(int sig) {
 	rl_on_new_line();              // Prepara nuevo prompt
 	//rl_redisplay();            // Fuerza a readline a mostrar el prompt
 }
+
 
 // void handle_sigint(int sig)
 // {

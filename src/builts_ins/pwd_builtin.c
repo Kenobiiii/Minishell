@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pwd_builtin.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: anggalle <anggalle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/22 14:08:21 by anggalle          #+#    #+#             */
-/*   Updated: 2025/01/23 11:36:29 by paromero         ###   ########.fr       */
+/*   Updated: 2025/02/04 11:26:57 by anggalle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,5 +24,6 @@ int	pwd_builtin(t_data *data)
 	path = find_variable_in_env(data, "PWD=");
 	ft_putstr_fd(path, STDOUT_FILENO);
 	ft_putstr_fd("\n", STDOUT_FILENO);
+	free(path);
 	return (1);
 }

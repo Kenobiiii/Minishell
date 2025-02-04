@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: anggalle <anggalle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 19:06:45 by paromero          #+#    #+#             */
-/*   Updated: 2025/02/03 20:15:00 by paromero         ###   ########.fr       */
+/*   Updated: 2025/02/04 12:15:11 by anggalle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -170,6 +170,9 @@ int			pwd_builtin(t_data *data);
 
 //! cd_builtint.c //
 int			cd_builtin(t_data *data);
+
+//! exit_builtin.c //
+void		exec_pipe(t_data *data, t_ast *node);
 
 //! export_builtint.c //
 int			export_builtin(t_data *data);

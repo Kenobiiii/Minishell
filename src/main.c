@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: anggalle <anggalle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 17:54:48 by paromero          #+#    #+#             */
-/*   Updated: 2025/01/30 14:32:22 by paromero         ###   ########.fr       */
+/*   Updated: 2025/02/04 11:17:37 by anggalle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,6 @@ int	minishell(char **env)
 		if (g_sigint_received)
 		{
 			g_sigint_received = 0;
-			free(data.line);
 			data.line = NULL;
 		}
 		update_pwd(&data);
