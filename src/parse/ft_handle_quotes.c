@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_handle_quotes.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: anggalle <anggalle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 12:33:32 by paromero          #+#    #+#             */
-/*   Updated: 2025/02/04 11:45:37 by paromero         ###   ########.fr       */
+/*   Updated: 2025/02/04 12:53:40 by anggalle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,8 @@ char	*ft_handle_single(char	*line)
 	{
 		if (line[i] == '\'')
 			i++;
-		i++;
+		if (line[i])
+			i++;
 		count++;
 	}
 	new_line = (char *)malloc(sizeof(char) * (count + 1));
@@ -38,7 +39,8 @@ char	*ft_handle_single(char	*line)
 		if (line[i] == '\'')
 			i++;
 		new_line[j++] = line[i];
-		i++;
+		if (line[i])
+			i++;
 	}
 	new_line[j] = '\0';
 	return (new_line);
@@ -58,7 +60,8 @@ char	*ft_handle_double(char	*line)
 	{
 		if (line[i] == '"')
 			i++;
-		i++;
+		if (line[i])
+			i++;
 		count++;
 	}
 	new_line = (char *)malloc(sizeof(char) * (count + 1));
@@ -70,7 +73,8 @@ char	*ft_handle_double(char	*line)
 		if (line[i] == '"')
 			i++;
 		new_line[j++] = line[i];
-		i++;
+		if (line[i])
+			i++;
 	}
 	new_line[j] = '\0';
 	return (new_line);
