@@ -9,31 +9,31 @@ OBJ_DIR = objs
 SRCS = src/main.c \
 		src/init/init.c \
 		src/parse/ft_line_utils.c \
-		src/parse/ft_tokens.c \
-		src/parse/ft_free_parse.c \
 		src/parse/ft_parse_utils.c \
-		src/parse/ft_ast.c \
-		src/execution/exec.c \
+		src/parse/ft_handle_dollar.c \
+		src/parse/ft_handle_quotes.c \
 		src/parse/ft_parse_path.c \
-		src/execution/exec_utils.c \
+		src/parse/ft_quotesplit.c \
+		src/parse/ft_tokens.c \
+		src/parse/ft_ast.c \
+		src/parse/ft_errors.c \
+		src/parse/ft_redin2_cases.c \
+		src/parse/ft_free_parse.c \
+		src/parse/ft_free.c \
 		src/builts_ins/echo_builtin.c \
 		src/builts_ins/builtin.c \
 		src/builts_ins/pwd_builtin.c \
-		src/parse/ft_quotesplit.c \
 		src/builts_ins/cd_builtin.c \
 		src/builts_ins/export_builtin.c \
 		src/builts_ins/unset_builtin.c \
 		src/builts_ins/env_builtin.c \
 		src/builts_ins/exit_builtin.c \
+		src/execution/exec.c \
+		src/execution/exec_utils.c \
 		src/execution/signals.c \
 		src/execution/pipe.c \
 		src/execution/redirections.c \
-		src/parse/ft_errors.c \
-		src/prints_funcs.c \
-		src/parse/ft_handle_dollar.c \
-		src/parse/ft_handle_quotes.c \
-		src/parse/ft_redin2_cases.c \
-		src/parse/ft_free.c
+		src/prints_funcs.c
 
 OBJS = $(patsubst src/%.c, $(OBJ_DIR)/%.o, $(SRCS))  # src/main.c → objs/main.o
 
