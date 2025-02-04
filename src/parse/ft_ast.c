@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_ast.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anggalle <anggalle@student.42.fr>          +#+  +:+       +#+        */
+/*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 17:26:30 by paromero          #+#    #+#             */
-/*   Updated: 2025/02/03 19:42:37 by anggalle         ###   ########.fr       */
+/*   Updated: 2025/02/03 19:46:04 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,9 +69,7 @@ void	ft_handle_command_node(t_ast **root, t_ast **current_cmd,
 
 	new_node = ft_create_ast_node(CMD, tokens->value);
 	if (is_redin2(last_operator))
-	{
 		redin2(current_cmd, last_operator, new_node, tokens);
-	}	
 	else
 	{
 		if (*current_cmd)

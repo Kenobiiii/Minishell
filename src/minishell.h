@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anggalle <anggalle@student.42.fr>          +#+  +:+       +#+        */
+/*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 19:06:45 by paromero          #+#    #+#             */
-/*   Updated: 2025/02/04 12:15:11 by anggalle         ###   ########.fr       */
+/*   Updated: 2025/02/04 12:28:18 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,6 +136,12 @@ char		*get_cmd_path(t_data *data, char *cmd);
 
 //! ft_quotesplit.c //
 char		**ft_quotesplit(char const *s, char c);
+
+//! ft_handle_quotes //
+void	ft_handle_quotes(t_data	*data, char	**matrix);
+
+//! ft_handle_dollar //
+char	*ft_handledollar(t_data *data, const char *line);
 
 //* 				EXECUTION					//
 

@@ -29,6 +29,8 @@ SRCS = src/main.c \
 		src/execution/redirections.c \
 		src/parse/ft_errors.c \
 		src/prints_funcs.c \
+		src/parse/ft_handle_dollar.c \
+		src/parse/ft_handle_quotes.c \
 		src/parse/ft_free.c
 
 OBJS = $(patsubst src/%.c, $(OBJ_DIR)/%.o, $(SRCS))  # src/main.c → objs/main.o
