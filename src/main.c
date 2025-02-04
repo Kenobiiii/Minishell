@@ -6,62 +6,13 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 17:54:48 by paromero          #+#    #+#             */
-/*   Updated: 2025/02/04 12:39:26 by paromero         ###   ########.fr       */
+/*   Updated: 2025/02/04 17:54:00 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 sig_atomic_t	g_sigint_received = 0;
-
-int	ft_isspace(char	*line)
-{
-	int	i;
-
-	i = 0;
-	if (ft_strlen(line) == 0)
-		return (0);
-	while (line[i])
-	{
-		if (line[i] != ' ')
-			return (1);
-		i++;
-	}
-	return (0);
-}
-
-int	update_pwd(t_data	*data)
-{
-	char	*new_pwd;
-	char	cwd[PATH_MAX];
-	t_env	*tmp;
-
-	new_pwd = getcwd(cwd, sizeof(cwd));
-	tmp = data->env;
-	while (ft_strncmp(tmp->value, "PWD=", 4) != 0)
-		tmp = tmp->next;
-	if (tmp)
-	{
-		free (tmp->value);
-		tmp->value = ft_strcat("PWD=", new_pwd);
-	}
-	free (data->cwd);
-	data->cwd = ft_strdup(new_pwd);
-	return (1);
-}
-
-char	*deletefirstspaces(char *line)
-{
-	char	*new_line;
-	int		i;
-
-	i = 0;
-	while (line[i] == ' ')
-		i++;
-	new_line = ft_strdup(line + i);
-	free(line);
-	return (new_line);
-}
 
 int	line_syntax(t_data	*data)
 {

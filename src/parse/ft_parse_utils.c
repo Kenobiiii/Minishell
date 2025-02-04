@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 18:47:59 by paromero          #+#    #+#             */
-/*   Updated: 2025/02/04 13:16:46 by paromero         ###   ########.fr       */
+/*   Updated: 2025/02/04 17:54:15 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,46 +41,22 @@ size_t	ft_spacestrlen(char *line)
 	return (j);
 }
 
-int	openquotes(char	*line)
+int	update_pwd(t_data	*data)
 {
-	int	i;
-	int	count_double;
-	int	count_single;
+	char	*new_pwd;
+	char	cwd[PATH_MAX];
+	t_env	*tmp;
 
-	count_single = 0;
-	count_double = 0;
-	i = 0;
-	if (line[i] == '"' || line[0] == '\'')
-		return (0);
-	while (line[i])
+	new_pwd = getcwd(cwd, sizeof(cwd));
+	tmp = data->env;
+	while (ft_strncmp(tmp->value, "PWD=", 4) != 0)
+		tmp = tmp->next;
+	if (tmp)
 	{
-		if (line[i] == '"' && count_single % 2 == 0)
-			count_double++;
-		if (line[i] == '\'' && count_double % 2 == 0)
-			count_single++;
-		i++;
+		free (tmp->value);
+		tmp->value = ft_strcat("PWD=", new_pwd);
 	}
-	if (count_double % 2 == 0 && count_single % 2 == 0)
-		return (1);
-	return (0);
-}
-
-int	handle_invslash_pcomma(char *line)
-{
-	int		i;
-	char	quote;
-
-	i = 0;
-	quote = 0;
-	while (line[i])
-	{
-		if (line[i] == '"' || line[i] == '\'')
-			quote = line[i];
-		while (line[i] != quote && quote)
-			i++;
-		if (line[i] == '\\' || line[i] == ';')
-			return (syntax_error());
-		i++;
-	}
+	free (data->cwd);
+	data->cwd = ft_strdup(new_pwd);
 	return (1);
 }

@@ -8,6 +8,7 @@ USER = paromero
 OBJ_DIR = objs
 SRCS = src/main.c \
 		src/init/init.c \
+		src/parse/ft_line_utils.c \
 		src/parse/ft_tokens.c \
 		src/parse/ft_free_parse.c \
 		src/parse/ft_parse_utils.c \
