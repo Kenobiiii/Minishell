@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_parse_path.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: anggalle <anggalle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 12:59:22 by anggalle          #+#    #+#             */
-/*   Updated: 2025/01/30 12:51:24 by paromero         ###   ########.fr       */
+/*   Updated: 2025/02/04 13:12:36 by anggalle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,10 +79,15 @@ char	*get_cmd_path(t_data *data, char *cmd)
 	char	**cmd_path;
 	char	*total_cmd;
 	char	*valid_path;
+	char	*env_path;
 
 	if (!cmd)
 		return (NULL);
-	cmd_path = ft_split(find_variable_in_env(data, "PATH="), ':');
+	env_path = find_variable_in_env(data, "PATH=");
+	if (!env_path)
+		return (NULL);
+	cmd_path = ft_split(env_path, ':');
+	free(env_path);
 	if (!cmd_path)
 		return (NULL);
 	total_cmd = ft_strcat("/", cmd);
