@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_parse_path.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anggalle <anggalle@student.42.fr>          +#+  +:+       +#+        */
+/*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 12:59:22 by anggalle          #+#    #+#             */
-/*   Updated: 2025/02/04 13:12:36 by anggalle         ###   ########.fr       */
+/*   Updated: 2025/02/04 17:44:13 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,16 +92,10 @@ char	*get_cmd_path(t_data *data, char *cmd)
 		return (NULL);
 	total_cmd = ft_strcat("/", cmd);
 	if (!total_cmd)
-	{
-		free_cmd_path(cmd_path, total_cmd);
-		return (NULL);
-	}
+		return (handle_invalid_cmd_path(cmd_path, total_cmd));
 	valid_path = find_valid_path(cmd_path, total_cmd);
 	if (!valid_path)
-	{
-		free_cmd_path(cmd_path, total_cmd);
-		return (NULL);
-	}
+		return (handle_invalid_cmd_path(cmd_path, total_cmd));
 	free_cmd_path(cmd_path, total_cmd);
 	return (valid_path);
 }

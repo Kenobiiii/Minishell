@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 19:06:45 by paromero          #+#    #+#             */
-/*   Updated: 2025/02/04 13:20:40 by paromero         ###   ########.fr       */
+/*   Updated: 2025/02/04 17:44:38 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,6 +106,7 @@ int			ft_tokens(t_data *data, char *str);
 
 //! ft_errors.c //
 int 		syntax_error(void);
+char		*handle_invalid_cmd_path(char **cmd_path, char *total_cmd);
 
 //! ft_parse_utils.c //
 int			openquotes(char	*line);
