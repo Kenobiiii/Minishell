@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/18 09:38:49 by paromero          #+#    #+#             */
-/*   Updated: 2025/01/31 12:32:29 by paromero         ###   ########.fr       */
+/*   Updated: 2025/02/04 13:17:23 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ static int allocate_substr(char **array, char const *s, char c)
 	return 0;
 }
 
-char	**ft_quotesplit(char const *s, char c)
+char	**ft_quotesplit(char const *s, char c, t_data	*data)
 {
 	char	**array;
 	size_t	substrlen;
@@ -99,5 +99,6 @@ char	**ft_quotesplit(char const *s, char c)
 		free_matrix(array);
 		return (NULL);
 	}
+	ft_handle_quotes(data, array);
 	return (array);
 }

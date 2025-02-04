@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 19:06:45 by paromero          #+#    #+#             */
-/*   Updated: 2025/02/04 12:39:43 by paromero         ###   ########.fr       */
+/*   Updated: 2025/02/04 13:20:40 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,13 +134,17 @@ char		*find_variable_in_env(t_data *data, char *var);
 char		*get_cmd_path(t_data *data, char *cmd);
 
 //! ft_quotesplit.c //
-char		**ft_quotesplit(char const *s, char c);
+char		**ft_quotesplit(char const *s, char c,	t_data	*data);
 
-//! ft_handle_quotes //
+//! ft_handle_quotes.c //
 void	ft_handle_quotes(t_data	*data, char	**matrix);
 
-//! ft_handle_dollar //
+//! ft_handle_dollar.c //
 char	*ft_handledollar(t_data *data, const char *line);
+
+//! ft_redin2_cases.c //
+int	is_redin2(t_ast **last_operator);
+void	redin2(t_ast **current_cmd, t_ast **last_operator, t_ast *new_node, t_tokens *tokens);
 
 //* 				EXECUTION					//
 

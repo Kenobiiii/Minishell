@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 18:47:59 by paromero          #+#    #+#             */
-/*   Updated: 2025/02/04 12:39:33 by paromero         ###   ########.fr       */
+/*   Updated: 2025/02/04 13:16:46 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,4 +84,3 @@ int	handle_invslash_pcomma(char *line)
 	}
 	return (1);
 }
-
