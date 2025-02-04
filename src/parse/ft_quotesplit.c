@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/18 09:38:49 by paromero          #+#    #+#             */
-/*   Updated: 2025/02/04 13:23:13 by paromero         ###   ########.fr       */
+/*   Updated: 2025/02/04 13:40:02 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,12 +41,37 @@ static	int	count_substr(char const	*s, char c)
 	return (count);
 }
 
+static int	process_substr(char **array, char const *s, size_t *i, char c)
+{
+	size_t	start;
+	char	quote;
+
+	start = *i;
+	quote = '\0';
+	if (s[*i] == '\'' || s[*i] == '"')
+	{
+		quote = s[*i];
+		start = (*i)++;
+		while (s[*i] && s[*i] != quote)
+			(*i)++;
+		if (s[*i] == quote)
+			(*i)++;
+	}
+	else
+	{
+		while (s[*i] && s[*i] != c)
+			(*i)++;
+	}
+	array[0] = ft_substr(s, start, *i - start);
+	if (!array[0])
+		return (-1);
+	return (0);
+}
+
 static int	allocate_substr(char **array, char const *s, char c)
 {
 	size_t	i;
 	size_t	j;
-	size_t	start;
-	char	quote;
 
 	i = 0;
 	j = 0;
@@ -56,25 +81,7 @@ static int	allocate_substr(char **array, char const *s, char c)
 			i++;
 		if (!s[i])
 			break ;
-		start = i;
-		quote = '\0';
-		if (s[i] == '\'' || s[i] == '"')
-		{
-			quote = s[i];
-			start = i;
-			i++;
-			while (s[i] && s[i] != quote)
-				i++;
-			if (s[i] == quote)
-				i++;
-		}
-		else
-		{
-			while (s[i] && s[i] != c)
-				i++;
-		}
-		array[j] = ft_substr(s, start, i - start);
-		if (!array[j])
+		if (process_substr(&array[j], s, &i, c) == -1)
 			return (-1);
 		j++;
 	}
