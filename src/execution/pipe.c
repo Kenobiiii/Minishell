@@ -6,7 +6,7 @@
 /*   By: anggalle <anggalle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 11:59:00 by anggalle          #+#    #+#             */
-/*   Updated: 2025/02/04 12:20:18 by anggalle         ###   ########.fr       */
+/*   Updated: 2025/02/04 12:29:46 by anggalle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,21 +51,22 @@ static void	exec_pipe_right(t_data *data, t_ast *node, int pipefd[2])
 void	exec_pipe(t_data *data, t_ast *node)
 {
 	int		pipefd[2];
-	pid_t	pid_left, pid_right;
+	pid_t	pid_left;
+	pid_t	pid_right;
 	int		status_right;
 
 	if (handle_process_error(pipe(pipefd), "pipe") < 0)
-		return;
+		return ;
 	pid_left = handle_process_error(fork(), "fork");
 	if (pid_left == 0)
 		exec_pipe_left(data, node, pipefd);
 	else if (pid_left < 0)
-		return;
+		return ;
 	pid_right = handle_process_error(fork(), "fork");
 	if (pid_right == 0)
 		exec_pipe_right(data, node, pipefd);
 	else if (pid_right < 0)
-		return;
+		return ;
 	close(pipefd[0]);
 	close(pipefd[1]);
 	waitpid(pid_left, NULL, 0);
