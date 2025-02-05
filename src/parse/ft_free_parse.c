@@ -6,7 +6,7 @@
 /*   By: anggalle <anggalle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 17:24:13 by paromero          #+#    #+#             */
-/*   Updated: 2025/02/05 14:05:00 by anggalle         ###   ########.fr       */
+/*   Updated: 2025/02/05 14:14:20 by anggalle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,10 @@ void	ft_free_tokens(t_tokens *tokens)
 	{
 		temp = tokens;
 		tokens = tokens->next;
-		free(temp->value);
-		free(temp);
+		if (temp->value)
+			free(temp->value);
+		if (temp)
+			free(temp);
 	}
 }
 
