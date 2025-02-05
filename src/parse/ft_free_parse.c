@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_free_parse.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anggalle <anggalle@student.42.fr>          +#+  +:+       +#+        */
+/*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 17:24:13 by paromero          #+#    #+#             */
-/*   Updated: 2025/02/05 14:14:20 by anggalle         ###   ########.fr       */
+/*   Updated: 2025/02/05 17:45:26 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,8 +67,8 @@ void	ft_free_env(t_env	*env)
 	}
 }
 
-void	ft_free_error_token(t_data	*data, char **result)
+void	ft_free_error_token(t_data	*data, char **array)
 {
-	free_matrix(result);
+	free_matrix(array);
 	ft_free_tokens(data->tokens);
 }

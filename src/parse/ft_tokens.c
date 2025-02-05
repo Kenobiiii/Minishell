@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 20:08:34 by paromero          #+#    #+#             */
-/*   Updated: 2025/02/04 13:17:29 by paromero         ###   ########.fr       */
+/*   Updated: 2025/02/05 17:43:19 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,29 +34,29 @@ int	ft_types(char	*value)
 int	ft_tokens(t_data *data, char *str)
 {
 	t_tokens	*current;
-	char		**result;
+	char		**token_array;
 	int			i;
 
-	result = ft_quotesplit(str, ' ', data);
-	data->tokens = ft_new_token(result[0]);
+	token_array = ft_quotesplit(str, ' ', data);
+	data->tokens = ft_new_token(token_array[0]);
 	if (!data->tokens)
 		return (0);
 	current = data->tokens;
 	i = 1;
-	while (result[i])
+	while (token_array[i])
 	{
-		current->type = ft_types(result[i - 1]);
-		current->next = ft_new_token(result[i]);
+		current->type = ft_types(token_array[i - 1]);
+		current->next = ft_new_token(token_array[i]);
 		if (!current->next)
 		{
-			ft_free_error_token(data, result);
+			ft_free_error_token(data, token_array);
 			return (0);
 		}
 		current = current->next;
 		i++;
 	}
-	current->type = ft_types(result[i - 1]);
-	free_matrix(result);
+	current->type = ft_types(token_array[i - 1]);
+	free_matrix(token_array);
 	return (1);
 }
 
