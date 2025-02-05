@@ -6,7 +6,7 @@
 /*   By: anggalle <anggalle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 18:02:07 by paromero          #+#    #+#             */
-/*   Updated: 2025/02/05 14:13:47 by anggalle         ###   ########.fr       */
+/*   Updated: 2025/02/05 14:19:25 by anggalle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,10 @@
 void	free_innerwhile(t_data	*data)
 {
 	if (data->line)
+	{
 		free (data->line);
+		data->line = NULL;
+	}	
 	if (data->tokens)
 	{
 		ft_free_tokens(data->tokens);
