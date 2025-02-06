@@ -6,7 +6,7 @@
 /*   By: anggalle <anggalle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 17:42:48 by anggalle          #+#    #+#             */
-/*   Updated: 2025/02/06 13:37:35 by anggalle         ###   ########.fr       */
+/*   Updated: 2025/02/06 14:14:51 by anggalle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,29 @@ void exec_logical_and(t_data *data, t_ast *node)
 	}
 }
 
+void	analyse_status(t_data *data)
+{
+	int status;
+
+	status = data->wstatus;
+	if (WIFEXITED(status))
+	{
+		data->wstatus = WEXITSTATUS(status);
+	}
+	else if (WIFSIGNALED(status))
+	{
+		data->wstatus = 128 + WTERMSIG(status);
+	}
+	// else if (WIFSTOPPED(status))
+	// {
+	// 	data->wstatus = 128 + WSTOPSIG(status);
+	// }
+	else
+	{
+		data->wstatus = status;
+	}
+}
+
 void exec_simple_cmd(t_data *data, t_ast *node)
 {
 	char *path;
@@ -43,7 +66,7 @@ void exec_simple_cmd(t_data *data, t_ast *node)
 		if (!path)
 		{
 			printf("%s: command not found\n", node->value);
-            exit(127);
+			exit(127);
 		}
 		else if (execve(path, node->args, (char **)list_to_array(data->env)) == -1)
 		{
@@ -54,6 +77,7 @@ void exec_simple_cmd(t_data *data, t_ast *node)
 	} else if (pid > 0)
 	{
 		waitpid(pid, &data->wstatus, 0);
+		analyse_status(data);
 		free(path);
 	} else
 	{
