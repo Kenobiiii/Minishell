@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: anggalle <anggalle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 19:06:45 by paromero          #+#    #+#             */
-/*   Updated: 2025/02/06 12:51:22 by paromero         ###   ########.fr       */
+/*   Updated: 2025/02/06 12:53:12 by anggalle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -197,7 +197,7 @@ void		exec_pipe(t_data *data, t_ast *node);
 //! export_builtint.c //
 int			export_builtin(t_data *data);
 void		print_env_sorted(char **env_matrix);
-void		print_matrix(char **matrix);
+void		print_export_matrix(char **matrix);
 void		sort_matrix(char **matrix);
 
 //! env_builtin.c //

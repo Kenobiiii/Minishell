@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_builtin.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: anggalle <anggalle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 13:34:49 by anggalle          #+#    #+#             */
-/*   Updated: 2025/01/30 11:27:15 by paromero         ###   ########.fr       */
+/*   Updated: 2025/02/06 12:46:37 by anggalle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,14 +41,14 @@ void	sort_matrix(char **matrix)
 	}
 }
 
-void	print_matrix(char **matrix)
+void	print_export_matrix(char **matrix)
 {
 	int	i;
 
 	i = 0;
 	while (matrix[i])
 	{
-		printf("%s\n", matrix[i]);
+		printf("declare -x %s\n", matrix[i]);
 		i ++;
 	}
 }
@@ -56,7 +56,7 @@ void	print_matrix(char **matrix)
 void	print_env_sorted(char **env_matrix)
 {
 	sort_matrix(env_matrix);
-	print_matrix(env_matrix);
+	print_export_matrix(env_matrix);
 }
 
 int is_valid_identifier(char *arg)
@@ -136,11 +136,12 @@ int	export_builtin(t_data *data)
 	char	**env_matrix;
 	int		i;
 
-	i = 0;
+	i = 1;
 	env_matrix = list_to_array(data->env);
 	if (!data->ast->args[1])
 	{
 		print_env_sorted(env_matrix);
+		return (1);
 	}
 	while (data->ast->args[i])
 	{
@@ -149,7 +150,7 @@ int	export_builtin(t_data *data)
 			printf("export: not a valid identifier: %s\n", data->ast->args[i]);
 			return (1);
 		}
-		if (ft_strchr(data->ast->args[i], '='))
+		else
 			add_or_update_env(&data->env, data->ast->args[i]);
 		i ++;
 	}
