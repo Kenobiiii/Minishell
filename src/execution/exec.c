@@ -6,7 +6,7 @@
 /*   By: anggalle <anggalle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 17:42:48 by anggalle          #+#    #+#             */
-/*   Updated: 2025/02/04 13:09:21 by anggalle         ###   ########.fr       */
+/*   Updated: 2025/02/06 13:03:49 by anggalle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,11 @@ void exec_simple_cmd(t_data *data, t_ast *node)
 	pid_t pid;
 
 	path = get_cmd_path(data, node->value);
+	if (!path)
+	{
+		perror("Error en path");
+		return ;
+	}
 	pid = fork();
 	if (pid == 0)
 	{
@@ -44,7 +49,7 @@ void exec_simple_cmd(t_data *data, t_ast *node)
 		{
 			free(path);
 			perror("Error en execve");
-			exit(EXIT_FAILURE);
+			return ;
 		}
 	} else if (pid > 0)
 	{
