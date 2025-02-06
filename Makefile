@@ -28,6 +28,7 @@ SRCS = src/main.c \
 		src/builts_ins/unset_builtin.c \
 		src/builts_ins/env_builtin.c \
 		src/builts_ins/exit_builtin.c \
+		src/builts_ins/last_exit_status_builtin.c \
 		src/execution/exec.c \
 		src/execution/exec_utils.c \
 		src/execution/signals.c \

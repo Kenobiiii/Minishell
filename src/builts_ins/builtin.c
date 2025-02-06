@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anggalle <anggalle@student.42.fr>          +#+  +:+       +#+        */
+/*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 19:17:47 by anggalle          #+#    #+#             */
-/*   Updated: 2025/01/29 18:17:55 by anggalle         ###   ########.fr       */
+/*   Updated: 2025/02/06 13:23:44 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,10 @@ int	is_builtins(t_data *data)
 	else if (ft_strncmp(data->ast->value, "pwd", ft_strlen(data->ast->value)) == 0)
 	{
 		ret = pwd_builtin(data);
+	}
+	else if (ft_strncmp(data->ast->value, "$?", ft_strlen(data->ast->value)) == 0)
+	{
+		ret = last_cmd_status(data);
 	}
 	else if (ft_strncmp(data->ast->value, "cd", ft_strlen(data->ast->value)) == 0)
 	{

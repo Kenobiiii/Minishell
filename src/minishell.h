@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anggalle <anggalle@student.42.fr>          +#+  +:+       +#+        */
+/*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 19:06:45 by paromero          #+#    #+#             */
-/*   Updated: 2025/02/06 12:53:12 by anggalle         ###   ########.fr       */
+/*   Updated: 2025/02/06 13:24:42 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -209,6 +209,9 @@ int			exit_builtin(t_data *data);
 
 //! unset_builtint.c //
 int			unset_builtin(t_data *data);
+
+//! last_exit_status_builtin.c //
+int			last_cmd_status(t_data	*data);
 
 //! printfuncs //
 // int			print_tokens(t_tokens *token);

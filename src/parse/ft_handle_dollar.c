@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 11:06:52 by paromero          #+#    #+#             */
-/*   Updated: 2025/02/04 17:37:24 by paromero         ###   ########.fr       */
+/*   Updated: 2025/02/06 13:21:47 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,7 @@ char	*ft_handledollar(t_data *data, const char *line)
 		return (NULL);
 	while (line[i])
 	{
-		if (line[i] == '$')
+		if (line[i] == '$' && line[i + 1] != '?')
 		{
 			var_token = extract_var(line, &i);
 			if (copy_env_value(data, var_token, result, &j))
