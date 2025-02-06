@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 19:06:45 by paromero          #+#    #+#             */
-/*   Updated: 2025/02/04 17:57:21 by paromero         ###   ########.fr       */
+/*   Updated: 2025/02/06 12:51:22 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,12 @@
 # include <ncurses.h>
 # include <linux/limits.h>
 # include "../libft/libft.h"
+
+
+# define ANSI_COLOR_GREEN "\e[1;96m"
+# define ANSI_COLOR_RED "\e[1;91m"
+# define ANSI_COLOR_RESET "\e[0m"
+# define ANSI_COLOR_BLUE "\e[1;34m"
 
 typedef enum e_type
 {

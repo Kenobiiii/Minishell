@@ -6,16 +6,11 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 18:47:59 by paromero          #+#    #+#             */
-/*   Updated: 2025/02/06 12:49:59 by paromero         ###   ########.fr       */
+/*   Updated: 2025/02/06 12:51:09 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
-#define ANSI_COLOR_GREEN "\e[1;96m"
-#define ANSI_COLOR_RED "\e[1;91m"
-#define ANSI_COLOR_RESET "\e[0m"
-#define ANSI_COLOR_BLUE "\e[1;34m"
 
 int	ft_dobletype(t_type	type)
 {
