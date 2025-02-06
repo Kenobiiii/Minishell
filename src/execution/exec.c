@@ -6,7 +6,7 @@
 /*   By: anggalle <anggalle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 17:42:48 by anggalle          #+#    #+#             */
-/*   Updated: 2025/02/06 13:03:49 by anggalle         ###   ########.fr       */
+/*   Updated: 2025/02/06 13:37:35 by anggalle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,21 +35,21 @@ void exec_simple_cmd(t_data *data, t_ast *node)
 	pid_t pid;
 
 	path = get_cmd_path(data, node->value);
-	if (!path)
-	{
-		perror("Error en path");
-		return ;
-	}
 	pid = fork();
 	if (pid == 0)
 	{
 		signal(SIGINT, SIG_DFL);
 		signal(SIGQUIT, SIG_DFL);
-		if (execve(path, node->args, (char **)list_to_array(data->env)) == -1)
+		if (!path)
+		{
+			printf("%s: command not found\n", node->value);
+            exit(127);
+		}
+		else if (execve(path, node->args, (char **)list_to_array(data->env)) == -1)
 		{
 			free(path);
 			perror("Error en execve");
-			return ;
+			exit(126);
 		}
 	} else if (pid > 0)
 	{

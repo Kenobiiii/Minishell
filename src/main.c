@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: anggalle <anggalle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 17:54:48 by paromero          #+#    #+#             */
-/*   Updated: 2025/02/04 17:54:00 by paromero         ###   ########.fr       */
+/*   Updated: 2025/02/06 13:39:50 by anggalle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,14 +18,21 @@ int	line_syntax(t_data	*data)
 {
 	add_history(data->line);
 	if (!ft_isspace(data->line))
+	{
+		free_innerwhile(data);
 		return (0);
+	}
 	if (!openquotes(data->line))
 	{
 		printf("Syntax error\n");
+		free_innerwhile(data);
 		return (0);
 	}
 	if (!handle_invslash_pcomma(data->line))
+	{
+		free_innerwhile(data);
 		return (0);
+	}
 	ft_tokens(data, data->line);
 	data->ast = ft_build_ast(data->tokens);
 	return (1);

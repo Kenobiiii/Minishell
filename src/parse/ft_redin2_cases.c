@@ -6,7 +6,7 @@
 /*   By: anggalle <anggalle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 13:19:35 by paromero          #+#    #+#             */
-/*   Updated: 2025/02/05 14:22:18 by anggalle         ###   ########.fr       */
+/*   Updated: 2025/02/06 13:56:36 by anggalle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,13 +32,15 @@ void	redin2(t_ast **current_cmd, t_ast **last_operator,
 		if (*current_cmd)
 		{
 			ft_add_argument(*current_cmd, tokens->value);
+			free(new_node->value);
+			free(new_node);
 		}
 		else
 		{
 			new_node->args = malloc(sizeof(char *) * 2);
 			if (new_node->args)
 			{
-				new_node->args[0] = ft_strdup(tokens->value);
+				new_node->args[0] = tokens->value;
 				new_node->args[1] = NULL;
 			}
 			*current_cmd = new_node;
