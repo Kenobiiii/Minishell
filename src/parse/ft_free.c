@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_free.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anggalle <anggalle@student.42.fr>          +#+  +:+       +#+        */
+/*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 18:02:07 by paromero          #+#    #+#             */
-/*   Updated: 2025/02/05 14:19:25 by anggalle         ###   ########.fr       */
+/*   Updated: 2025/02/05 19:08:48 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,11 @@ void	free_innerwhile(t_data	*data)
 	{
 		ft_free_ast(data->ast);
 		data->ast = NULL;
+	}
+	if (data->prompt)
+	{
+		free (data->prompt);
+		data->prompt = NULL;
 	}
 }
 
