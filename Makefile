@@ -20,6 +20,11 @@ SRCS = src/main.c \
 		src/parse/ft_redin2_cases.c \
 		src/parse/ft_free_parse.c \
 		src/parse/ft_free.c \
+		src/execution/exec.c \
+		src/execution/exec_utils.c \
+		src/execution/signals.c \
+		src/execution/pipe.c \
+		src/execution/redirections.c \
 		src/builts_ins/echo_builtin.c \
 		src/builts_ins/builtin.c \
 		src/builts_ins/pwd_builtin.c \
@@ -29,11 +34,6 @@ SRCS = src/main.c \
 		src/builts_ins/env_builtin.c \
 		src/builts_ins/exit_builtin.c \
 		src/builts_ins/last_exit_status_builtin.c \
-		src/execution/exec.c \
-		src/execution/exec_utils.c \
-		src/execution/signals.c \
-		src/execution/pipe.c \
-		src/execution/redirections.c \
 		src/prints_funcs.c
 
 OBJS = $(patsubst src/%.c, $(OBJ_DIR)/%.o, $(SRCS))  # src/main.c → objs/main.o
