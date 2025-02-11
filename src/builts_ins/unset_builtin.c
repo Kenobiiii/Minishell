@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   unset_builtin.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anggalle <anggalle@student.42.fr>          +#+  +:+       +#+        */
+/*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/28 14:51:47 by anggalle          #+#    #+#             */
-/*   Updated: 2025/01/28 15:23:04 by anggalle         ###   ########.fr       */
+/*   Updated: 2025/02/11 17:52:56 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
 
 static char	*get_var_key(char *str)
 {
@@ -45,7 +44,7 @@ static void	remove_variable(t_env **env, char *var)
 			free(current->value);
 			free(current);
 			free(key);
-			break;
+			break ;
 		}
 		free(key);
 		prev = current;

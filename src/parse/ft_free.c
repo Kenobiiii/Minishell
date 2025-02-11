@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 18:02:07 by paromero          #+#    #+#             */
-/*   Updated: 2025/02/05 19:08:48 by paromero         ###   ########.fr       */
+/*   Updated: 2025/02/11 17:39:17 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	free_innerwhile(t_data	*data)
 	{
 		free (data->line);
 		data->line = NULL;
-	}	
+	}
 	if (data->tokens)
 	{
 		ft_free_tokens(data->tokens);

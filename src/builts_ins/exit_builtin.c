@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit_builtin.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anggalle <anggalle@student.42.fr>          +#+  +:+       +#+        */
+/*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 18:14:24 by anggalle          #+#    #+#             */
-/*   Updated: 2025/01/29 18:20:26 by anggalle         ###   ########.fr       */
+/*   Updated: 2025/02/11 17:50:44 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int	exit_builtin(t_data *data)
 {
 	if (data->ast->args[1])
 	{
-		//Manejar error
+		//TODO Manejar error
 		printf("Error en la introducción de comandos\n");
 	}
 	data->exit = 1;

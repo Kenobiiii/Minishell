@@ -3,24 +3,24 @@
 /*                                                        :::      ::::::::   */
 /*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anggalle <anggalle@student.42.fr>          +#+  +:+       +#+        */
+/*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 18:42:47 by anggalle          #+#    #+#             */
-/*   Updated: 2025/02/04 11:14:03 by anggalle         ###   ########.fr       */
+/*   Updated: 2025/02/11 17:43:49 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void handle_sigint(int sig) {
+void	handle_sigint(int sig)
+{
 	(void)sig;
 	g_sigint_received = 1;
 	write(STDOUT_FILENO, "\n", 1); // Nueva línea
-	rl_replace_line("", 0);        // Limpiar entrada actual (requiere -lreadline)
-	rl_on_new_line();              // Prepara nuevo prompt
-	//rl_redisplay();            // Fuerza a readline a mostrar el prompt
+	rl_replace_line("", 0); // Limpiar entrada actual (requiere -lreadline)
+	rl_on_new_line(); // Prepara nuevo prompt
+	//rl_redisplay(); // Fuerza a readline a mostrar el prompt
 }
-
 
 // void handle_sigint(int sig)
 // {
@@ -29,9 +29,8 @@ void handle_sigint(int sig) {
 // 	minishell(list_to_array(data.env));
 // }
 
-void setup_signals(void)
+void	setup_signals(void)
 {
-	signal(SIGINT, handle_sigint);    // Ctrl+C
-	signal(SIGQUIT, SIG_IGN);         // Ctrl+\ (ignorar)
+	signal(SIGINT, handle_sigint); // Ctrl+C
+	signal(SIGQUIT, SIG_IGN); // Ctrl+\ (ignorar)
 }
-	

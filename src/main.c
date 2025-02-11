@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anggalle <anggalle@student.42.fr>          +#+  +:+       +#+        */
+/*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 17:54:48 by paromero          #+#    #+#             */
-/*   Updated: 2025/02/06 13:39:50 by anggalle         ###   ########.fr       */
+/*   Updated: 2025/02/11 18:02:17 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ int	minishell(char **env)
 	t_data	data;
 
 	init_data(&data, env);
-	setup_signals(); //- Configurar señales al inicio
+	setup_signals();
 	while (data.exit == 0)
 	{
 		if (g_sigint_received)
@@ -57,7 +57,7 @@ int	minishell(char **env)
 			break ;
 		if (!line_syntax(&data))
 			continue ;
-		if (is_builtins(&data) == 0)
+		if (is_builtins(&data, data.ast->value) == 0)
 			exec_func(&data);
 		free_innerwhile(&data);
 		continue ;

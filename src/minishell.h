@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 19:06:45 by paromero          #+#    #+#             */
-/*   Updated: 2025/02/06 13:24:42 by paromero         ###   ########.fr       */
+/*   Updated: 2025/02/11 18:01:28 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,6 @@
 # include <ncurses.h>
 # include <linux/limits.h>
 # include "../libft/libft.h"
-
 
 # define ANSI_COLOR_GREEN "\e[1;96m"
 # define ANSI_COLOR_RED "\e[1;91m"
@@ -180,7 +179,7 @@ void		exec_heredoc(t_data	*data, t_ast *node);
 //* 				BUILTS_IN					//
 
 //!	builtin.c //
-int			is_builtins(t_data *data);
+int			is_builtins(t_data *data, char *line);
 
 //! echo_builtin.c //
 int			echo_builtin(t_data *data);

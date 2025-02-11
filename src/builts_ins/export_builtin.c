@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_builtin.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anggalle <anggalle@student.42.fr>          +#+  +:+       +#+        */
+/*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 13:34:49 by anggalle          #+#    #+#             */
-/*   Updated: 2025/02/06 12:46:37 by anggalle         ###   ########.fr       */
+/*   Updated: 2025/02/11 17:52:24 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,14 +59,15 @@ void	print_env_sorted(char **env_matrix)
 	print_export_matrix(env_matrix);
 }
 
-int is_valid_identifier(char *arg)
+int	is_valid_identifier(char *arg)
 {
 	int	i;
 
 	i = 1;
 	if (!ft_isalpha(arg[0]) && arg[0] != '_')
 		return (0);
-	while (arg[i] && arg[i] != '=') {
+	while (arg[i] && arg[i] != '=')
+	{
 		if (!ft_isalnum(arg[i]) && arg[i] != '_')
 			return (0);
 		i++;
@@ -83,14 +84,14 @@ t_env	*exist_identifier(t_env **env, char *args)
 	while (args[equal_pos])
 	{
 		if (args[equal_pos] == '=')
-			break;	
+			break ;
 		equal_pos ++;
 	}
 	equal_pos = 0;
 	while (args[equal_pos])
 	{
 		if (args[equal_pos] == '=')
-			break;	
+			break ;
 		equal_pos ++;
 	}
 	current = *env;
@@ -109,7 +110,8 @@ void	add_or_update_env(t_env	**env, char *args)
 	t_env	*new_node;
 	t_env	*last;
 
-	if ((env_node = exist_identifier(env, args)))
+	env_node = exist_identifier(env, args);
+	if ((env_node))
 	{
 		free(env_node->value);
 		env_node->value = ft_strdup(args);
