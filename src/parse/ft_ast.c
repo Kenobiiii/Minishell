@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_ast.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anggalle <anggalle@student.42.fr>          +#+  +:+       +#+        */
+/*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 17:26:30 by paromero          #+#    #+#             */
-/*   Updated: 2025/02/05 14:22:15 by anggalle         ###   ########.fr       */
+/*   Updated: 2025/02/11 19:05:50 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,7 +121,7 @@ void	ft_add_argument(t_ast *cmd_node, char *arg)
 	}
 	new_args[i] = ft_strdup(arg);
 	new_args[i + 1] = NULL;
-	free(cmd_node->args);
+	free_matrix(cmd_node->args);
 	cmd_node->args = NULL;
 	cmd_node->args = new_args;
 }
