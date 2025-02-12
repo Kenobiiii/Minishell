@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 17:24:13 by paromero          #+#    #+#             */
-/*   Updated: 2025/02/05 17:45:26 by paromero         ###   ########.fr       */
+/*   Updated: 2025/02/12 17:41:10 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,8 @@ void	ft_free_ast(t_ast	*ast)
 		return ;
 	ft_free_ast(ast->left);
 	ft_free_ast(ast->right);
-	free (ast->value);
+	if (ast->value)
+		free (ast->value);
 	if (ast->args)
 		free_matrix(ast->args);
 	free (ast);

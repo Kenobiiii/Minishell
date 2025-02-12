@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 12:33:32 by paromero          #+#    #+#             */
-/*   Updated: 2025/02/04 13:15:42 by paromero         ###   ########.fr       */
+/*   Updated: 2025/02/11 18:07:27 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,6 +111,7 @@ void	ft_handle_quotes(t_data	*data, char	**matrix)
 	int		quote_found;
 
 	count_x = 0;
+	new_line = NULL;
 	while (matrix[count_x])
 	{
 		quote_found = 0;
