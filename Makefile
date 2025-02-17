@@ -16,12 +16,13 @@ SRCS = src/main.c \
 		src/parse/ft_quotesplit.c \
 		src/parse/ft_tokens.c \
 		src/parse/ft_ast.c \
-		src/parse/ft_errors.c \
+		src/errors/ft_errors.c \
 		src/parse/ft_redin2_cases.c \
 		src/parse/ft_free_parse.c \
 		src/parse/ft_free.c \
 		src/execution/exec.c \
 		src/execution/exec_utils.c \
+		src/execution/logical_and_or.c \
 		src/execution/signals.c \
 		src/execution/pipe.c \
 		src/execution/redirections.c \

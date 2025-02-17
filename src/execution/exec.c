@@ -3,49 +3,25 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: anggalle <anggalle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 17:42:48 by anggalle          #+#    #+#             */
-/*   Updated: 2025/02/11 17:42:03 by paromero         ###   ########.fr       */
+/*   Updated: 2025/02/17 19:28:43 by anggalle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	exec_logical_or(t_data *data, t_ast *node)
+static void	handle_child(t_data *data, char *path, t_ast *node)
 {
-	exec_ast(data, node->left);
-	if (WEXITSTATUS(data->wstatus) != 0)
+	signal(SIGINT, SIG_DFL);
+	signal(SIGQUIT, SIG_DFL);
+	if (!path)
+		exit_minishell(data, "command not found", 127);
+	if (execve(path, node->args, (char **)list_to_array(data->env)) == -1)
 	{
-		exec_ast(data, node->right);
-	}
-}
-
-void	exec_logical_and(t_data *data, t_ast *node)
-{
-	exec_ast(data, node->left);
-	if (WEXITSTATUS(data->wstatus) == 0)
-	{
-		exec_ast(data, node->right);
-	}
-}
-
-void	analyse_status(t_data *data)
-{
-	int	status;
-
-	status = data->wstatus;
-	if (WIFEXITED(status))
-	{
-		data->wstatus = WEXITSTATUS(status);
-	}
-	else if (WIFSIGNALED(status))
-	{
-		data->wstatus = 128 + WTERMSIG(status);
-	}
-	else
-	{
-		data->wstatus = status;
+		free(path);
+		exit_minishell(data, "Error in execve", 126);
 	}
 }
 
@@ -57,22 +33,7 @@ void	exec_simple_cmd(t_data *data, t_ast *node)
 	path = get_cmd_path(data, node->value);
 	pid = fork();
 	if (pid == 0)
-	{
-		signal(SIGINT, SIG_DFL);
-		signal(SIGQUIT, SIG_DFL);
-		if (!path)
-		{
-			printf("%s: command not found\n", node->value);
-			exit(127);
-		}
-		else if (execve(path, node->args,
-				(char **)list_to_array(data->env)) == -1)
-		{
-			free(path);
-			perror("Error en execve");
-			exit(126);
-		}
-	}
+		handle_child(data, path, node);
 	else if (pid > 0)
 	{
 		waitpid(pid, &data->wstatus, 0);
@@ -82,7 +43,7 @@ void	exec_simple_cmd(t_data *data, t_ast *node)
 	else
 	{
 		free(path);
-		perror("Error en fork");
+		exit_minishell(data, "Error in fork", EXIT_FAILURE);
 	}
 }
 

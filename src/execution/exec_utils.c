@@ -3,16 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   exec_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: anggalle <anggalle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 13:59:23 by anggalle          #+#    #+#             */
-/*   Updated: 2025/02/11 17:56:27 by paromero         ###   ########.fr       */
+/*   Updated: 2025/02/17 19:37:25 by anggalle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-// Función para contar los nodos de la lista enlazada
 static size_t	count_nodes(t_env *head)
 {
 	size_t	count;
@@ -26,11 +25,11 @@ static size_t	count_nodes(t_env *head)
 	return (count);
 }
 
-// Función para convertir la lista enlazada a matriz
 char	**list_to_array(t_env *head)
 {
 	size_t	count;
 	size_t	i;
+	size_t	j;
 	char	**array;
 
 	count = count_nodes(head);
@@ -40,32 +39,51 @@ char	**list_to_array(t_env *head)
 	i = 0;
 	while (head)
 	{
-		array[i] = strdup(head->value); // Copia el valor a la matriz
-		if (!array[i])
+		array[i] = strdup(head->value);
+		if (!array[i++])
 		{
-			// Liberar memoria en caso de error
-			for (size_t j = 0; j < i; j++)
-			{
-				free((char *)array[j]);
-			}
+			j = 0;
+			while (j < i)
+				free((char *)array[j++]);
 			free(array);
 			return (NULL);
 		}
 		head = head->next;
-		i++;
 	}
-	array[i] = NULL; // Terminar la matriz con NULL
+	array[i] = NULL;
 	return (array);
 }
 
-// Liberar memoria de la matriz
 void	free_array(const char **array)
 {
+	size_t	i;
+
 	if (!array)
 		return ;
-	for (size_t i = 0; array[i]; i++)
+	i = 0;
+	while (array[i])
 	{
 		free((char *)array[i]);
+		i ++;
 	}
 	free(array);
+}
+
+void	analyse_status(t_data *data)
+{
+	int	status;
+
+	status = data->wstatus;
+	if (WIFEXITED(status))
+	{
+		data->wstatus = WEXITSTATUS(status);
+	}
+	else if (WIFSIGNALED(status))
+	{
+		data->wstatus = 128 + WTERMSIG(status);
+	}
+	else
+	{
+		data->wstatus = status;
+	}
 }

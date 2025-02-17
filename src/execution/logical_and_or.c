@@ -1,28 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   signals.c                                          :+:      :+:    :+:   */
+/*   logical_and_or.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: anggalle <anggalle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/29 18:42:47 by anggalle          #+#    #+#             */
-/*   Updated: 2025/02/17 19:33:43 by anggalle         ###   ########.fr       */
+/*   Created: 2025/02/17 19:26:39 by anggalle          #+#    #+#             */
+/*   Updated: 2025/02/17 19:27:05 by anggalle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	handle_sigint(int sig)
+void	exec_logical_or(t_data *data, t_ast *node)
 {
-	(void)sig;
-	g_sigint_received = 1;
-	write(STDOUT_FILENO, "\n", 1); // Nueva línea
-	rl_replace_line("", 0); // Limpiar entrada actual (requiere -lreadline)
-	rl_on_new_line(); // Prepara nuevo prompt
-	//rl_redisplay(); // Fuerza a readline a mostrar el prompt
+	exec_ast(data, node->left);
+	if (WEXITSTATUS(data->wstatus) != 0)
+	{
+		exec_ast(data, node->right);
+	}
 }
-void	setup_signals(void)
+
+void	exec_logical_and(t_data *data, t_ast *node)
 {
-	signal(SIGINT, handle_sigint); // Ctrl+C
-	signal(SIGQUIT, SIG_IGN); // Ctrl+\ (ignorar)
+	exec_ast(data, node->left);
+	if (WEXITSTATUS(data->wstatus) == 0)
+	{
+		exec_ast(data, node->right);
+	}
 }

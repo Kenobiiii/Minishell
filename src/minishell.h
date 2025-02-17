@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: anggalle <anggalle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 19:06:45 by paromero          #+#    #+#             */
-/*   Updated: 2025/02/11 18:01:28 by paromero         ###   ########.fr       */
+/*   Updated: 2025/02/17 19:28:03 by anggalle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,6 +145,7 @@ void		redin2(t_ast **current_cmd, t_ast **last_operator,
 //! ft_errors.c //
 int			syntax_error(void);
 char		*handle_invalid_cmd_path(char **cmd_path, char *total_cmd);
+void		exit_minishell(t_data *data, const char *error_message, int exit_code);
 
 //! ft_free.c //
 void		free_innerwhile(t_data	*data);
@@ -163,12 +164,15 @@ void		ft_free_ast(t_ast	*ast);
 void		exec_func(t_data *data);
 void		exec_ast(t_data *data, t_ast *node);
 void		exec_simple_cmd(t_data *data, t_ast *node);
+
+//! logical_and_or.c //
 void		exec_logical_and(t_data *data, t_ast *node);
 void		exec_logical_or(t_data *data, t_ast *node);
 
 //!	exec_utils.c //
 char		**list_to_array(t_env *head);
 void		free_array(const char **array);
+void		analyse_status(t_data *data);
 
 //! redirections.c //
 void		exec_redirect_out(t_data *data, t_ast *node);
