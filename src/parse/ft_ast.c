@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 17:26:30 by paromero          #+#    #+#             */
-/*   Updated: 2025/02/11 19:05:50 by paromero         ###   ########.fr       */
+/*   Updated: 2025/02/19 17:10:43 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,21 +107,20 @@ void	ft_add_argument(t_ast *cmd_node, char *arg)
 	char	**new_args;
 
 	i = 0;
-	j = 1;
 	while (cmd_node->args && cmd_node->args[i])
 		i++;
 	new_args = malloc(sizeof(char *) * (i + 2));
 	if (!new_args)
 		return ;
 	new_args[0] = ft_strdup(cmd_node->value);
-	while (j < i + 1)
+	j = 1;
+	while (j < i)
 	{
-		new_args[j] = cmd_node->args[j];
+		new_args[j] = ft_strdup(cmd_node->args[j]);
 		j++;
 	}
 	new_args[i] = ft_strdup(arg);
 	new_args[i + 1] = NULL;
 	free_matrix(cmd_node->args);
-	cmd_node->args = NULL;
 	cmd_node->args = new_args;
 }
