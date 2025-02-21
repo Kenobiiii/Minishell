@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_free_parse.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: anggalle <anggalle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 17:24:13 by paromero          #+#    #+#             */
-/*   Updated: 2025/02/12 17:41:10 by paromero         ###   ########.fr       */
+/*   Updated: 2025/02/20 12:26:11 by anggalle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,11 @@ void	free_matrix(char **array)
 		free(array[i]);
 		i++;
 	}
-	free(array);
+	if (array)
+	{
+		free(array);
+		array = NULL;
+	}
 }
 
 void	ft_free_tokens(t_tokens *tokens)
@@ -39,6 +43,7 @@ void	ft_free_tokens(t_tokens *tokens)
 			free(temp->value);
 		if (temp)
 			free(temp);
+		temp = NULL;
 	}
 }
 
@@ -46,13 +51,16 @@ void	ft_free_ast(t_ast	*ast)
 {
 	if (!ast)
 		return ;
-	ft_free_ast(ast->left);
-	ft_free_ast(ast->right);
+	if (ast->left)
+		ft_free_ast(ast->left);
+	if (ast->right)
+		ft_free_ast(ast->right);
 	if (ast->value)
 		free (ast->value);
 	if (ast->args)
 		free_matrix(ast->args);
 	free (ast);
+	ast = NULL;
 }
 
 void	ft_free_env(t_env	*env)

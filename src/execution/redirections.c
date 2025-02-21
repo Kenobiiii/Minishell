@@ -6,7 +6,7 @@
 /*   By: anggalle <anggalle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 14:27:38 by anggalle          #+#    #+#             */
-/*   Updated: 2025/02/04 10:35:45 by anggalle         ###   ########.fr       */
+/*   Updated: 2025/02/20 12:14:01 by anggalle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,11 @@ void	exec_redirect_out(t_data *data, t_ast *node)
 	int		original_stdout;
 
 	original_stdout = dup(STDOUT_FILENO);
+	if (!node->right)
+	{
+		ft_printf("No hay archivo de salida\n");
+		return ;
+	}
 	filename = node->right->value;
 	fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd == -1)
