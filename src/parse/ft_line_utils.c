@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 17:52:10 by paromero          #+#    #+#             */
-/*   Updated: 2025/02/04 17:53:40 by paromero         ###   ########.fr       */
+/*   Updated: 2025/02/23 18:41:48 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,7 @@ int	handle_invslash_pcomma(char *line)
 			quote = line[i];
 		while (line[i] != quote && quote)
 			i++;
+		quote = 0;
 		if (line[i] == '\\' || line[i] == ';')
 			return (syntax_error());
 		i++;
