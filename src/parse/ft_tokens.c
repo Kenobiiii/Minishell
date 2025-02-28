@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 20:08:34 by paromero          #+#    #+#             */
-/*   Updated: 2025/02/05 17:43:19 by paromero         ###   ########.fr       */
+/*   Updated: 2025/02/28 21:23:33 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,19 +60,18 @@ int	ft_tokens(t_data *data, char *str)
 	return (1);
 }
 
-t_tokens	*ft_new_token(char	*str)
+t_tokens	*ft_new_token(char *str)
 {
 	t_tokens	*new_node;
+	char		*processed_str;
 
-	new_node = (t_tokens *)malloc(sizeof(t_tokens));
+	processed_str = ft_strdup(str);
+	if (processed_str[0] == '\x01')
+		ft_memmove(processed_str, processed_str + 1, strlen(processed_str));
+	new_node = malloc(sizeof(t_tokens));
 	if (!new_node)
 		return (NULL);
-	new_node->value = ft_strdup(str);
-	if (!new_node->value)
-	{
-		free(new_node);
-		return (NULL);
-	}
-	new_node->next = (NULL);
+	new_node->value = processed_str;
+	new_node->next = NULL;
 	return (new_node);
 }

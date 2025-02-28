@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 17:52:10 by paromero          #+#    #+#             */
-/*   Updated: 2025/02/23 18:41:48 by paromero         ###   ########.fr       */
+/*   Updated: 2025/02/28 21:22:50 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,4 +84,29 @@ int	handle_invslash_pcomma(char *line)
 		i++;
 	}
 	return (1);
+}
+
+char	*ft_mask_operator(char *str)
+{
+	char	*result;
+	int		i;
+	int		j;
+
+	i = 0;
+	j = 0;
+	result = malloc(ft_strlen(str) * 2 + 1);
+	if (!result)
+		return (NULL);
+	while (str[i])
+	{
+		if ((str[i] == '&' && str[i + 1] == '&') || (str[i] == '|'
+				&& str[i + 1] == '|'))
+			result[j++] = '\x01';
+		else if (str[i] == '|' || str[i] == '>' || str[i] == '<')
+			result[j++] = '\x01';
+		result[j++] = str[i++];
+	}
+	result[j] = '\0';
+	free(str);
+	return (result);
 }

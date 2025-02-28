@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 12:33:32 by paromero          #+#    #+#             */
-/*   Updated: 2025/02/11 18:07:27 by paromero         ###   ########.fr       */
+/*   Updated: 2025/02/28 21:22:07 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,7 @@ int	handle_quotes(t_data *data, char **matrix, int count_x, int count_y)
 	{
 		new_line = ft_handle_double(matrix[count_x]);
 		new_line = ft_handledollar(data, new_line);
+		new_line = ft_mask_operator(new_line);
 		free(matrix[count_x]);
 		matrix[count_x] = new_line;
 		return (1);

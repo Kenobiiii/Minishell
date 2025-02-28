@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anggalle <anggalle@student.42.fr>          +#+  +:+       +#+        */
+/*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 19:06:45 by paromero          #+#    #+#             */
-/*   Updated: 2025/02/17 19:28:03 by anggalle         ###   ########.fr       */
+/*   Updated: 2025/02/28 21:24:09 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,6 +107,7 @@ char		*deletefirstspaces(char *line);
 int			ft_isspace(char	*line);
 int			openquotes(char	*line);
 int			handle_invslash_pcomma(char *line);
+char		*ft_mask_operator(char *str);
 
 //! ft_parse_utils.c //
 size_t		ft_spacestrlen(char *line);
@@ -145,7 +146,8 @@ void		redin2(t_ast **current_cmd, t_ast **last_operator,
 //! ft_errors.c //
 int			syntax_error(void);
 char		*handle_invalid_cmd_path(char **cmd_path, char *total_cmd);
-void		exit_minishell(t_data *data, const char *error_message, int exit_code);
+void		exit_minishell(t_data *data, const char *error_message,
+				int exit_code);
 
 //! ft_free.c //
 void		free_innerwhile(t_data	*data);
