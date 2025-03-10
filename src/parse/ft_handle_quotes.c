@@ -6,26 +6,25 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 12:33:32 by paromero          #+#    #+#             */
-/*   Updated: 2025/02/28 21:22:07 by paromero         ###   ########.fr       */
+/*   Updated: 2025/03/10 12:42:01 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-int	ft_quotelen(char	*line)
+int	ft_quotelen(char	*line, char quote)
 {
 	int	i;
 	int	count;
 
 	i = 0;
 	count = 0;
-	while (line[i])
+	if (line[i] == quote)
+		i++;
+	while (line[i] && line[i] != quote)
 	{
-		if (line[i] == '\'')
-			i++;
-		if (line[i])
-			i++;
 		count++;
+		i++;
 	}
 	return (count);
 }
@@ -39,18 +38,14 @@ char	*ft_handle_single(char	*line)
 
 	j = 0;
 	i = 0;
-	count = ft_quotelen(line);
+	count = ft_quotelen(line, '\'');
 	new_line = (char *)malloc(sizeof(char) * (count + 1));
 	if (!new_line)
 		return (0);
-	while (line[i])
-	{
-		if (line[i] == '\'')
-			i++;
-		new_line[j++] = line[i];
-		if (line[i])
-			i++;
-	}
+	if (line[i] == '\'')
+		i++;
+	while (line[i] && line[i] != '\'')
+		new_line[j++] = line[i++];
 	new_line[j] = '\0';
 	return (new_line);
 }
@@ -65,18 +60,14 @@ char	*ft_handle_double(char	*line)
 	count = 0;
 	j = 0;
 	i = 0;
-	count = ft_quotelen(line);
+	count = ft_quotelen(line, '"');
 	new_line = (char *)malloc(sizeof(char) * (count + 1));
 	if (!new_line)
 		return (0);
-	while (line[i])
-	{
-		if (line[i] == '"')
-			i++;
-		new_line[j++] = line[i];
-		if (line[i])
-			i++;
-	}
+	if (line[i] == '"')
+		i++;
+	while (line[i] && line[i] != '"')
+		new_line[j++] = line[i++];
 	new_line[j] = '\0';
 	return (new_line);
 }
