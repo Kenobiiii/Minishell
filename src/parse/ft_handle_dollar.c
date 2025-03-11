@@ -6,11 +6,11 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 11:06:52 by paromero          #+#    #+#             */
-/*   Updated: 2025/02/11 18:09:50 by paromero         ###   ########.fr       */
+/*   Updated: 2025/03/10 17:23:07 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+# include "../minishell.h"
 
 static char	*get_env_value(t_data *data, const char *name)
 {
@@ -88,27 +88,48 @@ static int	copy_env_value(t_data *data,
 	return (1);
 }
 
+char	*exit_status(t_data	*data, char *result)
+{
+	int	j;
+	char	*wstatus;
+
+	j = 0;
+	wstatus = ft_itoa(data->wstatus);
+	if (wstatus)
+	{
+		while (wstatus[j] != '\0')
+		{
+			result[j] = wstatus[j];
+			j++;
+		}
+		free (wstatus);
+	}
+	return (result);
+}
+
 char	*ft_handledollar(t_data *data, const char *line)
 {
 	char	*result;
 	int		i;
 	int		j;
-	char	*var_token;
-
+	
 	i = 0;
 	j = 0;
 	result = ft_calloc(ft_strlen(line) * 10 + 1, sizeof(char));
 	if (!result)
-		return (NULL);
+	return (NULL);
 	while (line[i])
 	{
-		if (line[i] == '$' && line[i + 1] != '?')
-		{
-			var_token = extract_var(line, &i);
-			if (copy_env_value(data, var_token, result, &j))
-				continue ;
-		}
-		result[j++] = line[i++];
+		if (line[i] == '$' && line[i + 1] != '?' && line[i + 1])
+		if (copy_env_value(data, extract_var(line, &i), result, &j))
+		continue ;
+	if (line[i] == '$' && line[i + 1] == '?' && line[i + 2])
+	{
+		result = exit_status(data, result);
+		j += ft_strlen(ft_itoa(data->wstatus));
+		i += 2;
+	}
+	result[j++] = line[i++];
 	}
 	result[j] = '\0';
 	return (result);
