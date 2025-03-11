@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 12:33:32 by paromero          #+#    #+#             */
-/*   Updated: 2025/03/10 12:42:01 by paromero         ###   ########.fr       */
+/*   Updated: 2025/03/11 18:42:26 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,18 +34,18 @@ char	*ft_handle_single(char	*line)
 	char	*new_line;
 	int		i;
 	int		j;
-	int		count;
 
 	j = 0;
 	i = 0;
-	count = ft_quotelen(line, '\'');
-	new_line = (char *)malloc(sizeof(char) * (count + 1));
+	new_line = (char *)malloc(sizeof(char) * (ft_strlen(line) + 1));
 	if (!new_line)
 		return (0);
-	if (line[i] == '\'')
+	while (line[i])
+	{
+		if (line[i] != '\'')
+			new_line[j++] = line[i];
 		i++;
-	while (line[i] && line[i] != '\'')
-		new_line[j++] = line[i++];
+	}
 	new_line[j] = '\0';
 	return (new_line);
 }
@@ -55,19 +55,18 @@ char	*ft_handle_double(char	*line)
 	char	*new_line;
 	int		i;
 	int		j;
-	int		count;
 
-	count = 0;
 	j = 0;
 	i = 0;
-	count = ft_quotelen(line, '"');
-	new_line = (char *)malloc(sizeof(char) * (count + 1));
+	new_line = (char *)malloc(sizeof(char) * (ft_strlen(line) + 1));
 	if (!new_line)
 		return (0);
-	if (line[i] == '"')
+	while (line[i])
+	{
+		if (line[i] != '"')
+			new_line[j++] = line[i];
 		i++;
-	while (line[i] && line[i] != '"')
-		new_line[j++] = line[i++];
+	}
 	new_line[j] = '\0';
 	return (new_line);
 }
