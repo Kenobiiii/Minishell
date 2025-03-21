@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 12:32:49 by anggalle          #+#    #+#             */
-/*   Updated: 2025/02/11 17:49:11 by paromero         ###   ########.fr       */
+/*   Updated: 2025/03/21 12:18:27 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,11 @@ int	cd_builtin(t_data *data)
 			printf("Can't get to the home directory.\n");
 			return (1);
 		}
+	}
+	else if (data->ast->args[2])
+	{
+		printf("too many arguments\n");
+		data->wstatus = 1;
 	}
 	else
 	{
