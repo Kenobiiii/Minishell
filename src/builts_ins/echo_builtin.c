@@ -6,11 +6,24 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 17:09:01 by anggalle          #+#    #+#             */
-/*   Updated: 2025/02/11 18:00:49 by paromero         ###   ########.fr       */
+/*   Updated: 2025/03/21 11:47:31 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+static void	ft_putstatus_fd(char *status, int fd)
+{
+	int	i;
+
+	i = 0;
+	if (status != NULL)
+	{
+		while (status[i])
+			write (fd, &status[i++], 1);
+	}
+	free (status);
+}
 
 int	echo_builtin(t_data *data)
 {
@@ -45,6 +58,8 @@ int	echo_builtin(t_data *data)
 						print_new_line = 0;
 				}
 			}
+			else if (ft_strncmp(data->ast->args[i], "$?", 2) == 0)
+				ft_putstatus_fd(ft_itoa(data->wstatus), STDOUT_FILENO);
 			else
 			{
 				ft_putstr_fd(data->ast->args[i], STDOUT_FILENO);
