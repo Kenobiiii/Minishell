@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 18:14:24 by anggalle          #+#    #+#             */
-/*   Updated: 2025/02/11 17:50:44 by paromero         ###   ########.fr       */
+/*   Updated: 2025/03/21 12:56:07 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ int	exit_builtin(t_data *data)
 		//TODO Manejar error
 		printf("Error en la introducción de comandos\n");
 	}
-	data->exit = 1;
+	else
+		data->exit = 1;
 	return (1);
 }
