@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_builtin.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: anggalle <anggalle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 13:34:49 by anggalle          #+#    #+#             */
-/*   Updated: 2025/02/11 17:52:24 by paromero         ###   ########.fr       */
+/*   Updated: 2025/03/26 15:09:15 by anggalle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,7 +149,8 @@ int	export_builtin(t_data *data)
 	{
 		if (!is_valid_identifier(data->ast->args[i]))
 		{
-			printf("export: not a valid identifier: %s\n", data->ast->args[i]);
+			//printf("export: not a valid identifier: %s\n", data->ast->args[i]);
+			data->wstatus = 1;
 			return (1);
 		}
 		else
