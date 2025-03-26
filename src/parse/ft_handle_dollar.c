@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_handle_dollar.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: anggalle <anggalle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 11:06:52 by paromero          #+#    #+#             */
-/*   Updated: 2025/03/10 17:23:07 by paromero         ###   ########.fr       */
+/*   Updated: 2025/03/26 18:18:28 by anggalle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,19 +117,22 @@ char	*ft_handledollar(t_data *data, const char *line)
 	j = 0;
 	result = ft_calloc(ft_strlen(line) * 10 + 1, sizeof(char));
 	if (!result)
-	return (NULL);
+		return (NULL);
 	while (line[i])
 	{
-		if (line[i] == '$' && line[i + 1] != '?' && line[i + 1])
-		if (copy_env_value(data, extract_var(line, &i), result, &j))
-		continue ;
-	if (line[i] == '$' && line[i + 1] == '?' && line[i + 2])
-	{
-		result = exit_status(data, result);
-		j += ft_strlen(ft_itoa(data->wstatus));
-		i += 2;
-	}
-	result[j++] = line[i++];
+		if (line[i] == '$' && line[i + 1] && ft_isalnum(line[i + 1]))
+		{
+			if (copy_env_value(data, extract_var(line, &i), result, &j))
+				continue ;
+		}
+		else if (line[i] == '$' && line[i + 1] == '?' && line[i + 2])
+		{
+			result = exit_status(data, result);
+			j += ft_strlen(ft_itoa(data->wstatus));
+			i += 2;
+		}
+		else
+		result[j++] = line[i++];
 	}
 	result[j] = '\0';
 	return (result);

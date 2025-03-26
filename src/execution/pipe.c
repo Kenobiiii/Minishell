@@ -6,7 +6,7 @@
 /*   By: anggalle <anggalle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 11:59:00 by anggalle          #+#    #+#             */
-/*   Updated: 2025/02/04 12:29:46 by anggalle         ###   ########.fr       */
+/*   Updated: 2025/03/26 17:17:12 by anggalle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ void	exec_pipe(t_data *data, t_ast *node)
 	pid_t	pid_left;
 	pid_t	pid_right;
 	int		status_right;
+	int		status_left;
 
 	if (handle_process_error(pipe(pipefd), "pipe") < 0)
 		return ;
@@ -69,7 +70,12 @@ void	exec_pipe(t_data *data, t_ast *node)
 		return ;
 	close(pipefd[0]);
 	close(pipefd[1]);
-	waitpid(pid_left, NULL, 0);
+	waitpid(pid_left, &status_left, 0);
+	if (WEXITSTATUS(status_left) != 0) // Si el primer comando falla
+	{
+		data->wstatus = WEXITSTATUS(status_left);
+		return;
+	}
 	waitpid(pid_right, &status_right, 0);
-	data->wstatus = status_right;
+	data->wstatus = WEXITSTATUS(status_right);
 }
