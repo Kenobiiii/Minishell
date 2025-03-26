@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_handle_dollar.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anggalle <anggalle@student.42.fr>          +#+  +:+       +#+        */
+/*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 11:06:52 by paromero          #+#    #+#             */
-/*   Updated: 2025/03/26 18:18:28 by anggalle         ###   ########.fr       */
+/*   Updated: 2025/03/26 18:42:53 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,15 +91,19 @@ static int	copy_env_value(t_data *data,
 char	*exit_status(t_data	*data, char *result)
 {
 	int	j;
+	int i;
 	char	*wstatus;
 
+	i = 0;
 	j = 0;
 	wstatus = ft_itoa(data->wstatus);
 	if (wstatus)
 	{
 		while (wstatus[j] != '\0')
 		{
-			result[j] = wstatus[j];
+			while (result[i] != '$')
+				i++;
+			result[i] = wstatus[j];
 			j++;
 		}
 		free (wstatus);
@@ -107,7 +111,7 @@ char	*exit_status(t_data	*data, char *result)
 	return (result);
 }
 
-char	*ft_handledollar(t_data *data, const char *line)
+char	*ft_handledollar(t_data *data, char *line)
 {
 	char	*result;
 	int		i;
@@ -127,12 +131,12 @@ char	*ft_handledollar(t_data *data, const char *line)
 		}
 		else if (line[i] == '$' && line[i + 1] == '?' && line[i + 2])
 		{
-			result = exit_status(data, result);
+			result = exit_status(data, line);
 			j += ft_strlen(ft_itoa(data->wstatus));
 			i += 2;
 		}
 		else
-		result[j++] = line[i++];
+			result[j++] = line[i++];
 	}
 	result[j] = '\0';
 	return (result);
