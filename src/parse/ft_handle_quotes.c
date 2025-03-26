@@ -6,7 +6,7 @@
 /*   By: anggalle <anggalle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 12:33:32 by paromero          #+#    #+#             */
-/*   Updated: 2025/03/26 17:34:15 by anggalle         ###   ########.fr       */
+/*   Updated: 2025/03/26 18:45:55 by anggalle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,7 @@ int	handle_quotes(t_data *data, char **matrix, int count_x, int count_y)
 	if (matrix[count_x][count_y] == '\'')
 	{
 		new_line = ft_handle_single(matrix[count_x]);
+		new_line = ft_mask_operator(new_line);
 		free(matrix[count_x]);
 		matrix[count_x] = new_line;
 		return (1);
