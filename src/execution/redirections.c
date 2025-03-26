@@ -6,7 +6,7 @@
 /*   By: anggalle <anggalle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 14:27:38 by anggalle          #+#    #+#             */
-/*   Updated: 2025/02/20 12:14:01 by anggalle         ###   ########.fr       */
+/*   Updated: 2025/03/26 14:25:11 by anggalle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,14 @@ void	exec_redirect_in(t_data *data, t_ast *node)
 	int		original_stdin;
 
 	original_stdin = dup(STDIN_FILENO);
+	if (!node->right)
+	{
+		ft_printf("No hay archivo de entrada\n");
+		data->wstatus = 2;
+		return ;
+	}
 	filename = node->right->value;
+	printf("Llega aqui\n");
 	fd = open(filename, O_RDONLY);
 	if (fd == -1)
 	{
