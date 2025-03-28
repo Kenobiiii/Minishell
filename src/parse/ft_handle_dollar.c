@@ -6,11 +6,11 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 11:06:52 by paromero          #+#    #+#             */
-/*   Updated: 2025/03/28 23:58:55 by paromero         ###   ########.fr       */
+/*   Updated: 2025/03/29 00:03:14 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "../minishell.h"
+#include "../minishell.h"
 
 static char	*get_env_value(t_data *data, const char *name)
 {
@@ -88,25 +88,25 @@ static int	copy_env_value(t_data *data,
 	return (1);
 }
 
-static void handle_exit_status(t_data *data, char *result, int *j) 
+static	void	handle_exit_status(t_data *data, char *result, int *j)
 {
 	char	*wstatus;
 	int		k;
 
 	wstatus = ft_itoa(data->wstatus);
 	if (!wstatus)
-		return;
+		return ;
 	k = 0;
 	while (wstatus[k])
 		result[(*j)++] = wstatus[k++];
 	free(wstatus);
 }
 
-char    *ft_handledollar(t_data *data, char *line)
+char	*ft_handledollar(t_data *data, char *line)
 {
-	char    *result;
-	int     i;
-	int     j;
+	char	*result;
+	int		i;
+	int		j;
 
 	i = 0;
 	j = 0;
@@ -115,7 +115,7 @@ char    *ft_handledollar(t_data *data, char *line)
 		return (NULL);
 	while (line[i])
 	{
-		if (line[i] == '$' && line[i+1] == '?') 
+		if (line[i] == '$' && line[i + 1] == '?')
 		{
 			handle_exit_status(data, result, &j);
 			i += 2;
