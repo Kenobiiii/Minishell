@@ -6,7 +6,7 @@
 /*   By: anggalle <anggalle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 14:27:38 by anggalle          #+#    #+#             */
-/*   Updated: 2025/03/29 17:06:04 by anggalle         ###   ########.fr       */
+/*   Updated: 2025/03/29 18:01:05 by anggalle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ void	exec_redirect_out(t_data *data, t_ast *node)
 	if (!node->right)
 	{
 		ft_printf("No hay archivo de salida\n");
+		data->wstatus = 2;
 		return ;
 	}
 	filename = node->right->value;
@@ -29,6 +30,7 @@ void	exec_redirect_out(t_data *data, t_ast *node)
 	if (fd == -1)
 	{
 		perror("minishell");
+		data->wstatus = 1;
 		return ;
 	}
 	dup2(fd, STDOUT_FILENO);
@@ -56,6 +58,7 @@ void	exec_redirect_in(t_data *data, t_ast *node)
 	if (fd == -1)
 	{
 		perror("minishell");
+		data->wstatus = 1;
 		return ;
 	}
 	dup2(fd, STDIN_FILENO);
@@ -77,6 +80,7 @@ void	exec_redirect_append(t_data *data, t_ast *node)
 	if (fd == -1)
 	{
 		perror("minishell");
+		data->wstatus = 1;
 		return ;
 	}
 	dup2(fd, STDOUT_FILENO);
