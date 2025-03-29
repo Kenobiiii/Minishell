@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_quotesplit.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: anggalle <anggalle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/18 09:38:49 by paromero          #+#    #+#             */
-/*   Updated: 2025/03/29 00:43:21 by paromero         ###   ########.fr       */
+/*   Updated: 2025/03/29 17:40:05 by anggalle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,27 +16,39 @@ static int count_substr(char const *s, char c)
 {
     size_t i = 0;
     size_t count = 0;
-    char quote;
+    char quote = '\0';
 
     while (s[i])
-	{
+    {
         while (s[i] == c)
             i++;
         if (!s[i])
             break;
         count++;
         while (s[i] && (s[i] != c || quote))
-		{
+        {
             if (s[i] == '"' || s[i] == '\'')
-			{
+            {
                 quote = s[i++];
                 while (s[i] && s[i] != quote)
                     i++;
                 if (s[i] == quote)
                     i++;
                 quote = '\0';
-            } 
-			else
+            }
+            else if ((s[i] == '<' && s[i + 1] == '<') || (s[i] == '>' && s[i + 1] == '>'))
+            {
+                // Detecta redirecciones dobles (<< o >>)
+                i += 2; // Avanza dos posiciones
+                break;
+            }
+            else if (s[i] == '<' || s[i] == '>' || s[i] == '|')
+            {
+                // Detecta redirecciones simples (<, >, |)
+                i++;
+                break;
+            }
+            else
                 i++;
         }
     }
@@ -49,6 +61,24 @@ static int process_substr(char **array, char const *s, size_t *i, char c)
 	size_t start = *i;
 	char quote = '\0';
 
+	// Si encuentra un carácter especial al inicio, lo trata como un token independiente
+	if (s[*i] == '<' || s[*i] == '>' || s[*i] == '|')
+	{
+		if ((s[*i] == '<' && s[*i + 1] == '<') || (s[*i] == '>' && s[*i + 1] == '>'))
+		{
+			// Detecta redirecciones dobles (<< o >>)
+			array[0] = ft_substr(s, *i, 2); // Extrae los dos caracteres
+			(*i) += 2;
+		}
+		else
+		{
+			// Detecta redirecciones simples (<, >, |)
+			array[0] = ft_substr(s, *i, 1); // Extrae solo el carácter especial
+			(*i)++;
+		}
+		return (array[0] ? 0 : -1);
+	}
+
 	while (s[*i] && (s[*i] != c || quote))
 	{
 		if (s[*i] == '"' || s[*i] == '\'')
@@ -60,9 +90,16 @@ static int process_substr(char **array, char const *s, size_t *i, char c)
 			if (s[*i] == quote)
 				(*i)++;
 			quote = '\0';
-		} else
+		}
+		else if (s[*i] == '<' || s[*i] == '>' || s[*i] == '|')
+		{
+			// Si encuentra un carácter especial en medio, corta el token actual
+			break;
+		}
+		else
 			(*i)++;
 	}
+
 	array[0] = ft_substr(s, start, *i - start);
 	return (array[0] ? 0 : -1);
 }
@@ -87,7 +124,6 @@ static int	allocate_substr(char **array, char const *s, char c)
 	array[j] = NULL;
 	return (0);
 }
-
 
 char	**ft_quotesplit(char const *s, char c, t_data	*data)
 {
