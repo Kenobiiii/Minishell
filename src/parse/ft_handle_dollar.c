@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_handle_dollar.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: anggalle <anggalle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 11:06:52 by paromero          #+#    #+#             */
-/*   Updated: 2025/03/29 00:03:14 by paromero         ###   ########.fr       */
+/*   Updated: 2025/03/29 02:12:35 by anggalle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
