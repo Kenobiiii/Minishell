@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd_builtin.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: anggalle <anggalle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 12:32:49 by anggalle          #+#    #+#             */
-/*   Updated: 2025/03/21 12:18:27 by paromero         ###   ########.fr       */
+/*   Updated: 2025/03/29 01:11:15 by anggalle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,14 +32,13 @@ int	cd_builtin(t_data *data)
 	}
 	else if (data->ast->args[2])
 	{
-		printf("too many arguments\n");
 		data->wstatus = 1;
 	}
 	else
 	{
 		if (chdir(data->ast->args[1]) == -1)
 		{
-			printf("cd: no such file or directory: %s\n", data->ast->args[1]);
+			data->wstatus = 1;
 			return (1);
 		}
 	}
