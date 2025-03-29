@@ -6,7 +6,7 @@
 /*   By: anggalle <anggalle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 14:27:38 by anggalle          #+#    #+#             */
-/*   Updated: 2025/03/29 01:58:42 by anggalle         ###   ########.fr       */
+/*   Updated: 2025/03/29 17:06:04 by anggalle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,6 @@ void	exec_redirect_in(t_data *data, t_ast *node)
 		return ;
 	}
 	filename = node->right->value;
-	printf("Llega aqui\n");
 	fd = open(filename, O_RDONLY);
 	if (fd == -1)
 	{

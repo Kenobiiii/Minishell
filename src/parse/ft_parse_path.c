@@ -6,7 +6,7 @@
 /*   By: anggalle <anggalle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 12:59:22 by anggalle          #+#    #+#             */
-/*   Updated: 2025/03/08 12:13:40 by anggalle         ###   ########.fr       */
+/*   Updated: 2025/03/29 17:16:23 by anggalle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,13 @@ char	*get_cmd_path(t_data *data, char *cmd)
 
 	if (!cmd)
 		return (NULL);
+	if (cmd[0] == '/' || cmd[0] == '.')
+	{
+		if (access(cmd, X_OK) == 0)
+			return (ft_strdup(cmd));
+		else
+			return (NULL);
+	}
 	env_path = find_variable_in_env(data, "PATH=");
 	if (!env_path)
 		return (NULL);
