@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 17:26:30 by paromero          #+#    #+#             */
-/*   Updated: 2025/02/19 18:54:30 by paromero         ###   ########.fr       */
+/*   Updated: 2025/03/31 19:25:02 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,17 @@ t_ast	*ft_create_ast_node(t_type type, char *value)
 	return (node);
 }
 
+int	is_red(t_ast **last_operator)
+{
+	if (*last_operator)
+	{
+		if ((*last_operator)->type == REDIN2 || (*last_operator)->type == REDOUT2
+			|| (*last_operator)->type == REDIRECT_IN || (*last_operator)->type == REDIRECT_OUT)
+			return (1);
+	}
+	return (0);
+}
+
 void	ft_handle_command_node(t_ast **root, t_ast **current_cmd,
 	t_ast **last_operator, t_tokens *tokens)
 {
@@ -34,8 +45,15 @@ void	ft_handle_command_node(t_ast **root, t_ast **current_cmd,
 
 	if (!*current_cmd && tokens->type == CMD)
 		new_node = ft_create_ast_node(CMD, tokens->value);
-	if (is_redin2(last_operator))
-		redin2(current_cmd, last_operator, new_node, tokens);
+	if (is_red(last_operator)) //! Nuevo cambio
+	{
+		if (is_redin2(last_operator))
+			redin2(current_cmd, last_operator, new_node, tokens);
+		else
+			(*last_operator)->right = ft_create_ast_node(CMD, tokens->value);
+		*current_cmd = (*last_operator)->left; // Restaurar el comando original
+		*last_operator = NULL;
+	}
 	else
 	{
 		if (*current_cmd)
