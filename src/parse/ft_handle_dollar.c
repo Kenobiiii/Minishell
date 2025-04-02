@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_handle_dollar.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anggalle <anggalle@student.42.fr>          +#+  +:+       +#+        */
+/*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 11:06:52 by paromero          #+#    #+#             */
-/*   Updated: 2025/03/29 02:12:35 by anggalle         ###   ########.fr       */
+/*   Updated: 2025/04/02 11:22:29 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,15 +76,23 @@ static int	copy_env_value(t_data *data,
 	char	*env_value;
 	int		k;
 
-	env_value = find_envvar(data, var_token);
-	free(var_token);
-	if (env_value)
+	k = 0;
+	if (ft_strncmp(var_token, "$EMPTY", ft_strlen(var_token)) == 0)
 	{
-		k = 0;
-		while (env_value[k])
+		while(var_token[k])
+		result[(*j)++] = var_token[k++];
+	}
+	else
+	{
+		env_value = find_envvar(data, var_token);
+		if (env_value)
+		{
+			while (env_value[k])
 			result[(*j)++] = env_value[k++];
 		free(env_value);
+		}
 	}
+	free(var_token);
 	return (1);
 }
 

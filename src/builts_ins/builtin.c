@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 19:17:47 by anggalle          #+#    #+#             */
-/*   Updated: 2025/03/29 00:21:16 by paromero         ###   ########.fr       */
+/*   Updated: 2025/04/02 11:40:30 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,5 +33,7 @@ int	is_builtins(t_data *data, char *line)
 		ret = env_builtin(data);
 	else if (ft_strncmp(line, "exit", 5) == 0)
 		ret = exit_builtin(data);
+	else if (ft_strncmp(line, "$EMPTY", 6) == 0)
+		ret = printf("\n");
 	return (ret);
 }
