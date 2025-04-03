@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anggalle <anggalle@student.42.fr>          +#+  +:+       +#+        */
+/*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 17:54:48 by paromero          #+#    #+#             */
-/*   Updated: 2025/03/26 14:11:51 by anggalle         ###   ########.fr       */
+/*   Updated: 2025/04/02 19:25:50 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,21 +18,17 @@ int	line_syntax(t_data	*data)
 {
 	add_history(data->line);
 	if (!ft_isspace(data->line))
-	{
-		free_innerwhile(data);
-		return (0);
-	}
+		return (free_while(0));
+	if (!ft_isspace(data->line))
+		return (free_while(0));
 	if (!openquotes(data->line))
 	{
-		printf("Syntax error\n");
-		free_innerwhile(data);
-		return (0);
+		perror("command not found");
+		data->wstatus = 127;
+		return (free_while(0));
 	}
 	if (!handle_invslash_pcomma(data->line))
-	{
-		free_innerwhile(data);
-		return (0);
-	}
+		return (free_while(0));
 	ft_tokens(data, data->line);
 	data->ast = ft_build_ast(data->tokens);
 	return (1);
@@ -59,7 +55,7 @@ int	minishell(char **env)
 			continue ;
 		if (is_builtins(&data, data.ast->value) == 0)
 			exec_func(&data);
-		free_innerwhile(&data);
+		free_while(&data);
 		continue ;
 	}
 	free_minishell(&data);

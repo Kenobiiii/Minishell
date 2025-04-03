@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit_builtin.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anggalle <anggalle@student.42.fr>          +#+  +:+       +#+        */
+/*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 18:14:24 by anggalle          #+#    #+#             */
-/*   Updated: 2025/03/26 14:33:05 by anggalle         ###   ########.fr       */
+/*   Updated: 2025/04/02 19:23:28 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,11 +29,11 @@ int	exit_builtin(t_data *data)
 		}
 		if (data->ast->args[2])
 		{
-			free_innerwhile(data);
+			free_while(data);
 			exit (1);
 		}
 		exit_code = ft_atoi(data->ast->args[1]);
-		free_innerwhile(data);
+		free_while(data);
 		exit (exit_code);
 	}
 	else

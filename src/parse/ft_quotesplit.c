@@ -6,49 +6,90 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/18 09:38:49 by paromero          #+#    #+#             */
-/*   Updated: 2025/03/29 00:43:21 by paromero         ###   ########.fr       */
+/*   Updated: 2025/04/01 11:56:24 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-static int count_substr(char const *s, char c)
+static void	skip_quotes_specials(const char *s, size_t *i, char c, char *quote)
 {
-    size_t i = 0;
-    size_t count = 0;
-    char quote;
-
-    while (s[i])
+	while (s[*i] && (s[*i] != c || *quote))
 	{
-        while (s[i] == c)
-            i++;
-        if (!s[i])
-            break;
-        count++;
-        while (s[i] && (s[i] != c || quote))
+		if (s[*i] == '"' || s[*i] == '\'')
 		{
-            if (s[i] == '"' || s[i] == '\'')
-			{
-                quote = s[i++];
-                while (s[i] && s[i] != quote)
-                    i++;
-                if (s[i] == quote)
-                    i++;
-                quote = '\0';
-            } 
-			else
-                i++;
-        }
-    }
-    return (count);
+			*quote = s[*i];
+			(*i)++;
+			while (s[*i] && s[*i] != *quote)
+				(*i)++;
+			if (s[*i] == *quote)
+				(*i)++;
+			*quote = '\0';
+		}
+		else if ((s[*i] == '<' && s[*i + 1] == '<')
+			|| (s[*i] == '>' && s[*i + 1] == '>'))
+		{
+			(*i) += 2;
+			break ;
+		}
+		else if (s[*i] == '<' || s[*i] == '>' || s[*i] == '|')
+		{
+			(*i)++;
+			break ;
+		}
+		else
+			(*i)++;
+	}
 }
 
-
-static int process_substr(char **array, char const *s, size_t *i, char c)
+static int	count_substr(char const *s, char c)
 {
-	size_t start = *i;
-	char quote = '\0';
+	size_t	i;
+	size_t	count;
+	char	quote;
 
+	i = 0;
+	count = 0;
+	quote = '\0';
+	while (s[i])
+	{
+		while (s[i] == c)
+			i++;
+		if (!s[i])
+			break ;
+		count++;
+		skip_quotes_specials(s, &i, c, &quote);
+	}
+	return (count);
+}
+
+static int	handle_special_chars(char **array, char const *s, size_t *i)
+{
+	if ((s[*i] == '<' && s[*i + 1] == '<')
+		|| (s[*i] == '>' && s[*i + 1] == '>'))
+	{
+		array[0] = ft_substr(s, *i, 2);
+		(*i) += 2;
+	}
+	else
+	{
+		array[0] = ft_substr(s, *i, 1);
+		(*i) += 1;
+	}
+	if (array[0] == NULL)
+		return (-1);
+	return (0);
+}
+
+static int	process_substr(char **array, char const *s, size_t *i, char c)
+{
+	size_t	start;
+	char	quote;
+
+	start = *i;
+	quote = '\0';
+	if (s[*i] == '<' || s[*i] == '>' || s[*i] == '|')
+		return (handle_special_chars(array, s, i));
 	while (s[*i] && (s[*i] != c || quote))
 	{
 		if (s[*i] == '"' || s[*i] == '\'')
@@ -60,11 +101,16 @@ static int process_substr(char **array, char const *s, size_t *i, char c)
 			if (s[*i] == quote)
 				(*i)++;
 			quote = '\0';
-		} else
+		}
+		else if (s[*i] == '<' || s[*i] == '>' || s[*i] == '|')
+			break ;
+		else
 			(*i)++;
 	}
 	array[0] = ft_substr(s, start, *i - start);
-	return (array[0] ? 0 : -1);
+	if (array[0] == NULL)
+		return (-1);
+	return (0);
 }
 
 static int	allocate_substr(char **array, char const *s, char c)
@@ -88,8 +134,7 @@ static int	allocate_substr(char **array, char const *s, char c)
 	return (0);
 }
 
-
-char	**ft_quotesplit(char const *s, char c, t_data	*data)
+char	**ft_quotesplit(char const *s, char c, t_data *data)
 {
 	char	**array;
 	size_t	substrlen;

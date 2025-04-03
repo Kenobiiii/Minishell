@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 19:06:45 by paromero          #+#    #+#             */
-/*   Updated: 2025/03/26 18:42:25 by paromero         ###   ########.fr       */
+/*   Updated: 2025/04/02 19:26:57 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,7 +150,7 @@ void		exit_minishell(t_data *data, const char *error_message,
 				int exit_code);
 
 //! ft_free.c //
-void		free_innerwhile(t_data	*data);
+int		free_while(t_data	*data);
 void		free_minishell(t_data	*data);
 
 //! ft_free_parse.c //
