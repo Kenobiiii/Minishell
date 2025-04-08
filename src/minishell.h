@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 19:06:45 by paromero          #+#    #+#             */
-/*   Updated: 2025/04/08 18:45:13 by paromero         ###   ########.fr       */
+/*   Updated: 2025/04/08 18:47:59 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,7 +128,7 @@ void		ft_handle_quotes(t_data	*data, char	**matrix);
 char		*ft_handledollar(t_data *data, char *line);
 
 //! ft_handle_dollar_utils.c //
-char	*get_env_value(t_data *data, const char *name);
+char		*get_env_value(t_data *data, const char *name);
 
 //! parse_path //
 void		free_cmd_path(char	**matrix,	char	*cmd);
@@ -148,15 +148,15 @@ void		ft_add_argument(t_ast *cmd_node, char *arg);
 
 //! ft_ast_utils.c //
 void		handle_redirection(t_ast **root, t_ast **cmd,
-	t_ast **last_op, t_tokens *tokens);
+				t_ast **last_op, t_tokens *tokens);
 void		connect_operator(t_ast **root, t_ast **cmd,
-	t_ast **last_op, t_ast *new_op);
+				t_ast **last_op, t_ast *new_op);
 int			is_red(t_ast **last_op);
 
 //! ft_ast_arg.c //
 void		ft_add_argument(t_ast *cmd_node, char *arg);
 void		handle_command_as_arg(t_ast **cmd, t_ast **redirect,
-    t_tokens *tokens);
+				t_tokens *tokens);
 void		copy_args(char **new_args, t_ast *cmd_node, int i, char *arg);
 
 //! ft_redin2_cases.c //
@@ -171,7 +171,7 @@ void		exit_minishell(t_data *data, const char *error_message,
 				int exit_code);
 
 //! ft_free.c //
-int		free_while(t_data	*data);
+int			free_while(t_data	*data);
 void		free_minishell(t_data	*data);
 
 //! ft_free_parse.c //
