@@ -6,33 +6,11 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 11:06:52 by paromero          #+#    #+#             */
-/*   Updated: 2025/04/02 11:22:29 by paromero         ###   ########.fr       */
+/*   Updated: 2025/04/08 18:39:53 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
-static char	*get_env_value(t_data *data, const char *name)
-{
-	t_env	*env;
-	char	*equal_sign;
-	int		key_len;
-
-	env = data->env;
-	while (env)
-	{
-		equal_sign = ft_strchr(env->value, '=');
-		if (equal_sign)
-		{
-			key_len = equal_sign - env->value;
-			if (key_len == (int)ft_strlen(name)
-				&& !ft_strncmp(env->value, name, key_len))
-				return (ft_strdup(equal_sign + 1));
-		}
-		env = env->next;
-	}
-	return (ft_strdup(""));
-}
 
 char	*find_envvar(t_data *data, const char *dollarline)
 {
@@ -79,8 +57,8 @@ static int	copy_env_value(t_data *data,
 	k = 0;
 	if (ft_strncmp(var_token, "$EMPTY", ft_strlen(var_token)) == 0)
 	{
-		while(var_token[k])
-		result[(*j)++] = var_token[k++];
+		while (var_token[k])
+			result[(*j)++] = var_token[k++];
 	}
 	else
 	{
@@ -88,8 +66,8 @@ static int	copy_env_value(t_data *data,
 		if (env_value)
 		{
 			while (env_value[k])
-			result[(*j)++] = env_value[k++];
-		free(env_value);
+				result[(*j)++] = env_value[k++];
+			free (env_value);
 		}
 	}
 	free(var_token);

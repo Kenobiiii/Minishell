@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 19:06:45 by paromero          #+#    #+#             */
-/*   Updated: 2025/04/08 18:34:40 by paromero         ###   ########.fr       */
+/*   Updated: 2025/04/08 18:45:13 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,10 +109,14 @@ int			openquotes(char	*line);
 int			handle_invslash_pcomma(char *line);
 char		*ft_mask_operator(char *str);
 
+//! ft_prompt.c //
+int			update_pwd(t_data	*data);
+
 //! ft_parse_utils.c //
 size_t		ft_spacestrlen(char *line);
 int			ft_dobletype(t_type	type);
-int			update_pwd(t_data	*data);
+char		*check_access(char *cmd);
+int			handle_special_chars(char **array, char const *s, size_t *i);
 
 //! ft_quotesplit.c //
 char		**ft_quotesplit(char const *s, char c,	t_data	*data);
@@ -122,6 +126,9 @@ void		ft_handle_quotes(t_data	*data, char	**matrix);
 
 //! ft_handle_dollar.c //
 char		*ft_handledollar(t_data *data, char *line);
+
+//! ft_handle_dollar_utils.c //
+char	*get_env_value(t_data *data, const char *name);
 
 //! parse_path //
 void		free_cmd_path(char	**matrix,	char	*cmd);

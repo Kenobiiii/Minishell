@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 18:29:00 by paromero          #+#    #+#             */
-/*   Updated: 2025/04/08 18:34:17 by paromero         ###   ########.fr       */
+/*   Updated: 2025/04/08 18:36:20 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ void	ft_add_argument(t_ast *cmd_node, char *arg)
 }
 
 void	handle_command_as_arg(t_ast **cmd, t_ast **redirect,
-    t_tokens *tokens)
+	t_tokens *tokens)
 {
 	if (*cmd && (*cmd)->type == CMD)
 		ft_add_argument(*cmd, tokens->value);

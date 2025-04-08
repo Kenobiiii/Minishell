@@ -10,7 +10,9 @@ SRCS = src/main.c \
 		src/init/init.c \
 		src/parse/ft_line_utils.c \
 		src/parse/ft_parse_utils.c \
+		src/parse/ft_prompt.c \
 		src/parse/ft_handle_dollar.c \
+		src/parse/ft_handle_dollar_utils.c \
 		src/parse/ft_handle_quotes.c \
 		src/parse/ft_parse_path.c \
 		src/parse/ft_quotesplit.c \

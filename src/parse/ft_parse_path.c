@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 12:59:22 by anggalle          #+#    #+#             */
-/*   Updated: 2025/04/01 11:45:53 by paromero         ###   ########.fr       */
+/*   Updated: 2025/04/08 18:43:50 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,14 +72,6 @@ char	*find_valid_path(char **cmd_path, char *total_cmd)
 		i ++;
 	}
 	return (NULL);
-}
-
-char	*check_access(char *cmd)
-{
-	if (access(cmd, X_OK) == 0)
-		return (ft_strdup(cmd));
-	else
-		return (NULL);
 }
 
 char	*get_cmd_path(t_data *data, char *cmd)
