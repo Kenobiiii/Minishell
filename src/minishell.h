@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 19:06:45 by paromero          #+#    #+#             */
-/*   Updated: 2025/04/02 19:26:57 by paromero         ###   ########.fr       */
+/*   Updated: 2025/04/08 18:34:40 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,8 +135,22 @@ int			ft_types(char	*value);
 int			ft_tokens(t_data *data, char *str);
 
 //! ft_ast.c //
+t_ast		*ft_create_ast_node(t_type type, char *value);
 t_ast		*ft_build_ast(t_tokens *tokens);
 void		ft_add_argument(t_ast *cmd_node, char *arg);
+
+//! ft_ast_utils.c //
+void		handle_redirection(t_ast **root, t_ast **cmd,
+	t_ast **last_op, t_tokens *tokens);
+void		connect_operator(t_ast **root, t_ast **cmd,
+	t_ast **last_op, t_ast *new_op);
+int			is_red(t_ast **last_op);
+
+//! ft_ast_arg.c //
+void		ft_add_argument(t_ast *cmd_node, char *arg);
+void		handle_command_as_arg(t_ast **cmd, t_ast **redirect,
+    t_tokens *tokens);
+void		copy_args(char **new_args, t_ast *cmd_node, int i, char *arg);
 
 //! ft_redin2_cases.c //
 int			is_redin2(t_ast **last_operator);
