@@ -6,13 +6,13 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/18 09:38:49 by paromero          #+#    #+#             */
-/*   Updated: 2025/04/01 11:56:24 by paromero         ###   ########.fr       */
+/*   Updated: 2025/04/08 18:15:16 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-static void	skip_quotes_specials(const char *s, size_t *i, char c, char *quote)
+static void	skip_quotes(const char *s, size_t *i, char c, char *quote)
 {
 	while (s[*i] && (s[*i] != c || *quote))
 	{
@@ -26,17 +26,8 @@ static void	skip_quotes_specials(const char *s, size_t *i, char c, char *quote)
 				(*i)++;
 			*quote = '\0';
 		}
-		else if ((s[*i] == '<' && s[*i + 1] == '<')
-			|| (s[*i] == '>' && s[*i + 1] == '>'))
-		{
-			(*i) += 2;
-			break ;
-		}
 		else if (s[*i] == '<' || s[*i] == '>' || s[*i] == '|')
-		{
-			(*i)++;
 			break ;
-		}
 		else
 			(*i)++;
 	}
@@ -58,7 +49,16 @@ static int	count_substr(char const *s, char c)
 		if (!s[i])
 			break ;
 		count++;
-		skip_quotes_specials(s, &i, c, &quote);
+		if (s[i] == '<' || s[i] == '>' || s[i] == '|')
+		{
+			if ((s[i] == '<' && s[i + 1] == '<')
+				|| (s[i] == '>' && s[i + 1] == '>'))
+				i += 2;
+			else
+				i++;
+		}
+		else
+			skip_quotes(s, &i, c, &quote);
 	}
 	return (count);
 }
