@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/18 09:38:49 by paromero          #+#    #+#             */
-/*   Updated: 2025/04/08 18:44:12 by paromero         ###   ########.fr       */
+/*   Updated: 2025/04/08 19:40:27 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,13 +50,7 @@ static int	count_substr(char const *s, char c)
 			break ;
 		count++;
 		if (s[i] == '<' || s[i] == '>' || s[i] == '|')
-		{
-			if ((s[i] == '<' && s[i + 1] == '<')
-				|| (s[i] == '>' && s[i + 1] == '>'))
-				i += 2;
-			else
-				i++;
-		}
+			handle_special_operators(s, &i);
 		else
 			skip_quotes(s, &i, c, &quote);
 	}
@@ -75,15 +69,7 @@ static int	process_substr(char **array, char const *s, size_t *i, char c)
 	while (s[*i] && (s[*i] != c || quote))
 	{
 		if (s[*i] == '"' || s[*i] == '\'')
-		{
-			quote = s[*i];
-			(*i)++;
-			while (s[*i] && s[*i] != quote)
-				(*i)++;
-			if (s[*i] == quote)
-				(*i)++;
-			quote = '\0';
-		}
+			process_quotes(s, i, &quote);
 		else if (s[*i] == '<' || s[*i] == '>' || s[*i] == '|')
 			break ;
 		else

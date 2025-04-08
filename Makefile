@@ -15,6 +15,7 @@ SRCS = src/main.c \
 		src/parse/ft_handle_dollar_utils.c \
 		src/parse/ft_handle_quotes.c \
 		src/parse/ft_parse_path.c \
+		src/parse/ft_quotesplit_utils.c \
 		src/parse/ft_quotesplit.c \
 		src/parse/ft_tokens.c \
 		src/parse/ft_ast.c \
