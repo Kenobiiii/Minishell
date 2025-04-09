@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd_builtin.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anggalle <anggalle@student.42.fr>          +#+  +:+       +#+        */
+/*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 12:32:49 by anggalle          #+#    #+#             */
-/*   Updated: 2025/03/29 01:16:51 by anggalle         ###   ########.fr       */
+/*   Updated: 2025/04/09 18:49:20 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,22 +25,18 @@ int	cd_builtin(t_data *data)
 			return (1);
 		}
 		if (chdir(home_dir) == -1)
-		{
 			printf("Can't get to the home directory.\n");
+		if (chdir(home_dir) == -1)
 			return (1);
-		}
 	}
 	else if (data->ast->args[2])
-	{
 		data->wstatus = 1;
-	}
 	else
 	{
 		if (chdir(data->ast->args[1]) == -1)
-		{
 			data->wstatus = 1;
+		if (chdir(data->ast->args[1]) == -1)
 			return (1);
-		}
 	}
 	return (1);
 }
