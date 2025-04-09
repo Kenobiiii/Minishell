@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 19:06:45 by paromero          #+#    #+#             */
-/*   Updated: 2025/04/08 19:41:18 by paromero         ###   ########.fr       */
+/*   Updated: 2025/04/09 17:30:28 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,6 +101,9 @@ int			init_env(t_data *data, char *env[]);
 t_env		*create_env_node(const char *value);
 
 //* 				PARSE					//
+
+//! ft_check_syntax.c //
+int			check_syntax(char *line);
 
 //! ft_line_utils.c //
 char		*deletefirstspaces(char *line);

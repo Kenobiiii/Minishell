@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 17:54:48 by paromero          #+#    #+#             */
-/*   Updated: 2025/04/08 17:41:39 by paromero         ###   ########.fr       */
+/*   Updated: 2025/04/09 17:31:52 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,12 @@ int	line_syntax(t_data	*data)
 	add_history(data->line);
 	if (!ft_isspace(data->line))
 		return (free_while(data));
-	if (!ft_isspace(data->line))
+	if (!check_syntax(data->line))
+	{
+		ft_putstr_fd("minishell: syntax error\n", 2);
+		data->wstatus = 2;
 		return (free_while(data));
+	}
 	if (!openquotes(data->line))
 	{
 		perror("command not found");
