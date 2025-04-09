@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 19:06:45 by paromero          #+#    #+#             */
-/*   Updated: 2025/04/09 18:24:32 by paromero         ###   ########.fr       */
+/*   Updated: 2025/04/09 18:33:41 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -237,7 +237,7 @@ int			print_env(t_env *env);
 int			env_builtin(t_data *data);
 
 //! exit_builtin.c //
-int			exit_builtin(t_data *data);
+int			exit_builtin(t_data *data, t_ast *ast);
 
 //! unset_builtint.c //
 int			unset_builtin(t_data *data);
