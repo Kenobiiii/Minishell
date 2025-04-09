@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_errors.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anggalle <anggalle@student.42.fr>          +#+  +:+       +#+        */
+/*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 12:54:12 by paromero          #+#    #+#             */
-/*   Updated: 2025/03/29 02:03:18 by anggalle         ###   ########.fr       */
+/*   Updated: 2025/04/09 17:52:16 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,4 +29,14 @@ void	exit_minishell(t_data *data, const char *error_message, int exit_code)
     	perror(error_message);
 	free_minishell(data);
 	exit(exit_code);
+}
+
+int	handle_process_error(int value, const char *msg)
+{
+	if (value < 0)
+	{
+		perror(msg);
+		return (-1);
+	}
+	return (value);
 }

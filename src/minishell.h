@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 19:06:45 by paromero          #+#    #+#             */
-/*   Updated: 2025/04/09 17:39:23 by paromero         ###   ########.fr       */
+/*   Updated: 2025/04/09 17:52:48 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,13 +56,6 @@ typedef struct s_ast
 	struct s_ast	*left;
 	struct s_ast	*right;
 }	t_ast;
-
-/**
- *- Uniones:
- *- son variables que comparten la misma memoria para así ahorrarla
- *- si una se modifica la otra también, útil para casos donde depende
- *- del tipo se necesita una cosa u otra
- */
 
 typedef struct s_tokens
 {
@@ -173,6 +166,7 @@ void		redin2(t_ast **current_cmd, t_ast **last_operator,
 
 //! ft_errors.c //
 int			syntax_error(void);
+int			handle_process_error(int value, const char *msg);
 char		*handle_invalid_cmd_path(char **cmd_path, char *total_cmd);
 void		exit_minishell(t_data *data, const char *error_message,
 				int exit_code);
