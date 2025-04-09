@@ -3,61 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   export_builtin.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anggalle <anggalle@student.42.fr>          +#+  +:+       +#+        */
+/*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 13:34:49 by anggalle          #+#    #+#             */
-/*   Updated: 2025/03/26 15:09:15 by anggalle         ###   ########.fr       */
+/*   Updated: 2025/04/09 18:23:35 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
-void	sort_matrix(char **matrix)
-{
-	int		i;
-	int		j;
-	int		length;
-	char	*swap;
-
-	i = 0;
-	j = 0;
-	length = 0;
-	while (matrix[length] != NULL)
-		length++;
-	while (i < length - 1)
-	{
-		j = 0;
-		while (j < length - i - 1)
-		{
-			if (ft_strncmp(matrix[j], matrix[j + 1], ft_strlen(matrix[j])) > 0)
-			{
-				swap = matrix[j];
-				matrix[j] = matrix[j + 1];
-				matrix[j + 1] = swap;
-			}
-			j ++;
-		}
-		i ++;
-	}
-}
-
-void	print_export_matrix(char **matrix)
-{
-	int	i;
-
-	i = 0;
-	while (matrix[i])
-	{
-		printf("declare -x %s\n", matrix[i]);
-		i ++;
-	}
-}
-
-void	print_env_sorted(char **env_matrix)
-{
-	sort_matrix(env_matrix);
-	print_export_matrix(env_matrix);
-}
 
 int	is_valid_identifier(char *arg)
 {
@@ -149,7 +102,6 @@ int	export_builtin(t_data *data)
 	{
 		if (!is_valid_identifier(data->ast->args[i]))
 		{
-			//printf("export: not a valid identifier: %s\n", data->ast->args[i]);
 			data->wstatus = 1;
 			return (1);
 		}
