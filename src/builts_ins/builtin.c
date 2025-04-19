@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 19:17:47 by anggalle          #+#    #+#             */
-/*   Updated: 2025/04/02 17:32:26 by paromero         ###   ########.fr       */
+/*   Updated: 2025/04/09 18:32:55 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int	is_builtins(t_data *data, char *line)
 	else if (ft_strncmp(line, "env", 4) == 0)
 		ret = env_builtin(data);
 	else if (ft_strncmp(line, "exit", 5) == 0)
-		ret = exit_builtin(data);
+		ret = exit_builtin(data, data->ast);
 	else if (ft_strncmp(line, "$EMPTY", 6) == 0)
 		ret = printf("\n");
 	free (wstatus);

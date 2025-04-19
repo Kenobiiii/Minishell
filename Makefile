@@ -8,14 +8,20 @@ USER = paromero
 OBJ_DIR = objs
 SRCS = src/main.c \
 		src/init/init.c \
+		src/parse/ft_check_syntax.c \
 		src/parse/ft_line_utils.c \
 		src/parse/ft_parse_utils.c \
+		src/parse/ft_prompt.c \
 		src/parse/ft_handle_dollar.c \
+		src/parse/ft_handle_dollar_utils.c \
 		src/parse/ft_handle_quotes.c \
 		src/parse/ft_parse_path.c \
+		src/parse/ft_quotesplit_utils.c \
 		src/parse/ft_quotesplit.c \
 		src/parse/ft_tokens.c \
 		src/parse/ft_ast.c \
+		src/parse/ft_ast_utils.c \
+		src/parse/ft_ast_arg.c \
 		src/errors/ft_errors.c \
 		src/parse/ft_redin2_cases.c \
 		src/parse/ft_free_parse.c \
@@ -31,6 +37,7 @@ SRCS = src/main.c \
 		src/builts_ins/pwd_builtin.c \
 		src/builts_ins/cd_builtin.c \
 		src/builts_ins/export_builtin.c \
+		src/builts_ins/export_utils.c \
 		src/builts_ins/unset_builtin.c \
 		src/builts_ins/env_builtin.c \
 		src/builts_ins/exit_builtin.c \

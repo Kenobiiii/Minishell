@@ -1,42 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exit_builtin.c                                     :+:      :+:    :+:   */
+/*   ft_handle_dollar_utils.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/01/29 18:14:24 by anggalle          #+#    #+#             */
-/*   Updated: 2025/04/09 18:32:45 by paromero         ###   ########.fr       */
+/*   Created: 2025/04/08 18:39:37 by paromero          #+#    #+#             */
+/*   Updated: 2025/04/08 18:45:17 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-int	exit_builtin(t_data *data, t_ast *ast)
+char	*get_env_value(t_data *data, const char *name)
 {
-	int	i;
-	int	exit_code;
+	t_env	*env;
+	char	*equal_sign;
+	int		key_len;
 
-	i = 0;
-	if (data->ast->args[1])
+	env = data->env;
+	while (env)
 	{
-		while (data->ast->args[1][i])
+		equal_sign = ft_strchr(env->value, '=');
+		if (equal_sign)
 		{
-			if (!ft_isdigit(ast->args[1][i]) && (ast->args[1][i] != '-')
-				&& (ast->args[1][i] != '+'))
-				exit(2);
-			i++;
+			key_len = equal_sign - env->value;
+			if (key_len == (int)ft_strlen(name)
+				&& !ft_strncmp(env->value, name, key_len))
+				return (ft_strdup(equal_sign + 1));
 		}
-		if (ast->args[2])
-		{
-			free_while(data);
-			exit (1);
-		}
-		exit_code = ft_atoi(ast->args[1]);
-		free_while(data);
-		exit (exit_code);
+		env = env->next;
 	}
-	else
-		data->exit = 1;
-	return (1);
+	return (ft_strdup(""));
 }

@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 19:06:45 by paromero          #+#    #+#             */
-/*   Updated: 2025/04/02 19:26:57 by paromero         ###   ########.fr       */
+/*   Updated: 2025/04/09 18:33:41 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,13 +57,6 @@ typedef struct s_ast
 	struct s_ast	*right;
 }	t_ast;
 
-/**
- *- Uniones:
- *- son variables que comparten la misma memoria para así ahorrarla
- *- si una se modifica la otra también, útil para casos donde depende
- *- del tipo se necesita una cosa u otra
- */
-
 typedef struct s_tokens
 {
 	t_type			type;
@@ -102,6 +95,9 @@ t_env		*create_env_node(const char *value);
 
 //* 				PARSE					//
 
+//! ft_check_syntax.c //
+int			check_syntax(char *line);
+
 //! ft_line_utils.c //
 char		*deletefirstspaces(char *line);
 int			ft_isspace(char	*line);
@@ -109,19 +105,30 @@ int			openquotes(char	*line);
 int			handle_invslash_pcomma(char *line);
 char		*ft_mask_operator(char *str);
 
+//! ft_prompt.c //
+int			update_pwd(t_data	*data);
+
 //! ft_parse_utils.c //
 size_t		ft_spacestrlen(char *line);
 int			ft_dobletype(t_type	type);
-int			update_pwd(t_data	*data);
+char		*check_access(char *cmd);
+int			handle_special_chars(char **array, char const *s, size_t *i);
 
 //! ft_quotesplit.c //
 char		**ft_quotesplit(char const *s, char c,	t_data	*data);
+
+//! ft_quotesplit_utils.c //
+void		process_quotes(const char *s, size_t *i, char *quote);
+void		handle_special_operators(const char *s, size_t *i);
 
 //! ft_handle_quotes.c //
 void		ft_handle_quotes(t_data	*data, char	**matrix);
 
 //! ft_handle_dollar.c //
 char		*ft_handledollar(t_data *data, char *line);
+
+//! ft_handle_dollar_utils.c //
+char		*get_env_value(t_data *data, const char *name);
 
 //! parse_path //
 void		free_cmd_path(char	**matrix,	char	*cmd);
@@ -135,8 +142,22 @@ int			ft_types(char	*value);
 int			ft_tokens(t_data *data, char *str);
 
 //! ft_ast.c //
+t_ast		*ft_create_ast_node(t_type type, char *value);
 t_ast		*ft_build_ast(t_tokens *tokens);
 void		ft_add_argument(t_ast *cmd_node, char *arg);
+
+//! ft_ast_utils.c //
+void		handle_redirection(t_ast **root, t_ast **cmd,
+				t_ast **last_op, t_tokens *tokens);
+void		connect_operator(t_ast **root, t_ast **cmd,
+				t_ast **last_op, t_ast *new_op);
+int			is_red(t_ast **last_op);
+
+//! ft_ast_arg.c //
+void		ft_add_argument(t_ast *cmd_node, char *arg);
+void		handle_command_as_arg(t_ast **cmd, t_ast **redirect,
+				t_tokens *tokens);
+void		copy_args(char **new_args, t_ast *cmd_node, int i, char *arg);
 
 //! ft_redin2_cases.c //
 int			is_redin2(t_ast **last_operator);
@@ -145,12 +166,13 @@ void		redin2(t_ast **current_cmd, t_ast **last_operator,
 
 //! ft_errors.c //
 int			syntax_error(void);
+int			handle_process_error(int value, const char *msg);
 char		*handle_invalid_cmd_path(char **cmd_path, char *total_cmd);
 void		exit_minishell(t_data *data, const char *error_message,
 				int exit_code);
 
 //! ft_free.c //
-int		free_while(t_data	*data);
+int			free_while(t_data	*data);
 void		free_minishell(t_data	*data);
 
 //! ft_free_parse.c //
@@ -205,12 +227,17 @@ void		print_env_sorted(char **env_matrix);
 void		print_export_matrix(char **matrix);
 void		sort_matrix(char **matrix);
 
+//! export_utils.c //
+void		print_env_sorted(char **env_matrix);
+void		print_export_matrix(char **matrix);
+void		sort_matrix(char **matrix);
+
 //! env_builtin.c //
 int			print_env(t_env *env);
 int			env_builtin(t_data *data);
 
 //! exit_builtin.c //
-int			exit_builtin(t_data *data);
+int			exit_builtin(t_data *data, t_ast *ast);
 
 //! unset_builtint.c //
 int			unset_builtin(t_data *data);
