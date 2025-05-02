@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 17:26:30 by paromero          #+#    #+#             */
-/*   Updated: 2025/04/08 18:28:48 by paromero         ###   ########.fr       */
+/*   Updated: 2025/05/02 11:22:32 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,14 +75,42 @@ void	ft_handle_command_node(t_ast **root, t_ast **cmd,
 		handle_new_command(root, cmd, last_op, tokens);
 }
 
-void	ft_handle_operator_node(t_ast **root, t_ast **cmd,
-		t_ast **last_op, t_tokens *tokens)
+void ft_handle_operator_node(t_ast **root, t_ast **cmd,
+	t_ast **last_op, t_tokens *tokens)
 {
-	t_ast	*new_op;
+	t_ast *new_op;
+	t_ast *current;
+	int found_same_redir;
 
+	found_same_redir = 0;
+	if (tokens->type == REDIRECT_IN || tokens->type == REDIRECT_OUT ||
+		tokens->type == REDIN2 || tokens->type == REDOUT2)
+	{
+		current = *root;
+		while (current)
+		{
+			if (current->type == tokens->type)
+			{
+				found_same_redir = 1;
+				if (current->right)
+				{
+					free(current->right->value);
+					current->right->value = ft_strdup(tokens->value);
+				}
+				break;
+			}
+			current = current->right;
+		}
+	}
+
+	// Si encontramos una redirección del mismo tipo, no necesitamos crear un nuevo nodo
+	if (found_same_redir)
+		return;
+
+	// Código normal para crear y conectar el nuevo operador
 	new_op = ft_create_ast_node(tokens->type, tokens->value);
 	if (!new_op)
-		return ;
+		return;
 	if (*cmd)
 		connect_operator(root, cmd, last_op, new_op);
 	else
@@ -91,6 +119,38 @@ void	ft_handle_operator_node(t_ast **root, t_ast **cmd,
 		*last_op = new_op;
 	}
 }
+
+// void print_ast(t_ast *node, int level) //! BORRAR AL ACABAR (TESTEO)
+// {
+// 	if (!node)
+// 		return;
+
+// 	// Indentación para mostrar la profundidad del nodo
+// 	for (int i = 0; i < level; i++)
+// 		printf("  ");
+
+// 	// Imprimir el tipo y el valor del nodo
+// 	if (node->type == CMD)
+// 		printf("CMD: %s\n", node->value);
+// 	else
+// 		printf("OPERATOR: %s\n", node->value);
+
+// 	// Imprimir los argumentos si es un nodo de comando
+// 	if (node->type == CMD && node->args)
+// 	{
+// 		for (int i = 0; node->args[i]; i++)
+// 		{
+// 			for (int j = 0; j < level + 1; j++)
+// 				printf("  ");
+// 			printf("ARG: %s\n", node->args[i]);
+// 		}
+// 	}
+
+// 	// Recursivamente imprimir los nodos hijos
+// 	print_ast(node->left, level + 1);
+// 	print_ast(node->right, level + 1);
+// }
+
 
 t_ast	*ft_build_ast(t_tokens *tokens)
 {
@@ -109,5 +169,8 @@ t_ast	*ft_build_ast(t_tokens *tokens)
 			ft_handle_operator_node(&root, &cmd, &last_op, tokens);
 		tokens = tokens->next;
 	}
+	// En ft_build_ast, justo antes del return
+	// ft_printf("---- AST FINAL ----\n");
+	// print_ast(root, 0);  // Necesitarás implementar esta función si no existe
 	return (root);
 }
