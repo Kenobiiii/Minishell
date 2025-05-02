@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: anggalle <anggalle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 17:54:48 by paromero          #+#    #+#             */
-/*   Updated: 2025/04/09 17:31:52 by paromero         ###   ########.fr       */
+/*   Updated: 2025/05/02 14:37:46 by anggalle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,12 @@ int	line_syntax(t_data	*data)
 	if (!handle_invslash_pcomma(data->line))
 		return (free_while(0));
 	ft_tokens(data, data->line);
-	data->ast = ft_build_ast(data->tokens);
+	data->ast = ft_build_ast(data, data->tokens);
+	if (data->ast == NULL) // Check if parsing failed
+	{
+		// data->wstatus should already be set to 1
+		return (free_while(data)); // Cleanup and indicate failure
+	}
 	return (1);
 }
 
