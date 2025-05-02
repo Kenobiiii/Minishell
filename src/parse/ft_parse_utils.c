@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 18:47:59 by paromero          #+#    #+#             */
-/*   Updated: 2025/04/08 18:44:24 by paromero         ###   ########.fr       */
+/*   Updated: 2025/05/02 13:17:52 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,12 +41,19 @@ size_t	ft_spacestrlen(char *line)
 	return (j);
 }
 
-char	*check_access(char *cmd)
+char *check_access(char *cmd)
 {
-	if (access(cmd, X_OK) == 0)
-		return (ft_strdup(cmd));
-	else
-		return (NULL);
+    // First check if file exists
+    if (access(cmd, F_OK) == 0)
+    {
+        // Then check if it's executable
+        if (access(cmd, X_OK) == 0)
+            return (ft_strdup(cmd));
+        else
+            errno = EACCES;  // Set permission denied error
+    }
+    // If we get here, either file doesn't exist or isn't executable
+    return (NULL);
 }
 
 int	handle_special_chars(char **array, char const *s, size_t *i)
