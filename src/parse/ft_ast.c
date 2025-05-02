@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_ast.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: anggalle <anggalle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 17:26:30 by paromero          #+#    #+#             */
-/*   Updated: 2025/05/02 11:22:32 by paromero         ###   ########.fr       */
+/*   Updated: 2025/05/02 13:44:35 by anggalle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,48 +76,66 @@ void	ft_handle_command_node(t_ast **root, t_ast **cmd,
 }
 
 void ft_handle_operator_node(t_ast **root, t_ast **cmd,
-	t_ast **last_op, t_tokens *tokens)
+    t_ast **last_op, t_tokens *tokens)
 {
-	t_ast *new_op;
-	t_ast *current;
-	int found_same_redir;
+    t_ast *new_op;
+    t_ast *current;
+    int found_same_redir = 0;
 
-	found_same_redir = 0;
-	if (tokens->type == REDIRECT_IN || tokens->type == REDIRECT_OUT ||
-		tokens->type == REDIN2 || tokens->type == REDOUT2)
-	{
-		current = *root;
-		while (current)
-		{
-			if (current->type == tokens->type)
-			{
-				found_same_redir = 1;
-				if (current->right)
-				{
-					free(current->right->value);
-					current->right->value = ft_strdup(tokens->value);
-				}
-				break;
-			}
-			current = current->right;
-		}
-	}
+    // Solo buscar redirecciones duplicadas si es un tipo de redirección
+    if (tokens->type == REDIRECT_IN || tokens->type == REDIRECT_OUT ||
+        tokens->type == REDIN2 || tokens->type == REDOUT2)
+    {
+        // Buscar redirecciones desde la raíz del comando actual
+        current = *root;
+        while (current)
+        {
+            // Si encontramos una redirección del mismo tipo
+            if (current->type == tokens->type)
+            {
+                found_same_redir = 1;
+                
+                // Actualizar el archivo (valor a la derecha)
+                if (current->right)
+                {
+                    free(current->right->value);
+                    current->right->value = ft_strdup(tokens->value);
+                }
+                else
+                {
+                    // Si no hay nodo derecho, crearlo
+                    current->right = ft_create_ast_node(CMD, tokens->value);
+                }
+                *last_op = current; // Mantener el operador actual como último operador
+                break;
+            }
+            
+            // Solo buscar en la rama principal del árbol
+            if (current->right && (current->type == REDIRECT_IN || 
+                                  current->type == REDIRECT_OUT ||
+                                  current->type == REDIN2 || 
+                                  current->type == REDOUT2))
+                current = current->right;
+            else
+                break;
+        }
+    }
 
-	// Si encontramos una redirección del mismo tipo, no necesitamos crear un nuevo nodo
-	if (found_same_redir)
-		return;
-
-	// Código normal para crear y conectar el nuevo operador
-	new_op = ft_create_ast_node(tokens->type, tokens->value);
-	if (!new_op)
-		return;
-	if (*cmd)
-		connect_operator(root, cmd, last_op, new_op);
-	else
-	{
-		*root = new_op;
-		*last_op = new_op;
-	}
+    // Si no encontramos una redirección del mismo tipo, crear nuevo nodo
+    if (!found_same_redir)
+    {
+        new_op = ft_create_ast_node(tokens->type, tokens->value);
+        if (!new_op)
+            return;
+            
+        if (*cmd)
+            connect_operator(root, cmd, last_op, new_op);
+        else
+        {
+            *root = new_op;
+            *last_op = new_op;
+        }
+    }
 }
 
 // void print_ast(t_ast *node, int level) //! BORRAR AL ACABAR (TESTEO)
