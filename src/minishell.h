@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
+/*   By: anggalle <anggalle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 19:06:45 by paromero          #+#    #+#             */
-/*   Updated: 2025/04/09 18:33:41 by paromero         ###   ########.fr       */
+/*   Updated: 2025/05/02 14:11:31 by anggalle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,7 +143,7 @@ int			ft_tokens(t_data *data, char *str);
 
 //! ft_ast.c //
 t_ast		*ft_create_ast_node(t_type type, char *value);
-t_ast		*ft_build_ast(t_tokens *tokens);
+t_ast		*ft_build_ast(t_data *data, t_tokens *tokens);
 void		ft_add_argument(t_ast *cmd_node, char *arg);
 
 //! ft_ast_utils.c //

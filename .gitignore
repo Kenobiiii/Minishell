@@ -7,5 +7,4 @@ minishell
 *.o
 a.out
 
-# tester
 minishell_tester
