@@ -6,3 +6,6 @@ minishell
 *.a
 *.o
 a.out
+
+# tester
+minishell_tester
