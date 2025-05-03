@@ -6,7 +6,7 @@
 /*   By: anggalle <anggalle@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 17:26:30 by paromero          #+#    #+#             */
-/*   Updated: 2025/05/02 14:40:56 by anggalle         ###   ########.fr       */
+/*   Updated: 2025/05/02 16:56:13 by anggalle         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -243,3 +243,5 @@ t_ast	*ft_build_ast(t_data *data, t_tokens *tokens)
 	// print_ast(root, 0);  // Necesitarás implementar esta función si no existe
 	return (root);
 }
+
+
