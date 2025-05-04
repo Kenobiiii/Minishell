@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_ast.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anggalle <anggalle@student.42.fr>          +#+  +:+       +#+        */
+/*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 17:26:30 by paromero          #+#    #+#             */
-/*   Updated: 2025/05/02 16:56:13 by anggalle         ###   ########.fr       */
+/*   Updated: 2025/05/04 13:46:09 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,109 +76,110 @@ void	ft_handle_command_node(t_ast **root, t_ast **cmd,
 }
 
 static int ft_handle_operator_node(t_data *data, t_ast **root, t_ast **cmd,
-    t_ast **last_op, t_tokens *tokens)
+	t_ast **last_op, t_tokens *tokens)
 {
-    t_ast *new_op;
-    t_ast *current;
-    int found_same_redir = 0;
+	t_ast *new_op;
+	t_ast *current;
+	int found_same_redir = 0;
 	char  *filename;
-    int   fd;
+	int   fd;
 
 
 	// --- Perform File Check BEFORE modifying AST ---
-    if (tokens->type == REDIRECT_IN || tokens->type == REDIRECT_OUT ||
-        tokens->type == REDIN2 || tokens->type == REDOUT2)
-    {
-        // Assuming the filename is stored in tokens->value for redirection tokens
-        filename = tokens->next->value;
-        if (!filename || !*filename) // Check for NULL or empty filename
-        {
-             data->wstatus = 1;
-             return (0); // Failure
-        }
+	if (tokens->type == REDIRECT_IN || tokens->type == REDIRECT_OUT ||
+		tokens->type == REDIN2 || tokens->type == REDOUT2)
+	{
+		// Assuming the filename is stored in tokens->value for redirection tokens
+		filename = tokens->next->value;
+		if (!filename || !*filename) // Check for NULL or empty filename
+		{
+			data->wstatus = 1;
+			return (0); // Failure
+		}
 
-        if (tokens->type == REDIRECT_IN) // Check read access for '<'
-        {
-            if (access(filename, R_OK) == -1)
-            {
-                data->wstatus = 1;
-                return (0); // Failure
-            }
-        }
-        else if (tokens->type == REDIRECT_OUT || tokens->type == REDOUT2) // Check write/create access for '>' or '>>'
-        {
-            int flags = (tokens->type == REDOUT2) ?
-                        (O_WRONLY | O_CREAT | O_APPEND) :
-                        (O_WRONLY | O_CREAT | O_TRUNC);
-            fd = open(filename, flags, 0644);
-            if (fd == -1)
-            {
+		if (tokens->type == REDIRECT_IN) // Check read access for '<'
+		{
+			if (access(filename, R_OK) == -1)
+			{
+				// Solo registrar el error pero CONTINUAR con el parsing
 				data->wstatus = 1;
-                return (0); // Failure
-            }
-            close(fd); // Successfully opened (and created if needed), close it.
-        }
-        // Note: REDIN2 ('<<') does not involve a file check at this stage.
-    }
-    // --- End File Check ---
+				// NO retornar 0 aquí
+			}
+		}
+		else if (tokens->type == REDIRECT_OUT || tokens->type == REDOUT2) // Check write/create access for '>' or '>>'
+		{
+			int flags = (tokens->type == REDOUT2) ?
+						(O_WRONLY | O_CREAT | O_APPEND) :
+						(O_WRONLY | O_CREAT | O_TRUNC);
+			fd = open(filename, flags, 0644);
+			if (fd == -1)
+			{
+				data->wstatus = 1;
+				return (0); // Failure
+			}
+			close(fd); // Successfully opened (and created if needed), close it.
+		}
+		// Note: REDIN2 ('<<') does not involve a file check at this stage.
+	}
+	// --- End File Check ---
 
 
-    // Solo buscar redirecciones duplicadas si es un tipo de redirección
-    if (tokens->type == REDIRECT_IN || tokens->type == REDIRECT_OUT ||
-        tokens->type == REDIN2 || tokens->type == REDOUT2)
-    {
-        // Buscar redirecciones desde la raíz del comando actual
-        current = *root;
-        while (current)
-        {
-            // Si encontramos una redirección del mismo tipo
-            if (current->type == tokens->type)
-            {
-                found_same_redir = 1;
-                
-                // Actualizar el archivo (valor a la derecha)
-                if (current->right)
-                {
-                    free(current->right->value);
-                    current->right->value = ft_strdup(tokens->value);
+	// Solo buscar redirecciones duplicadas si es un tipo de redirección
+	if (tokens->type == REDIRECT_IN || tokens->type == REDIRECT_OUT ||
+		tokens->type == REDIN2 || tokens->type == REDOUT2)
+	{
+		// Buscar redirecciones desde la raíz del comando actual
+		current = *root;
+		while (current)
+		{
+			// Si encontramos una redirección del mismo tipo
+			if (current->type == tokens->type)
+			{
+				found_same_redir = 1;
+				
+				// Actualizar el archivo (valor a la derecha)
+				if (current->right)
+				{
+					free(current->right->value);
+					current->right->value = ft_strdup(tokens->value);
 					if (!current->right->value) return (0); // Malloc check
-                }
-                else
-                {
-                    // Si no hay nodo derecho, crearlo
-                    current->right = ft_create_ast_node(CMD, tokens->value);
+				}
+				else
+				{
+					// Si no hay nodo derecho, crearlo
+					current->right = ft_create_ast_node(CMD, tokens->value);
 					if (!current->right || !current->right->value) return (0); // Malloc check
-                }
-                *last_op = current; // Mantener el operador actual como último operador
-                break;
-            }
-            
-            // Solo buscar en la rama principal del árbol
-            if (current->right && (current->type == REDIRECT_IN || 
-                                  current->type == REDIRECT_OUT ||
-                                  current->type == REDIN2 || 
-                                  current->type == REDOUT2))
-                current = current->right;
-            else
-                break;
-        }
-    }
+				}
+				*last_op = current; // Mantener el operador actual como último operador
+				break;
+			}
+			
+			// Solo buscar en la rama principal del árbol
+			if (current->right && (current->type == REDIRECT_IN || 
+								current->type == REDIRECT_OUT ||
+								current->type == REDIN2 || 
+								current->type == REDOUT2))
+				current = current->right;
+			else
+				break;
+		}
+	}
 
-    // Si no encontramos una redirección del mismo tipo, crear nuevo nodo
-    if (!found_same_redir)
-    {
-        new_op = ft_create_ast_node(tokens->type, tokens->value);
-        if (!new_op)
-            return (0); // Malloc check
-            
-        if (*cmd)
-            connect_operator(root, cmd, last_op, new_op);
-        else
-        {
-            *root = new_op;
-            *last_op = new_op;
-        }
-    }
+	// Si no encontramos una redirección del mismo tipo, crear nuevo nodo
+	if (!found_same_redir)
+	{
+		new_op = ft_create_ast_node(tokens->type, tokens->value);
+		if (!new_op)
+			return (0); // Malloc check
+			
+		if (*cmd)
+			connect_operator(root, cmd, last_op, new_op);
+		else
+		{
+			*root = new_op;
+			*last_op = new_op;
+		}
+	}
 	return (1);
 }
 
@@ -219,8 +220,9 @@ t_ast	*ft_build_ast(t_data *data, t_tokens *tokens)
 	t_ast	*root;
 	t_ast	*cmd;
 	t_ast	*last_op;
-	int     parse_success = 1; // Use int as boolean
+	int     parse_success;
 
+	parse_success = 1;
 	root = NULL;
 	cmd = NULL;
 	last_op = NULL;
@@ -230,18 +232,15 @@ t_ast	*ft_build_ast(t_data *data, t_tokens *tokens)
 			ft_handle_command_node(&root, &cmd, &last_op, tokens);
 		else
 			parse_success = ft_handle_operator_node(data, &root, &cmd, &last_op, tokens);
-		if (parse_success) // Only advance if the last step succeeded
-            tokens = tokens->next;
+		if (parse_success)
+			tokens = tokens->next;
 	}
 	if (!parse_success)
-    {
-        ft_free_ast(root); // Clean up partially built tree
-        return (NULL);     // Signal failure
-    }
-	// En ft_build_ast, justo antes del return
+	{
+		ft_free_ast(root);
+		return (NULL);
+	}
 	// ft_printf("---- AST FINAL ----\n");
 	// print_ast(root, 0);  // Necesitarás implementar esta función si no existe
 	return (root);
 }
-
-
