@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 17:53:02 by paromero          #+#    #+#             */
-/*   Updated: 2025/03/10 12:07:39 by paromero         ###   ########.fr       */
+/*   Updated: 2025/05/06 18:36:06 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,6 +106,7 @@ int	init_data(t_data *data, char **env)
 	data->cwd = ft_strdup(getcwd(cwd, sizeof(cwd)));
 	data->tokens = NULL;
 	data->ast = NULL;
+	data->only_redirections = 1;
 	data->wstatus = 0;
 	rl_clear_history();
 	if (env == NULL || env[0] == NULL)

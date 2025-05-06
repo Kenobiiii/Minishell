@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anggalle <anggalle@student.42.fr>          +#+  +:+       +#+        */
+/*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 19:06:45 by paromero          #+#    #+#             */
-/*   Updated: 2025/05/02 14:11:31 by anggalle         ###   ########.fr       */
+/*   Updated: 2025/05/06 18:35:41 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,7 @@ typedef struct s_data
 	int			exit; //- Manejo de salida
 	int			last_exit_status; //-salida ultimo comando ejecutado ($?)
 	int			wstatus;
+	int			only_redirections;
 	pid_t		pid; //- Proceso hijo y padre
 	t_env		*env; //- Puntero a estructuar de env
 	t_tokens	*tokens; //- puntero a estructura de tokens

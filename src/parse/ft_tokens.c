@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 20:08:34 by paromero          #+#    #+#             */
-/*   Updated: 2025/02/28 21:23:33 by paromero         ###   ########.fr       */
+/*   Updated: 2025/05/06 18:38:02 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,31 +33,47 @@ int	ft_types(char	*value)
 
 int	ft_tokens(t_data *data, char *str)
 {
-	t_tokens	*current;
-	char		**token_array;
-	int			i;
+    t_tokens	*current;
+    char		**token_array;
+    int			i;
+    int			type;
 
-	token_array = ft_quotesplit(str, ' ', data);
-	data->tokens = ft_new_token(token_array[0]);
-	if (!data->tokens)
-		return (0);
-	current = data->tokens;
-	i = 1;
-	while (token_array[i])
-	{
-		current->type = ft_types(token_array[i - 1]);
-		current->next = ft_new_token(token_array[i]);
-		if (!current->next)
-		{
-			ft_free_error_token(data, token_array);
-			return (0);
-		}
-		current = current->next;
-		i++;
-	}
-	current->type = ft_types(token_array[i - 1]);
-	free_matrix(token_array);
-	return (1);
+    token_array = ft_quotesplit(str, ' ', data);
+    data->tokens = ft_new_token(token_array[0]);
+    if (!data->tokens)
+        return (0);
+    // Inicializar la variable: asumimos que solo hay redirecciones
+    data->only_redirections = 1;
+    current = data->tokens;
+    i = 1;
+    while (token_array[i])
+    {
+        type = ft_types(token_array[i - 1]);
+        current->type = type;
+        
+        // Si encontramos un operador que no sea redirección, actualizar la bandera
+        if (type == PIPE || type == AND || type == OR)
+            data->only_redirections = 0;
+            
+        current->next = ft_new_token(token_array[i]);
+        if (!current->next)
+        {
+            ft_free_error_token(data, token_array);
+            return (0);
+        }
+        current = current->next;
+        i++;
+    }
+    // Comprobar también el último token
+    type = ft_types(token_array[i - 1]);
+    current->type = type;
+    
+    // Si el último token es un operador no redirección, actualizar bandera
+    if (type == PIPE || type == AND || type == OR)
+        data->only_redirections = 0;
+        
+    free_matrix(token_array);
+    return (1);
 }
 
 t_tokens	*ft_new_token(char *str)

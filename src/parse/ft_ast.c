@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 17:26:30 by paromero          #+#    #+#             */
-/*   Updated: 2025/05/04 13:46:09 by paromero         ###   ########.fr       */
+/*   Updated: 2025/05/06 19:04:24 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,8 @@ static int ft_handle_operator_node(t_data *data, t_ast **root, t_ast **cmd,
 		if (!filename || !*filename) // Check for NULL or empty filename
 		{
 			data->wstatus = 1;
-			return (0); // Failure
+			if (data->only_redirections == 1)
+				return (0);
 		}
 
 		if (tokens->type == REDIRECT_IN) // Check read access for '<'
@@ -103,6 +104,8 @@ static int ft_handle_operator_node(t_data *data, t_ast **root, t_ast **cmd,
 			{
 				// Solo registrar el error pero CONTINUAR con el parsing
 				data->wstatus = 1;
+				if (data->only_redirections == 1)
+					return (0);
 				// NO retornar 0 aquí
 			}
 		}
@@ -115,7 +118,8 @@ static int ft_handle_operator_node(t_data *data, t_ast **root, t_ast **cmd,
 			if (fd == -1)
 			{
 				data->wstatus = 1;
-				return (0); // Failure
+				if (data->only_redirections == 1)
+					return (0);
 			}
 			close(fd); // Successfully opened (and created if needed), close it.
 		}
@@ -142,13 +146,15 @@ static int ft_handle_operator_node(t_data *data, t_ast **root, t_ast **cmd,
 				{
 					free(current->right->value);
 					current->right->value = ft_strdup(tokens->value);
-					if (!current->right->value) return (0); // Malloc check
+					if (!current->right->value)
+						return (0); // Malloc check
 				}
 				else
 				{
 					// Si no hay nodo derecho, crearlo
 					current->right = ft_create_ast_node(CMD, tokens->value);
-					if (!current->right || !current->right->value) return (0); // Malloc check
+					if (!current->right || !current->right->value)
+						return (0); // Malloc check
 				}
 				*last_op = current; // Mantener el operador actual como último operador
 				break;
@@ -171,7 +177,6 @@ static int ft_handle_operator_node(t_data *data, t_ast **root, t_ast **cmd,
 		new_op = ft_create_ast_node(tokens->type, tokens->value);
 		if (!new_op)
 			return (0); // Malloc check
-			
 		if (*cmd)
 			connect_operator(root, cmd, last_op, new_op);
 		else
