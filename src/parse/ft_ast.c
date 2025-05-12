@@ -75,115 +75,140 @@ void	ft_handle_command_node(t_ast **root, t_ast **cmd,
 		handle_new_command(root, cmd, last_op, tokens);
 }
 
-static int ft_handle_operator_node(t_data *data, t_ast **root, t_ast **cmd,
-	t_ast **last_op, t_tokens *tokens)
+static int	handle_file_access(t_data *data, char *filename, int type)
 {
-	t_ast *new_op;
-	t_ast *current;
-	int found_same_redir = 0;
-	char  *filename;
-	int   fd;
+	int	fd;
+	int	flags;
 
-
-	// --- Perform File Check BEFORE modifying AST ---
-	if (tokens->type == REDIRECT_IN || tokens->type == REDIRECT_OUT ||
-		tokens->type == REDIN2 || tokens->type == REDOUT2)
+	if (type == REDIRECT_IN)
 	{
-		// Assuming the filename is stored in tokens->value for redirection tokens
-		filename = tokens->next->value;
-		if (!filename || !*filename) // Check for NULL or empty filename
+		if (access(filename, R_OK) == -1)
 		{
 			data->wstatus = 1;
 			if (data->only_redirections == 1)
 				return (0);
 		}
-
-		if (tokens->type == REDIRECT_IN) // Check read access for '<'
-		{
-			if (access(filename, R_OK) == -1)
-			{
-				// Solo registrar el error pero CONTINUAR con el parsing
-				data->wstatus = 1;
-				if (data->only_redirections == 1)
-					return (0);
-				// NO retornar 0 aquí
-			}
-		}
-		else if (tokens->type == REDIRECT_OUT || tokens->type == REDOUT2) // Check write/create access for '>' or '>>'
-		{
-			int flags = (tokens->type == REDOUT2) ?
-						(O_WRONLY | O_CREAT | O_APPEND) :
-						(O_WRONLY | O_CREAT | O_TRUNC);
-			fd = open(filename, flags, 0644);
-			if (fd == -1)
-			{
-				data->wstatus = 1;
-				if (data->only_redirections == 1)
-					return (0);
-			}
-			close(fd); // Successfully opened (and created if needed), close it.
-		}
-		// Note: REDIN2 ('<<') does not involve a file check at this stage.
 	}
-	// --- End File Check ---
-
-
-	// Solo buscar redirecciones duplicadas si es un tipo de redirección
-	if (tokens->type == REDIRECT_IN || tokens->type == REDIRECT_OUT ||
-		tokens->type == REDIN2 || tokens->type == REDOUT2)
+	else if (type == REDIRECT_OUT || type == REDOUT2)
 	{
-		// Buscar redirecciones desde la raíz del comando actual
-		current = *root;
-		while (current)
-		{
-			// Si encontramos una redirección del mismo tipo
-			if (current->type == tokens->type)
-			{
-				found_same_redir = 1;
-				
-				// Actualizar el archivo (valor a la derecha)
-				if (current->right)
-				{
-					free(current->right->value);
-					current->right->value = ft_strdup(tokens->value);
-					if (!current->right->value)
-						return (0); // Malloc check
-				}
-				else
-				{
-					// Si no hay nodo derecho, crearlo
-					current->right = ft_create_ast_node(CMD, tokens->value);
-					if (!current->right || !current->right->value)
-						return (0); // Malloc check
-				}
-				*last_op = current; // Mantener el operador actual como último operador
-				break;
-			}
-			
-			// Solo buscar en la rama principal del árbol
-			if (current->right && (current->type == REDIRECT_IN || 
-								current->type == REDIRECT_OUT ||
-								current->type == REDIN2 || 
-								current->type == REDOUT2))
-				current = current->right;
-			else
-				break;
-		}
-	}
-
-	// Si no encontramos una redirección del mismo tipo, crear nuevo nodo
-	if (!found_same_redir)
-	{
-		new_op = ft_create_ast_node(tokens->type, tokens->value);
-		if (!new_op)
-			return (0); // Malloc check
-		if (*cmd)
-			connect_operator(root, cmd, last_op, new_op);
+		if (type == REDOUT2)
+			flags = O_WRONLY | O_CREAT | O_APPEND;
 		else
+			flags = O_WRONLY | O_CREAT | O_TRUNC;
+		fd = open(filename, flags, 0644);
+		if (fd == -1)
 		{
-			*root = new_op;
-			*last_op = new_op;
+			data->wstatus = 1;
+			if (data->only_redirections == 1)
+				return (0);
 		}
+		close(fd);
+	}
+	return (1);
+}
+
+static int	handle_redirect_checks(t_data *data, t_tokens *tokens)
+{
+	char	*filename;
+
+	if (tokens->type != REDIRECT_IN && tokens->type != REDIRECT_OUT
+		&& tokens->type != REDIN2 && tokens->type != REDOUT2)
+		return (1);
+	filename = tokens->next->value;
+	if (!filename || !*filename)
+	{
+		data->wstatus = 1;
+		if (data->only_redirections == 1)
+			return (0);
+	}
+	return (handle_file_access(data, filename, tokens->type));
+}
+
+static int	handle_redirect_update(t_ast *current, t_tokens *tokens)
+{
+	if (current->right)
+	{
+		free(current->right->value);
+		current->right->value = ft_strdup(tokens->value);
+		if (!current->right->value)
+			return (0);
+	}
+	else
+	{
+		current->right = ft_create_ast_node(CMD, tokens->value);
+		if (!current->right || !current->right->value)
+			return (0);
+	}
+	return (1);
+}
+
+static int	handle_redirect_node(t_ast **root,
+	t_ast **last_op, t_tokens *tokens)
+{
+	t_ast	*current;
+	int		found_same_redir;
+
+	current = *root;
+	found_same_redir = 0;
+	while (current)
+	{
+		if (current->type == tokens->type)
+		{
+			found_same_redir = 1;
+			if (!handle_redirect_update(current, tokens))
+				return (0);
+			*last_op = current;
+			break ;
+		}
+		if (current->right && (current->type == REDIRECT_IN
+				|| current->type == REDIRECT_OUT
+				|| current->type == REDIN2
+				|| current->type == REDOUT2))
+			current = current->right;
+		else
+			break ;
+	}
+	return (found_same_redir);
+}
+
+static void	handle_new_node(t_ast **root, t_ast **cmd,
+	t_ast **last_op, t_ast *new_op)
+{
+	if (*cmd)
+		connect_operator(root, cmd, last_op, new_op);
+	else
+	{
+		*root = new_op;
+		*last_op = new_op;
+	}
+}
+
+static int	ft_handle_operator_node(t_data *data, t_ast_args *args)
+{
+	t_ast	*new_op;
+	int		found_same_redir;
+
+	if (!handle_redirect_checks(data, args->tokens))
+		return (0);
+	if (args->tokens->type == REDIRECT_IN || args->tokens->type == REDIRECT_OUT
+		|| args->tokens->type == REDIN2 || args->tokens->type == REDOUT2)
+	{
+		found_same_redir = handle_redirect_node(args->root,
+				args->last_op, args->tokens);
+		if (!found_same_redir)
+		{
+			new_op = ft_create_ast_node(args->tokens->type, args->tokens->value);
+			if (!new_op)
+				return (0);
+			handle_new_node(args->root, args->cmd, args->last_op, new_op);
+		}
+	}
+	else
+	{
+		new_op = ft_create_ast_node(args->tokens->type, args->tokens->value);
+		if (!new_op)
+			return (0);
+		handle_new_node(args->root, args->cmd, args->last_op, new_op);
 	}
 	return (1);
 }
@@ -219,24 +244,31 @@ static int ft_handle_operator_node(t_data *data, t_ast **root, t_ast **cmd,
 // 	print_ast(node->right, level + 1);
 // }
 
-
 t_ast	*ft_build_ast(t_data *data, t_tokens *tokens)
 {
 	t_ast	*root;
 	t_ast	*cmd;
 	t_ast	*last_op;
-	int     parse_success;
+	int		parse_success;
+	t_ast_args	args;
 
 	parse_success = 1;
 	root = NULL;
 	cmd = NULL;
 	last_op = NULL;
+	args.root = &root;
+	args.cmd = &cmd;
+	args.last_op = &last_op;
+	args.tokens = tokens;
 	while (tokens && parse_success)
 	{
 		if (tokens->type == CMD)
 			ft_handle_command_node(&root, &cmd, &last_op, tokens);
 		else
-			parse_success = ft_handle_operator_node(data, &root, &cmd, &last_op, tokens);
+		{
+			args.tokens = tokens;
+			parse_success = ft_handle_operator_node(data, &args);
+		}
 		if (parse_success)
 			tokens = tokens->next;
 	}

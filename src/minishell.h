@@ -64,6 +64,14 @@ typedef struct s_tokens
 	struct s_tokens	*next;
 }	t_tokens;
 
+typedef struct s_ast_args
+{
+	t_ast	**root;
+	t_ast	**cmd;
+	t_ast	**last_op;
+	t_tokens	*tokens;
+}	t_ast_args;
+
 typedef struct s_env
 {
 	char			*value;
