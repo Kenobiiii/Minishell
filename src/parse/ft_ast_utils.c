@@ -12,6 +12,21 @@
 
 #include "../minishell.h"
 
+t_ast	*ft_create_ast_node(t_type type, char *value)
+{
+	t_ast	*node;
+
+	node = malloc(sizeof(t_ast));
+	if (!node)
+		return (NULL);
+	node->type = type;
+	node->value = ft_strdup(value);
+	node->args = NULL;
+	node->right = NULL;
+	node->left = NULL;
+	return (node);
+}
+
 int	is_red(t_ast **last_op)
 {
     if (*last_op && ((*last_op)->type == REDIN2 || (*last_op)->type == REDOUT2

@@ -151,16 +151,22 @@ int			ft_types(char	*value);
 int			ft_tokens(t_data *data, char *str);
 
 //! ft_ast.c //
-t_ast		*ft_create_ast_node(t_type type, char *value);
 t_ast		*ft_build_ast(t_data *data, t_tokens *tokens);
 void		ft_add_argument(t_ast *cmd_node, char *arg);
 
 //! ft_ast_utils.c //
+t_ast		*ft_create_ast_node(t_type type, char *value);
 void		handle_redirection(t_ast **root, t_ast **cmd,
 				t_ast **last_op, t_tokens *tokens);
 void		connect_operator(t_ast **root, t_ast **cmd,
 				t_ast **last_op, t_ast *new_op);
 int			is_red(t_ast **last_op);
+
+//! ft_ast_redirects.c //
+int			handle_file_access(t_data *data, char *filename, int type);
+int			handle_redirect_checks(t_data *data, t_tokens *tokens);
+int			handle_redirect_update(t_ast *current, t_tokens *tokens);
+int			handle_redirect_node(t_ast **root, t_ast **last_op, t_tokens *tokens);
 
 //! ft_ast_arg.c //
 void		ft_add_argument(t_ast *cmd_node, char *arg);
