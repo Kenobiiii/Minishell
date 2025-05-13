@@ -12,6 +12,7 @@
 
 #include "../minishell.h"
 
+//? Crea un nuevo nodo de comando y lo conecta al AST si es necesario
 static void	handle_new_command(t_ast **root, t_ast **cmd,
 		t_ast **last_op, t_tokens *tokens)
 {
@@ -33,6 +34,7 @@ static void	handle_new_command(t_ast **root, t_ast **cmd,
 		(*last_op)->right = *cmd;
 }
 
+//? Procesa un token de comando y lo añade al AST
 void	ft_handle_command_node(t_ast **root, t_ast **cmd,
 	t_ast **last_op, t_tokens *tokens)
 {
@@ -60,6 +62,7 @@ void	ft_handle_command_node(t_ast **root, t_ast **cmd,
 		handle_new_command(root, cmd, last_op, tokens);
 }
 
+//? Crea un nuevo nodo operador y lo conecta al AST
 static void	handle_new_node(t_ast **root, t_ast **cmd,
 	t_ast **last_op, t_ast *new_op)
 {
@@ -72,6 +75,7 @@ static void	handle_new_node(t_ast **root, t_ast **cmd,
 	}
 }
 
+//? Procesa un token operador (pipe, redirección, &&, ||) y lo añade al AST
 static int	ft_handle_operator_node(t_data *data, t_ast_args *args)
 {
 	t_ast	*new_op;
@@ -102,12 +106,13 @@ static int	ft_handle_operator_node(t_data *data, t_ast_args *args)
 	return (1);
 }
 
+//? Construye el AST a partir de la lista de tokens
 t_ast	*ft_build_ast(t_data *data, t_tokens *tokens)
 {
-	t_ast	*root;
-	t_ast	*cmd;
-	t_ast	*last_op;
-	int		parse_success;
+	t_ast		*root;
+	t_ast		*cmd;
+	t_ast		*last_op;
+	int			parse_success;
 	t_ast_args	args;
 
 	parse_success = 1;

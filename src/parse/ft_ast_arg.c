@@ -12,6 +12,7 @@
 
 #include "../minishell.h"
 
+//? Copia los argumentos existentes a un nuevo array y añade un nuevo argumento
 void	copy_args(char **new_args, t_ast *cmd_node, int i, char *arg)
 {
 	int	j;
@@ -33,6 +34,7 @@ void	copy_args(char **new_args, t_ast *cmd_node, int i, char *arg)
 	new_args[j + 1] = NULL;
 }
 
+//? Añade un nuevo argumento a un nodo de comando existente
 void	ft_add_argument(t_ast *cmd_node, char *arg)
 {
 	int		i;
@@ -49,6 +51,7 @@ void	ft_add_argument(t_ast *cmd_node, char *arg)
 	cmd_node->args = new_args;
 }
 
+//? Maneja un argumento de comando en el contexto de una redirección
 void	handle_command_as_arg(t_ast **cmd, t_ast **redirect,
 	t_tokens *tokens)
 {

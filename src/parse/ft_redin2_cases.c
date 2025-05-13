@@ -12,6 +12,7 @@
 
 #include "../minishell.h"
 
+//? Verifica si el último operador es un operador de heredoc (<<)
 int	is_redin2(t_ast **last_operator)
 {
 	if (*last_operator)
@@ -22,6 +23,7 @@ int	is_redin2(t_ast **last_operator)
 	return (0);
 }
 
+//? Maneja el caso especial de heredoc (<<) con diferentes configuraciones de nodos
 void	redin2(t_ast **current_cmd, t_ast **last_operator,
 		t_ast *new_node, t_tokens *tokens)
 {

@@ -12,6 +12,7 @@
 
 #include "../minishell.h"
 
+//? Verifica el acceso a archivos para operaciones de redirección
 int	handle_file_access(t_data *data, char *filename, int type)
 {
 	int	fd;
@@ -44,6 +45,7 @@ int	handle_file_access(t_data *data, char *filename, int type)
 	return (1);
 }
 
+//? Verifica la validez de los tokens de redirección y sus argumentos
 int	handle_redirect_checks(t_data *data, t_tokens *tokens)
 {
 	char	*filename;
@@ -61,6 +63,7 @@ int	handle_redirect_checks(t_data *data, t_tokens *tokens)
 	return (handle_file_access(data, filename, tokens->type));
 }
 
+//? Actualiza un nodo de redirección existente con un nuevo valor
 int	handle_redirect_update(t_ast *current, t_tokens *tokens)
 {
 	if (current->right)
@@ -79,6 +82,7 @@ int	handle_redirect_update(t_ast *current, t_tokens *tokens)
 	return (1);
 }
 
+//? Busca nodos de redirección del mismo tipo y los actualiza o crea nuevos
 int	handle_redirect_node(t_ast **root,
 	t_ast **last_op, t_tokens *tokens)
 {
