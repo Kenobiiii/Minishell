@@ -14,9 +14,53 @@
 
 sig_atomic_t	g_sigint_received = 0;
 
+static	int	is_only_empty_var(char *line)
+{
+	while (*line && (*line == ' ' || *line == '\t'))
+		line++;
+	if (ft_strncmp(line, "$EMPTY", 6) == 0)
+	{
+		line += 6;
+		while (*line)
+		{
+			if (*line != ' ' && *line != '\t')
+				return (0);
+			line++;
+		}
+		return (1);
+	}
+	return (0);
+}
+
+static	int	is_empty_var_with_cmd(t_data *data, char *line)
+{
+	char	*temp;
+
+	while (*line && (*line == ' ' || *line == '\t'))
+		line++;
+	if (ft_strncmp(line, "$EMPTY", 6) == 0 && line[6] == ' ')
+	{
+		temp = ft_strdup(line + 7);
+		if (!temp)
+			return (0);
+		free(data->line);
+		data->line = temp;
+		return (1);
+	}
+	return (0);
+}
+
 int	line_syntax(t_data	*data)
 {
 	add_history(data->line);
+	if (is_only_empty_var(data->line))
+	{
+		data->wstatus = 0;
+		return (free_while(data));
+	}
+	if (is_empty_var_with_cmd(data, data->line))
+	{
+	}
 	if (!ft_isspace(data->line))
 		return (free_while(data));
 	if (!check_syntax(data->line))
@@ -35,11 +79,8 @@ int	line_syntax(t_data	*data)
 		return (free_while(0));
 	ft_tokens(data, data->line);
 	data->ast = ft_build_ast(data, data->tokens);
-	if (data->ast == NULL) // Check if parsing failed
-	{
-		// data->wstatus should already be set to 1
-		return (free_while(data)); // Cleanup and indicate failure
-	}
+	if (data->ast == NULL)
+		return (free_while(data));
 	return (1);
 }
 

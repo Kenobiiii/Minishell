@@ -55,20 +55,12 @@ static int	copy_env_value(t_data *data,
 	int		k;
 
 	k = 0;
-	if (ft_strncmp(var_token, "$EMPTY", ft_strlen(var_token)) == 0)
+	env_value = find_envvar(data, var_token);
+	if (env_value)
 	{
-		while (var_token[k])
-			result[(*j)++] = var_token[k++];
-	}
-	else
-	{
-		env_value = find_envvar(data, var_token);
-		if (env_value)
-		{
-			while (env_value[k])
-				result[(*j)++] = env_value[k++];
-			free (env_value);
-		}
+		while (env_value[k])
+			result[(*j)++] = env_value[k++];
+		free (env_value);
 	}
 	free(var_token);
 	return (1);
