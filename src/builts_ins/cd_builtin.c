@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd_builtin.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anggalle <anggalle@student.42.fr>          +#+  +:+       +#+        */
+/*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 12:32:49 by anggalle          #+#    #+#             */
-/*   Updated: 2025/04/20 01:00:39 by anggalle         ###   ########.fr       */
+/*   Updated: 2025/05/14 19:07:09 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,7 @@ int	cd_builtin(t_data *data)
 		}
 	}
 	else if (data->ast->args[2])
-	{
 		data->wstatus = 1;
-	}
 	else
 	{
 		if (chdir(data->ast->args[1]) == -1)

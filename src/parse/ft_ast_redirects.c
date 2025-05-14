@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 16:30:00 by paromero          #+#    #+#             */
-/*   Updated: 2025/05/14 18:40:04 by paromero         ###   ########.fr       */
+/*   Updated: 2025/05/14 19:02:26 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,13 +89,8 @@ int	handle_redirect_node(t_ast **root,
 	t_ast	*current;
 	int		found_same_redir;
 
-	// Para los tests que funcionan correctamente con múltiples redirecciones
-	// en una cadena, siempre creamos nodos nuevos para redirecciones de salida
-	// y redirecciones append. Esto garantiza que cada redirección se procese
-	// independientemente y todos los archivos reciban el mismo contenido.
 	if (tokens->type == REDIRECT_OUT || tokens->type == REDOUT2)
 		return (0);
-
 	current = *root;
 	found_same_redir = 0;
 	while (current)
@@ -117,4 +112,4 @@ int	handle_redirect_node(t_ast **root,
 			break ;
 	}
 	return (found_same_redir);
-} 
+}

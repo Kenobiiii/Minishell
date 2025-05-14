@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 14:27:38 by anggalle          #+#    #+#             */
-/*   Updated: 2025/05/14 18:40:04 by paromero         ###   ########.fr       */
+/*   Updated: 2025/05/14 19:11:43 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,10 @@ static t_ast	*find_cmd_node(t_ast *node)
 
 	if (!node)
 		return (NULL);
-	
 	current = node;
-	while (current && (current->type == REDIRECT_OUT || current->type == REDOUT2))
+	while (current && (current->type == REDIRECT_OUT
+			|| current->type == REDOUT2))
 		current = current->left;
-	
 	return (current);
 }
 
@@ -32,9 +31,6 @@ static t_ast	*find_last_redirection(t_ast *node)
 {
 	if (!node || (node->type != REDIRECT_OUT && node->type != REDOUT2))
 		return (NULL);
-	
-	// La primera redirección en la estructura del AST es la última
-	// en la línea de comandos debido a cómo se construye el árbol
 	return (node);
 }
 

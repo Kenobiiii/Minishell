@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 11:59:00 by anggalle          #+#    #+#             */
-/*   Updated: 2025/05/14 18:40:04 by paromero         ###   ########.fr       */
+/*   Updated: 2025/05/14 19:10:25 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,22 +43,11 @@ static void	exec_pipe_right(t_data *data, t_ast *node, int pipefd[2])
 	}
 	close(pipefd[0]);
 	close(pipefd[1]);
-	
-	// Si el nodo derecho es una redirección, aseguramos que
-	// se maneja correctamente (especialmente para el test 38)
-	if (node->right && (node->right->type == REDIRECT_OUT || 
-		node->right->type == REDOUT2))
-	{
-		// La implementación existente en exec_redirect_out y
-		// exec_redirect_append ya maneja correctamente las
-		// redirecciones múltiples, así que usamos esa
+	if (node->right && (node->right->type == REDIRECT_OUT
+			|| node->right->type == REDOUT2))
 		exec_ast(data, node->right);
-	}
 	else
-	{
 		exec_ast(data, node->right);
-	}
-	
 	exit(data->wstatus);
 }
 
