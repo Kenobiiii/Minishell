@@ -46,7 +46,12 @@ static void	wait_for_processes(t_data *data, pid_t pid_left, pid_t pid_right)
 	waitpid(pid_left, &status_left, 0);
 	waitpid(pid_right, &status_right, 0);
 	if (WIFEXITED(status_right))
-		data->wstatus = WEXITSTATUS(status_right);
+	{
+		if (WEXITSTATUS(status_right) == 0)
+			data->wstatus = 0;
+		else
+			data->wstatus = WEXITSTATUS(status_right);
+	}
 	else if (WIFSIGNALED(status_right))
 		data->wstatus = 128 + WTERMSIG(status_right);
 }
