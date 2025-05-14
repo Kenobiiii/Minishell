@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 12:54:12 by paromero          #+#    #+#             */
-/*   Updated: 2025/05/02 14:23:27 by paromero         ###   ########.fr       */
+/*   Updated: 2025/05/14 18:41:56 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ void exit_minishell(t_data *data, const char *error_message, int exit_code)
     exit(exit_code);
 }
 
-int	handle_process_error(int value, const char *msg)
+/*int	handle_process_error(int value, const char *msg)
 {
 	if (value < 0)
 	{
@@ -54,4 +54,4 @@ int	handle_process_error(int value, const char *msg)
 		return (-1);
 	}
 	return (value);
-}
+}*/

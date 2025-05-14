@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anggalle <anggalle@student.42.fr>          +#+  +:+       +#+        */
+/*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 13:59:23 by anggalle          #+#    #+#             */
-/*   Updated: 2025/03/26 17:39:02 by anggalle         ###   ########.fr       */
+/*   Updated: 2025/05/14 18:40:06 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,4 +86,21 @@ void	analyse_status(t_data *data)
 	{
 		data->wstatus = status;
 	}
+}
+
+/**
+ * Maneja los errores de procesos y muestra mensajes descriptivos
+ * 
+ * @param result El resultado de la llamada al sistema
+ * @param error_msg El mensaje de error a mostrar
+ * @return El resultado de la llamada al sistema
+ */
+int	handle_process_error(int result, char *error_msg)
+{
+	if (result < 0)
+	{
+		perror(error_msg);
+		return (-1);
+	}
+	return (result);
 }

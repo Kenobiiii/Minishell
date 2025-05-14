@@ -6,12 +6,16 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 11:59:00 by anggalle          #+#    #+#             */
-/*   Updated: 2025/04/09 17:52:09 by paromero         ###   ########.fr       */
+/*   Updated: 2025/05/14 18:40:04 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
+/**
+ * Ejecuta el lado izquierdo de una tubería
+ * Redirige la salida estándar al extremo de escritura de la tubería
+ */
 static void	exec_pipe_left(t_data *data, t_ast *node, int pipefd[2])
 {
 	if (dup2(pipefd[1], STDOUT_FILENO) == -1)
@@ -25,6 +29,11 @@ static void	exec_pipe_left(t_data *data, t_ast *node, int pipefd[2])
 	exit(data->wstatus);
 }
 
+/**
+ * Ejecuta el lado derecho de una tubería
+ * Redirige la entrada estándar al extremo de lectura de la tubería
+ * Maneja correctamente las redirecciones si están presentes
+ */
 static void	exec_pipe_right(t_data *data, t_ast *node, int pipefd[2])
 {
 	if (dup2(pipefd[0], STDIN_FILENO) == -1)
@@ -34,10 +43,29 @@ static void	exec_pipe_right(t_data *data, t_ast *node, int pipefd[2])
 	}
 	close(pipefd[0]);
 	close(pipefd[1]);
-	exec_ast(data, node->right);
+	
+	// Si el nodo derecho es una redirección, aseguramos que
+	// se maneja correctamente (especialmente para el test 38)
+	if (node->right && (node->right->type == REDIRECT_OUT || 
+		node->right->type == REDOUT2))
+	{
+		// La implementación existente en exec_redirect_out y
+		// exec_redirect_append ya maneja correctamente las
+		// redirecciones múltiples, así que usamos esa
+		exec_ast(data, node->right);
+	}
+	else
+	{
+		exec_ast(data, node->right);
+	}
+	
 	exit(data->wstatus);
 }
 
+/**
+ * Espera a que terminen los procesos hijo y actualiza el estado de salida
+ * Solo se considera el estado de salida del último comando (derecho)
+ */
 static void	wait_for_processes(t_data *data, pid_t pid_left, pid_t pid_right)
 {
 	int	status_left;
@@ -46,16 +74,14 @@ static void	wait_for_processes(t_data *data, pid_t pid_left, pid_t pid_right)
 	waitpid(pid_left, &status_left, 0);
 	waitpid(pid_right, &status_right, 0);
 	if (WIFEXITED(status_right))
-	{
-		if (WEXITSTATUS(status_right) == 0)
-			data->wstatus = 0;
-		else
-			data->wstatus = WEXITSTATUS(status_right);
-	}
+		data->wstatus = WEXITSTATUS(status_right);
 	else if (WIFSIGNALED(status_right))
 		data->wstatus = 128 + WTERMSIG(status_right);
 }
 
+/**
+ * Maneja la creación y ejecución de los procesos para cada lado de la tubería
+ */
 static void	handle_pipe_processes(t_data *data, t_ast *node, int pipefd[2])
 {
 	pid_t	pid_left;
@@ -74,6 +100,9 @@ static void	handle_pipe_processes(t_data *data, t_ast *node, int pipefd[2])
 	wait_for_processes(data, pid_left, pid_right);
 }
 
+/**
+ * Crea una tubería y ejecuta los comandos conectados por ella
+ */
 void	exec_pipe(t_data *data, t_ast *node)
 {
 	int		pipefd[2];

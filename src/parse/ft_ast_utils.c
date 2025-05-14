@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 18:26:41 by paromero          #+#    #+#             */
-/*   Updated: 2025/05/04 13:29:44 by paromero         ###   ########.fr       */
+/*   Updated: 2025/05/14 17:54:44 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,10 +64,19 @@ void	connect_operator(t_ast **root, t_ast **cmd,
 {
 	new_op->left = *cmd;
 	if (*last_op)
+	{
 		(*last_op)->right = new_op;
+	}
 	else
+	{
 		*root = new_op;
+	}
 	*last_op = new_op;
 	if (!is_red(last_op))
+	{
 		*cmd = NULL;
+	}
+	else
+	{
+	}
 }

@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 19:06:45 by paromero          #+#    #+#             */
-/*   Updated: 2025/05/06 18:35:41 by paromero         ###   ########.fr       */
+/*   Updated: 2025/05/14 18:41:15 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -181,7 +181,7 @@ void		redin2(t_ast **current_cmd, t_ast **last_operator,
 
 //! ft_errors.c //
 int			syntax_error(void);
-int			handle_process_error(int value, const char *msg);
+//int			handle_process_error(int value, const char *msg);
 char		*handle_invalid_cmd_path(char **cmd_path, char *total_cmd);
 void		exit_minishell(t_data *data, const char *error_message,
 				int exit_code);
@@ -212,6 +212,7 @@ void		exec_logical_or(t_data *data, t_ast *node);
 char		**list_to_array(t_env *head);
 void		free_array(const char **array);
 void		analyse_status(t_data *data);
+int			handle_process_error(int result, char *error_msg);
 
 //! redirections.c //
 void		exec_redirect_out(t_data *data, t_ast *node);
