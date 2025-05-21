@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 19:06:45 by paromero          #+#    #+#             */
-/*   Updated: 2025/05/14 18:41:15 by paromero         ###   ########.fr       */
+/*   Updated: 2025/05/21 17:29:26 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -180,6 +180,7 @@ void		redin2(t_ast **current_cmd, t_ast **last_operator,
 				t_ast *new_node, t_tokens *tokens);
 
 //! ft_errors.c //
+int			fd_error(t_data *data);
 int			syntax_error(void);
 //int			handle_process_error(int value, const char *msg);
 char		*handle_invalid_cmd_path(char **cmd_path, char *total_cmd);

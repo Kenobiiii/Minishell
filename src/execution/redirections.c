@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 14:27:38 by anggalle          #+#    #+#             */
-/*   Updated: 2025/05/14 19:11:43 by paromero         ###   ########.fr       */
+/*   Updated: 2025/05/21 17:29:52 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,163 +34,115 @@ static t_ast	*find_last_redirection(t_ast *node)
 	return (node);
 }
 
-void	exec_redirect_out(t_data *data, t_ast *node)
+static int	check_file_permissions(t_ast *current, t_data *data)
 {
 	int		fd;
+	int		flags;
 	char	*filename;
-	t_ast	*current;
-	t_ast	*cmd_node;
-	t_ast	*last_redirect;
-	int		original_stdout;
-	int		error_occurred = 0;
 
-	original_stdout = dup(STDOUT_FILENO);
-	if (!node || !node->right)
-	{
-		ft_printf("No hay archivo de salida\n");
-		data->wstatus = 2;
-		return;
-	}
-	
-	// Encontrar el comando real
-	cmd_node = find_cmd_node(node);
-	
-	// Encontrar la última redirección para aplicar el contenido
-	last_redirect = find_last_redirection(node);
-	
-	// Comprobamos permisos para todos los archivos primero
-	// Si alguno falla, no se crea ninguno
-	current = node;
-	while (current && (current->type == REDIRECT_OUT || current->type == REDOUT2))
+	while (current && (current->type == REDIRECT_OUT
+			|| current->type == REDOUT2))
 	{
 		if (current->right)
 		{
 			filename = current->right->value;
-			// Solo comprobar si podemos abrir/crear el archivo
-			int flags = current->type == REDOUT2 ? 
-				O_WRONLY | O_CREAT | O_APPEND : O_WRONLY | O_CREAT | O_TRUNC;
-			
+			flags = O_WRONLY | O_CREAT;
+			if (current->type == REDOUT2)
+				flags |= O_APPEND;
+			else
+				flags |= O_TRUNC;
 			fd = open(filename, flags, 0644);
 			if (fd == -1)
-			{
-				perror("minishell");
-				data->wstatus = 1;
-				error_occurred = 1;
-				close(original_stdout);
-				return; // Si falla algún archivo, salimos completamente
-			}
+				fd_error(data);
 			close(fd);
 		}
 		current = current->left;
 	}
-	
-	// Si todos los archivos pasan la comprobación, abrimos el último
-	// y ejecutamos el comando
-	if (!error_occurred)
+	return (1);
+}
+
+static void	apply_last_redirect(t_ast *redirect, t_ast *cmd, t_data *data)
+{
+	int		fd;
+	int		flags;
+	char	*filename;
+
+	if (!redirect || !redirect->right)
+		return ;
+	filename = redirect->right->value;
+	flags = O_WRONLY | O_CREAT;
+	if (redirect->type == REDOUT2)
+		flags |= O_APPEND;
+	else
+		flags |= O_TRUNC;
+	fd = open(filename, flags, 0644);
+	if (fd != -1)
 	{
-		if (last_redirect && last_redirect->right)
-		{
-			filename = last_redirect->right->value;
-			int flags = last_redirect->type == REDOUT2 ? 
-				O_WRONLY | O_CREAT | O_APPEND : O_WRONLY | O_CREAT | O_TRUNC;
-			
-			fd = open(filename, flags, 0644);
-			if (fd != -1)
-			{
-				dup2(fd, STDOUT_FILENO);
-				close(fd);
-				
-				if (cmd_node)
-					exec_ast(data, cmd_node);
-			}
-		}
+		dup2(fd, STDOUT_FILENO);
+		close(fd);
+		if (cmd)
+			exec_ast(data, cmd);
 	}
-	
-	// Restaurar stdout
+}
+
+void	exec_redirect_out(t_data *data, t_ast *node)
+{
+	t_ast	*cmd_node;
+	t_ast	*last_redirect;
+	int		original_stdout;
+
+	if (!node || !node->right)
+	{
+		ft_printf("No hay archivo de salida\n");
+		data->wstatus = 2;
+		return ;
+	}
+	original_stdout = dup(STDOUT_FILENO);
+	cmd_node = find_cmd_node(node);
+	last_redirect = find_last_redirection(node);
+	if (check_file_permissions(node, data))
+		apply_last_redirect(last_redirect, cmd_node, data);
 	dup2(original_stdout, STDOUT_FILENO);
 	close(original_stdout);
 }
 
 void	exec_redirect_append(t_data *data, t_ast *node)
 {
-	int		fd;
-	char	*filename;
-	t_ast	*current;
 	t_ast	*cmd_node;
 	t_ast	*last_redirect;
 	int		original_stdout;
-	int		error_occurred = 0;
 
-	original_stdout = dup(STDOUT_FILENO);
 	if (!node || !node->right)
 	{
 		ft_printf("No hay archivo de salida\n");
 		data->wstatus = 2;
-		return;
+		return ;
 	}
-	
-	// Encontrar el comando real
+	original_stdout = dup(STDOUT_FILENO);
 	cmd_node = find_cmd_node(node);
-	
-	// Encontrar la última redirección para aplicar el contenido
 	last_redirect = find_last_redirection(node);
-	
-	// Comprobamos permisos para todos los archivos primero
-	// Si alguno falla, no se crea ninguno
-	current = node;
-	while (current && (current->type == REDIRECT_OUT || current->type == REDOUT2))
-	{
-		if (current->right)
-		{
-			filename = current->right->value;
-			// Solo comprobar si podemos abrir/crear el archivo
-			int flags = current->type == REDOUT2 ? 
-				O_WRONLY | O_CREAT | O_APPEND : O_WRONLY | O_CREAT | O_TRUNC;
-			
-			fd = open(filename, flags, 0644);
-			if (fd == -1)
-			{
-				perror("minishell");
-				data->wstatus = 1;
-				error_occurred = 1;
-				close(original_stdout);
-				return; // Si falla algún archivo, salimos completamente
-			}
-			close(fd);
-		}
-		current = current->left;
-	}
-	
-	// Si todos los archivos pasan la comprobación, abrimos el último
-	// y ejecutamos el comando
-	if (!error_occurred)
-	{
-		if (last_redirect && last_redirect->right)
-		{
-			filename = last_redirect->right->value;
-			int flags = last_redirect->type == REDOUT2 ? 
-				O_WRONLY | O_CREAT | O_APPEND : O_WRONLY | O_CREAT | O_TRUNC;
-			
-			fd = open(filename, flags, 0644);
-			if (fd != -1)
-			{
-				dup2(fd, STDOUT_FILENO);
-				close(fd);
-				
-				if (cmd_node)
-					exec_ast(data, cmd_node);
-			}
-		}
-	}
-	
-	// Restaurar stdout
+	if (check_file_permissions(node, data))
+		apply_last_redirect(last_redirect, cmd_node, data);
 	dup2(original_stdout, STDOUT_FILENO);
 	close(original_stdout);
+}
+
+static int	read_heredoc_lines_part2(int pipefd, char *line)
+{
+	if (write(pipefd, line, strlen(line)) == -1
+		|| write(pipefd, "\n", 1) == -1)
+	{
+		free(line);
+		return (-1);
+	}
+	free(line);
+	return (1);
 }
 
 static int	read_heredoc_lines(int pipefd, char *delim)
 {
 	char	*line;
+	int		result;
 
 	while (1)
 	{
@@ -206,13 +158,9 @@ static int	read_heredoc_lines(int pipefd, char *delim)
 			free(line);
 			break ;
 		}
-		if (write(pipefd, line, strlen(line)) == -1
-			|| write(pipefd, "\n", 1) == -1)
-		{
-			free(line);
-			return (-1);
-		}
-		free(line);
+		result = read_heredoc_lines_part2(pipefd, line);
+		if (result < 0)
+			return (result);
 	}
 	return (1);
 }

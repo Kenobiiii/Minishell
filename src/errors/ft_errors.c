@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 12:54:12 by paromero          #+#    #+#             */
-/*   Updated: 2025/05/14 19:08:14 by paromero         ###   ########.fr       */
+/*   Updated: 2025/05/21 17:29:05 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,13 @@
 int	syntax_error(void)
 {
 	printf("Syntax error\n");
+	return (0);
+}
+
+int	fd_error(t_data *data)
+{
+	perror("minishell");
+	data->wstatus = 1;
 	return (0);
 }
 
