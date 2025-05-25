@@ -18,6 +18,7 @@
  */
 static void	exec_pipe_left(t_data *data, t_ast *node, int pipefd[2])
 {
+	setup_signals_for_child();
 	if (dup2(pipefd[1], STDOUT_FILENO) == -1)
 	{
 		perror("dup2");
@@ -36,6 +37,7 @@ static void	exec_pipe_left(t_data *data, t_ast *node, int pipefd[2])
  */
 static void	exec_pipe_right(t_data *data, t_ast *node, int pipefd[2])
 {
+	setup_signals_for_child();
 	if (dup2(pipefd[0], STDIN_FILENO) == -1)
 	{
 		perror("dup2");
@@ -98,5 +100,7 @@ void	exec_pipe(t_data *data, t_ast *node)
 
 	if (handle_process_error(pipe(pipefd), "pipe") < 0)
 		return ;
+	set_execution_mode(1); // Entrando en modo ejecución
 	handle_pipe_processes(data, node, pipefd);
+	set_execution_mode(0); // Saliendo del modo ejecución
 }

@@ -268,7 +268,10 @@ int			last_cmd_status(t_data	*data);
 
 //! signals.c //
 void		handle_sigint(int sig);
+void		handle_sigquit(int sig);
 void		setup_signals(void);
+void		set_execution_mode(int mode);
+void		setup_signals_for_child(void);
 
 //! Minishell_Function //
 int			minishell(char **env);

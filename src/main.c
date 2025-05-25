@@ -95,12 +95,20 @@ int	minishell(char **env)
 		if (g_sigint_received)
 		{
 			g_sigint_received = 0;
-			data.line = NULL;
+			data.wstatus = 130;
+			if (data.line)
+			{
+				free(data.line);
+				data.line = NULL;
+			}
 		}
 		update_pwd(&data);
 		data.line = readline(data.prompt);
 		if (data.line == NULL)
+		{
+			printf("exit\n");
 			break ;
+		}
 		if (!line_syntax(&data))
 			continue ;
 		if (is_builtins(&data, data.ast->value) == 0)

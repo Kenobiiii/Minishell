@@ -144,20 +144,35 @@ static int	read_heredoc_lines(int pipefd, char *delim)
 	char	*line;
 	int		result;
 
+	if (!delim)
+	{
+		ft_putstr_fd("error: delimiter is NULL\n", STDERR_FILENO);
+		return (-1);
+	}
+
 	while (1)
 	{
 		line = readline("> ");
-		if (!line)
+		if (!line) // Ctrl+D (EOF)
 		{
 			ft_putstr_fd("here-document delimited by EOF\n", STDERR_FILENO);
 			return (0);
 		}
-		if (strncmp(line, delim, strlen(delim)) == 0
-			&& (line[strlen(delim)] == '\0'))
+		
+		if (g_sigint_received) // Ctrl+C
+		{
+			g_sigint_received = 0;
+			free(line);
+			return (-1);
+		}
+		
+		if (strlen(line) == strlen(delim) 
+			&& strncmp(line, delim, strlen(delim)) == 0)
 		{
 			free(line);
 			break ;
 		}
+		
 		result = read_heredoc_lines_part2(pipefd, line);
 		if (result < 0)
 			return (result);
@@ -200,24 +215,57 @@ void	exec_heredoc(t_data *data, t_ast *node)
 	int		result;
 	int		original_stdin;
 
-	original_stdin = dup(STDIN_FILENO);
-	if (!node->left)
+	if (!node)
 	{
-		ft_putstr_fd("syntax error: missing delimiter for <<\n", STDERR_FILENO);
+		ft_putstr_fd("error: heredoc node is NULL\n", STDERR_FILENO);
+		data->wstatus = 1;
 		return ;
 	}
-	delim = node->left->value;
+	
+	original_stdin = dup(STDIN_FILENO);
+	
+	// Para heredoc: comando en node->left, delimitador en node->right
+	if (!node->right || !node->right->value)
+	{
+		ft_putstr_fd("syntax error: missing delimiter for <<\n", STDERR_FILENO);
+		data->wstatus = 2;
+		dup2(original_stdin, STDIN_FILENO);
+		close(original_stdin);
+		return ;
+	}
+	
+	delim = node->right->value;
+	
 	if (pipe(pipefd) < 0)
 	{
 		perror("pipe");
+		data->wstatus = 1;
+		dup2(original_stdin, STDIN_FILENO);
+		close(original_stdin);
 		return ;
 	}
+	
 	result = read_heredoc_lines(pipefd[1], delim);
 	close(pipefd[1]);
-	if (result >= 0 && dup2(pipefd[0], STDIN_FILENO) == -1)
-		perror("minishell");
+	
+	if (result >= 0)
+	{
+		if (dup2(pipefd[0], STDIN_FILENO) == -1)
+		{
+			perror("minishell: dup2");
+			data->wstatus = 1;
+		}
+		else if (node->left)
+		{
+			exec_ast(data, node->left);
+		}
+	}
+	else
+	{
+		data->wstatus = 130; // Cancelled by SIGINT
+	}
+	
 	close(pipefd[0]);
-	exec_ast(data, node->right);
 	dup2(original_stdin, STDIN_FILENO);
 	close(original_stdin);
 }

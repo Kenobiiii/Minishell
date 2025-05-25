@@ -31,7 +31,7 @@ t_ast	*ft_create_ast_node(t_type type, char *value)
 //? Verifica si el operador es un operador de redirección
 int	is_red(t_ast **last_op)
 {
-	if (*last_op && ((*last_op)->type == REDIN2 || (*last_op)->type == REDOUT2
+	if (last_op && *last_op && ((*last_op)->type == REDIN2 || (*last_op)->type == REDOUT2
 			|| (*last_op)->type == REDIRECT_IN
 			|| (*last_op)->type == REDIRECT_OUT))
 		return (1);
@@ -43,12 +43,19 @@ void	handle_redirection(t_ast **root, t_ast **cmd,
 		t_ast **last_op, t_tokens *tokens)
 {
 	t_ast	*original_cmd;
+	t_ast	*new_node;
 
 	original_cmd = *cmd;
 	if (is_redin2(last_op))
-		redin2(cmd, last_op, NULL, tokens);
+	{
+		new_node = ft_create_ast_node(CMD, tokens->value);
+		if (new_node)
+			redin2(cmd, last_op, new_node, tokens);
+	}
 	else
+	{
 		(*last_op)->right = ft_create_ast_node(CMD, tokens->value);
+	}
 	if (!(*last_op)->left && original_cmd)
 		(*last_op)->left = original_cmd;
 	if (!*root)

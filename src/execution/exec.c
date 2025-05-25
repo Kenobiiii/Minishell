@@ -14,8 +14,7 @@
 
 static void	handle_child(t_data *data, char *path, t_ast *node)
 {
-	signal(SIGINT, SIG_DFL);
-	signal(SIGQUIT, SIG_DFL);
+	setup_signals_for_child();
 	if (!path)
 		exit_minishell(data, "command not found", 127);
 	if (execve(path, node->args, (char **)list_to_array(data->env)) == -1)
@@ -31,17 +30,20 @@ void	exec_simple_cmd(t_data *data, t_ast *node)
 	pid_t	pid;
 
 	path = get_cmd_path(data, node->value);
+	set_execution_mode(1);
 	pid = fork();
 	if (pid == 0)
 		handle_child(data, path, node);
 	else if (pid > 0)
 	{
 		waitpid(pid, &data->wstatus, 0);
+		set_execution_mode(0);
 		analyse_status(data);
 		free(path);
 	}
 	else
 	{
+		set_execution_mode(0);
 		free(path);
 		exit_minishell(data, "Error in fork", EXIT_FAILURE);
 	}

@@ -15,7 +15,7 @@
 //? Verifica si el último operador es un operador de heredoc (<<)
 int	is_redin2(t_ast **last_operator)
 {
-	if (*last_operator)
+	if (last_operator && *last_operator)
 	{
 		if ((*last_operator)->type == REDIN2)
 			return (1);
@@ -27,14 +27,28 @@ int	is_redin2(t_ast **last_operator)
 void	redin2(t_ast **current_cmd, t_ast **last_operator,
 		t_ast *new_node, t_tokens *tokens)
 {
+	// Verificar que los punteros no sean NULL
+	if (!last_operator || !*last_operator || !new_node || !tokens)
+		return ;
+	
+	// Si no hay left (comando), asignar el comando
 	if (!(*last_operator)->left)
+	{
 		(*last_operator)->left = new_node;
+	}
+	// Si no hay right (delimitador), asignar el delimitador
+	else if (!(*last_operator)->right)
+	{
+		(*last_operator)->right = new_node;
+	}
 	else
 	{
-		if (*current_cmd)
+		// Si ya hay comando y delimitador, tratar como argumento adicional
+		if (current_cmd && *current_cmd)
 		{
 			ft_add_argument(*current_cmd, tokens->value);
-			free(new_node->value);
+			if (new_node->value)
+				free(new_node->value);
 			free(new_node);
 		}
 		else
@@ -42,11 +56,11 @@ void	redin2(t_ast **current_cmd, t_ast **last_operator,
 			new_node->args = malloc(sizeof(char *) * 2);
 			if (new_node->args)
 			{
-				new_node->args[0] = tokens->value;
+				new_node->args[0] = ft_strdup(tokens->value);
 				new_node->args[1] = NULL;
 			}
-			*current_cmd = new_node;
-			(*last_operator)->right = new_node;
+			if (current_cmd)
+				*current_cmd = new_node;
 		}
 	}
 }
