@@ -12,13 +12,30 @@
 
 #include "../minishell.h"
 
-
-//? Verifica el acceso a archivos para operaciones de redirección
-int	handle_file_access(t_data *data, char *filename, int type)
+//? Maneja archivos de salida y append
+static int	handle_output_file(t_data *data, char *filename, int type)
 {
 	int	fd;
 	int	flags;
 
+	if (type == REDOUT2)
+		flags = O_WRONLY | O_CREAT | O_APPEND;
+	else
+		flags = O_WRONLY | O_CREAT | O_TRUNC;
+	fd = open(filename, flags, 0644);
+	if (fd == -1)
+	{
+		data->wstatus = 1;
+		if (data->only_redirections == 1)
+			return (0);
+	}
+	close(fd);
+	return (1);
+}
+
+//? Verifica el acceso a archivos para operaciones de redirección
+int	handle_file_access(t_data *data, char *filename, int type)
+{
 	if (type == REDIRECT_IN)
 	{
 		if (access(filename, R_OK) == -1)
@@ -29,20 +46,7 @@ int	handle_file_access(t_data *data, char *filename, int type)
 		}
 	}
 	else if (type == REDIRECT_OUT || type == REDOUT2)
-	{
-		if (type == REDOUT2)
-			flags = O_WRONLY | O_CREAT | O_APPEND;
-		else
-			flags = O_WRONLY | O_CREAT | O_TRUNC;
-		fd = open(filename, flags, 0644);
-		if (fd == -1)
-		{
-			data->wstatus = 1;
-			if (data->only_redirections == 1)
-				return (0);
-		}
-		close(fd);
-	}
+		return (handle_output_file(data, filename, type));
 	return (1);
 }
 
@@ -106,8 +110,7 @@ int	handle_redirect_node(t_ast **root,
 		}
 		if (current->right && (current->type == REDIRECT_IN
 				|| current->type == REDIRECT_OUT
-				|| current->type == REDIN2
-				|| current->type == REDOUT2))
+				|| current->type == REDIN2 || current->type == REDOUT2))
 			current = current->right;
 		else
 			break ;
