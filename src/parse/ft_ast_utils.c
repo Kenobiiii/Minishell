@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 18:26:41 by paromero          #+#    #+#             */
-/*   Updated: 2025/05/14 17:54:44 by paromero         ###   ########.fr       */
+/*   Updated: 2025/05/25 17:27:13 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,42 +28,6 @@ t_ast	*ft_create_ast_node(t_type type, char *value)
 	return (node);
 }
 
-//? Verifica si el operador es un operador de redirección
-int	is_red(t_ast **last_op)
-{
-	if (last_op && *last_op && ((*last_op)->type == REDIN2 || (*last_op)->type == REDOUT2
-			|| (*last_op)->type == REDIRECT_IN
-			|| (*last_op)->type == REDIRECT_OUT))
-		return (1);
-	return (0);
-}
-
-//? Maneja la creación de nodos de redirección y su conexión con comandos
-void	handle_redirection(t_ast **root, t_ast **cmd,
-		t_ast **last_op, t_tokens *tokens)
-{
-	t_ast	*original_cmd;
-	t_ast	*new_node;
-
-	original_cmd = *cmd;
-	if (is_redin2(last_op))
-	{
-		new_node = ft_create_ast_node(CMD, tokens->value);
-		if (new_node)
-			redin2(cmd, last_op, new_node, tokens);
-	}
-	else
-	{
-		(*last_op)->right = ft_create_ast_node(CMD, tokens->value);
-	}
-	if (!(*last_op)->left && original_cmd)
-		(*last_op)->left = original_cmd;
-	if (!*root)
-		*root = *last_op;
-	*cmd = *last_op;
-	*last_op = NULL;
-}
-
 //? Conecta un nuevo operador con el nodo de comando actual 
 //? y actualiza la raíz del AST
 void	connect_operator(t_ast **root, t_ast **cmd,
@@ -71,19 +35,48 @@ void	connect_operator(t_ast **root, t_ast **cmd,
 {
 	new_op->left = *cmd;
 	if (*last_op)
-	{
 		(*last_op)->right = new_op;
-	}
+	else
+		*root = new_op;
+	*last_op = new_op;
+	if (!is_red(last_op))
+		*cmd = NULL;
+}
+
+//? Crea un nuevo nodo operador y lo conecta al AST
+void	handle_new_node(t_ast **root, t_ast **cmd,
+	t_ast **last_op, t_ast *new_op)
+{
+	if (*cmd)
+		connect_operator(root, cmd, last_op, new_op);
 	else
 	{
 		*root = new_op;
+		*last_op = new_op;
 	}
-	*last_op = new_op;
-	if (!is_red(last_op))
+}
+
+//? Inicializa las variables del AST
+void	init_ast_vars(t_ast **root, t_ast **cmd, t_ast **last_op,
+	t_ast_args *args)
+{
+	*root = NULL;
+	*cmd = NULL;
+	*last_op = NULL;
+	args->root = root;
+	args->cmd = cmd;
+	args->last_op = last_op;
+}
+
+//? Procesa un token individual
+int	process_token(t_data *data, t_ast_args *args)
+{
+	if (args->tokens->type == CMD)
 	{
-		*cmd = NULL;
+		ft_handle_command_node(args->root, args->cmd,
+			args->last_op, args->tokens);
+		return (1);
 	}
 	else
-	{
-	}
+		return (ft_handle_operator_node(data, args));
 }

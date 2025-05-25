@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 19:06:45 by paromero          #+#    #+#             */
-/*   Updated: 2025/05/25 16:42:36 by paromero         ###   ########.fr       */
+/*   Updated: 2025/05/25 17:27:13 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -171,6 +171,14 @@ void		handle_redirection(t_ast **root, t_ast **cmd,
 				t_ast **last_op, t_tokens *tokens);
 void		connect_operator(t_ast **root, t_ast **cmd,
 				t_ast **last_op, t_ast *new_op);
+void		handle_new_node(t_ast **root, t_ast **cmd,
+				t_ast **last_op, t_ast *new_op);
+void		init_ast_vars(t_ast **root, t_ast **cmd, t_ast **last_op,
+				t_ast_args *args);
+void		ft_handle_command_node(t_ast **root, t_ast **cmd,
+				t_ast **last_op, t_tokens *tokens);
+int			process_token(t_data *data, t_ast_args *args);
+int			ft_handle_operator_node(t_data *data, t_ast_args *args);
 int			is_red(t_ast **last_op);
 
 //! ft_ast_redirects.c //
@@ -178,6 +186,12 @@ int			handle_file_access(t_data *data, char *filename, int type);
 int			handle_redirect_checks(t_data *data, t_tokens *tokens);
 int			handle_redirect_update(t_ast *current, t_tokens *tokens);
 int			handle_redirect_node(t_ast **root, t_ast **last_op, t_tokens *tokens);
+
+//! ft_ast_red_utils.c //
+int			is_redirect_token(t_tokens *tokens);
+int			handle_redirect_operator(t_ast_args *args);
+void		handle_redirection(t_ast **root, t_ast **cmd,
+				t_ast **last_op, t_tokens *tokens);
 
 //! ft_ast_arg.c //
 void		ft_add_argument(t_ast *cmd_node, char *arg);

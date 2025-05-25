@@ -23,6 +23,7 @@ SRCS = src/main.c \
 		src/parse/ft_ast_utils.c \
 		src/parse/ft_ast_arg.c \
 		src/parse/ft_ast_redirects.c \
+		src/parse/ft_ast_red_utils.c \
 		src/errors/ft_errors.c \
 		src/parse/ft_redin2_cases.c \
 		src/parse/ft_free_parse.c \

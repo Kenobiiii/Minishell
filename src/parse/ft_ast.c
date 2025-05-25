@@ -6,14 +6,14 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 17:26:30 by paromero          #+#    #+#             */
-/*   Updated: 2025/05/14 17:54:44 by paromero         ###   ########.fr       */
+/*   Updated: 2025/05/25 17:27:13 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
 //? Crea un nuevo nodo de comando y lo conecta al AST si es necesario
-static void	handle_new_command(t_ast **root, t_ast **cmd,
+static	void	handle_new_command(t_ast **root, t_ast **cmd,
 		t_ast **last_op, t_tokens *tokens)
 {
 	t_ast	*new_cmd;
@@ -62,40 +62,15 @@ void	ft_handle_command_node(t_ast **root, t_ast **cmd,
 		handle_new_command(root, cmd, last_op, tokens);
 }
 
-//? Crea un nuevo nodo operador y lo conecta al AST
-static void	handle_new_node(t_ast **root, t_ast **cmd,
-	t_ast **last_op, t_ast *new_op)
-{
-	if (*cmd)
-		connect_operator(root, cmd, last_op, new_op);
-	else
-	{
-		*root = new_op;
-		*last_op = new_op;
-	}
-}
-
 //? Procesa un token operador (pipe, redirección, &&, ||) y lo añade al AST
-static int	ft_handle_operator_node(t_data *data, t_ast_args *args)
+int	ft_handle_operator_node(t_data *data, t_ast_args *args)
 {
 	t_ast	*new_op;
-	int		found_same_redir;
 
 	if (!handle_redirect_checks(data, args->tokens))
 		return (0);
-	if (args->tokens->type == REDIRECT_IN || args->tokens->type == REDIRECT_OUT
-		|| args->tokens->type == REDIN2 || args->tokens->type == REDOUT2)
-	{
-		found_same_redir = handle_redirect_node(args->root,
-				args->last_op, args->tokens);
-		if (!found_same_redir)
-		{
-			new_op = ft_create_ast_node(args->tokens->type, args->tokens->value);
-			if (!new_op)
-				return (0);
-			handle_new_node(args->root, args->cmd, args->last_op, new_op);
-		}
-	}
+	if (is_redirect_token(args->tokens))
+		return (handle_redirect_operator(args));
 	else
 	{
 		new_op = ft_create_ast_node(args->tokens->type, args->tokens->value);
@@ -116,22 +91,12 @@ t_ast	*ft_build_ast(t_data *data, t_tokens *tokens)
 	t_ast_args	args;
 
 	parse_success = 1;
-	root = NULL;
-	cmd = NULL;
-	last_op = NULL;
-	args.root = &root;
-	args.cmd = &cmd;
-	args.last_op = &last_op;
+	init_ast_vars(&root, &cmd, &last_op, &args);
 	args.tokens = tokens;
 	while (tokens && parse_success)
 	{
-		if (tokens->type == CMD)
-			ft_handle_command_node(&root, &cmd, &last_op, tokens);
-		else
-		{
-			args.tokens = tokens;
-			parse_success = ft_handle_operator_node(data, &args);
-		}
+		args.tokens = tokens;
+		parse_success = process_token(data, &args);
 		if (parse_success)
 			tokens = tokens->next;
 	}

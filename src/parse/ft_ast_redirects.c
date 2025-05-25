@@ -6,11 +6,12 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 16:30:00 by paromero          #+#    #+#             */
-/*   Updated: 2025/05/14 19:02:26 by paromero         ###   ########.fr       */
+/*   Updated: 2025/05/25 17:13:40 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
 
 //? Verifica el acceso a archivos para operaciones de redirección
 int	handle_file_access(t_data *data, char *filename, int type)
