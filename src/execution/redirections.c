@@ -153,50 +153,56 @@ static int	read_heredoc_lines(int pipefd, char *delim)
 		return (-1);
 	}
 
-	// Heredoc se considera como parte de la ejecución de un comando.
-	// g_shell_state ya debería estar en STATE_EXECUTING_COMMAND 
-	// (establecido en main.c antes de llamar a exec_heredoc).
-
 	while (1)
 	{
-		// Verificar si SIGINT fue recibido durante la ejecución (heredoc)
-		// El manejador habrá puesto g_shell_state = STATE_SIGINT_RECEIVED_IN_EXECUTION
-		if (g_shell_state == STATE_SIGINT_RECEIVED_IN_EXECUTION)
+		// Si SIGINT ocurrió ANTES de llamar a readline (por ejemplo, procesando la línea anterior)
+		if (g_shell_state == STATE_EXECUTION_INTERRUPTED)
 		{
-			// No necesitamos resetear g_shell_state aquí, main.c lo hará.
-			return (-1); // Indicar interrupción
+			// No cambiar a HEREDOC_INTERRUPTED aquí, porque readline no ha sido llamado aún
+			// y el handler ya puso el estado correcto para una interrupción de ejecución general.
+			return (-1); 
 		}
 
 		line = readline("> ");
 		
-		// Volver a verificar después de que readline retorne, por si SIGINT ocurrió
-		// exactamente durante la llamada a readline. El handler lo habrá manejado.
-		if (g_shell_state == STATE_SIGINT_RECEIVED_IN_EXECUTION)
+		// CASO 1: readline fue interrumpido por SIGINT (devuelve NULL) O Ctrl+D (devuelve NULL)
+		if (!line)
 		{
-			if (line) free(line);
-			return (-1);
+			if (g_shell_state == STATE_EXECUTION_INTERRUPTED) // Fue SIGINT quien interrumpió readline
+			{
+				g_shell_state = STATE_HEREDOC_INTERRUPTED; // Cambiamos al estado específico
+				return (-1); // Interrupción por SIGINT en heredoc
+			}
+			else // Fue Ctrl+D (EOF)
+			{
+				ft_putstr_fd("minishell: warning: here-document delimited by end-of-file (wanted `", STDERR_FILENO);
+				ft_putstr_fd(delim, STDERR_FILENO);
+				ft_putstr_fd("`)\n", STDERR_FILENO);
+				return (0); // EOF, no es una interrupción SIGINT
+			}
 		}
 
-		if (!line) // Ctrl+D (EOF)
+		// CASO 2: SIGINT ocurrió MIENTRAS readline estaba activo, pero readline NO devolvió NULL (menos común)
+		// o si la señal se procesó justo después de que readline retornara con una línea válida.
+		if (g_shell_state == STATE_EXECUTION_INTERRUPTED)
 		{
-			ft_putstr_fd("here-document delimited by EOF (wanted '\''", STDERR_FILENO);
-			ft_putstr_fd(delim, STDERR_FILENO);
-			ft_putstr_fd("\'')\n", STDERR_FILENO);
-			return (0); // O un código de error si EOF no es aceptable aquí
+			g_shell_state = STATE_HEREDOC_INTERRUPTED; // Cambiamos al estado específico
+			free(line);
+			return (-1);
 		}
 		
 		if (strlen(line) == strlen(delim) 
 			&& strncmp(line, delim, strlen(delim)) == 0)
 		{
 			free(line);
-			break ;
+			break ; // Delimitador encontrado
 		}
 		
-		result = read_heredoc_lines_part2(pipefd, line);
-		if (result < 0)
+		result = read_heredoc_lines_part2(pipefd, line); // line es liberado dentro de part2
+		if (result < 0) // Error de escritura
 			return (result);
 	}
-	return (1);
+	return (1); // Éxito, delimitador encontrado y todo escrito
 }
 
 void	exec_redirect_in(t_data *data, t_ast *node)

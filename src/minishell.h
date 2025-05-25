@@ -41,6 +41,7 @@
 #define STATE_PROMPT_INTERRUPTED 1       // SIGINT en prompt/readline
 #define STATE_EXECUTING 2                // Comando ejecutándose
 #define STATE_EXECUTION_INTERRUPTED 3    // SIGINT durante ejecución
+#define STATE_HEREDOC_INTERRUPTED 4      // SIGINT en heredoc
 
 // Declaración de la única variable global para el estado de señales
 // Esta se definirá en main.c

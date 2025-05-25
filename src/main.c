@@ -110,7 +110,7 @@ int	minishell(char **env)
 			data.wstatus = 130;
 			if (data.line) { free(data.line); data.line = NULL; }
 			g_shell_state = STATE_PROMPT_NORMAL; 
-			continue; // <<<< IMPORTANTE: Evitar la siguiente llamada a readline en esta iteración
+			continue;
 		}
 		else if (g_shell_state == STATE_EXECUTING) // Comando terminó normalmente
 		{
