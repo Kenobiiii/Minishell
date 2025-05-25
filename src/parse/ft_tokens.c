@@ -31,6 +31,26 @@ int	ft_types(char	*value)
 	return (CMD);
 }
 
+//? Procesa un token individual en el bucle
+static int	process_single_token(t_data *data, t_tokens **current,
+		char **token_array, int i)
+{
+	int	type;
+
+	type = ft_types(token_array[i - 1]);
+	(*current)->type = type;
+	if (type == PIPE || type == AND || type == OR)
+		data->only_redirections = 0;
+	(*current)->next = ft_new_token(token_array[i]);
+	if (!(*current)->next)
+	{
+		ft_free_error_token(data, token_array);
+		return (0);
+	}
+	*current = (*current)->next;
+	return (1);
+}
+
 int	ft_tokens(t_data *data, char *str)
 {
 	t_tokens	*current;
@@ -47,17 +67,8 @@ int	ft_tokens(t_data *data, char *str)
 	i = 1;
 	while (token_array[i])
 	{
-		type = ft_types(token_array[i - 1]);
-		current->type = type;
-		if (type == PIPE || type == AND || type == OR)
-			data->only_redirections = 0;
-		current->next = ft_new_token(token_array[i]);
-		if (!current->next)
-		{
-			ft_free_error_token(data, token_array);
+		if (!process_single_token(data, &current, token_array, i))
 			return (0);
-		}
-		current = current->next;
 		i++;
 	}
 	type = ft_types(token_array[i - 1]);
