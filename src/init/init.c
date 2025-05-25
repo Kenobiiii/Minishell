@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 17:53:02 by paromero          #+#    #+#             */
-/*   Updated: 2025/05/06 18:36:06 by paromero         ###   ########.fr       */
+/*   Updated: 2025/05/25 16:42:49 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,11 +114,7 @@ int	init_data(t_data *data, char **env)
 	else
 	{
 		if (!init_env(data, env))
-		{
-			printf("Error initializing env");
-			free(data->env);
-			return (0);
-		}
+			env_error(data);
 		increment_shlvl(data->env);
 	}
 	return (1);

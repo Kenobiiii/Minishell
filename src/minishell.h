@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 19:06:45 by paromero          #+#    #+#             */
-/*   Updated: 2025/05/21 17:29:26 by paromero         ###   ########.fr       */
+/*   Updated: 2025/05/25 16:42:36 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -193,7 +193,7 @@ void		redin2(t_ast **current_cmd, t_ast **last_operator,
 //! ft_errors.c //
 int			fd_error(t_data *data);
 int			syntax_error(void);
-//int			handle_process_error(int value, const char *msg);
+int			env_error(t_data *data);
 char		*handle_invalid_cmd_path(char **cmd_path, char *total_cmd);
 void		exit_minishell(t_data *data, const char *error_message,
 				int exit_code);

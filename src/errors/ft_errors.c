@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 12:54:12 by paromero          #+#    #+#             */
-/*   Updated: 2025/05/21 17:29:05 by paromero         ###   ########.fr       */
+/*   Updated: 2025/05/25 16:41:57 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,13 @@ char	*handle_invalid_cmd_path(char **cmd_path, char *total_cmd)
 {
 	free_cmd_path(cmd_path, total_cmd);
 	return (NULL);
+}
+
+int	env_error(t_data *data)
+{
+	printf("Error initializing env");
+	free(data->env);
+	return (0);
 }
 
 void	exit_minishell(t_data *data, const char *error_message, int exit_code)
