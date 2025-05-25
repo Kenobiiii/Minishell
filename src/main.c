@@ -77,7 +77,7 @@ int	line_syntax(t_data	*data)
 		return (free_while(data));
 	}
 	if (!handle_invslash_pcomma(data->line))
-		return (free_while(0));
+		return (free_while(data));
 	ft_tokens(data, data->line);
 	data->ast = ft_build_ast(data, data->tokens);
 	if (data->ast == NULL)
