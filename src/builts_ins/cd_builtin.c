@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 12:32:49 by anggalle          #+#    #+#             */
-/*   Updated: 2025/05/25 21:27:57 by paromero         ###   ########.fr       */
+/*   Updated: 2025/05/25 21:36:51 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int	cd_builtin(t_data *data)
 	{
 		home_dir = getenv("HOME");
 		if (home_dir == NULL)
-			return (home_error);
+			return (home_error());
 		if (chdir(home_dir) == -1)
 		{
 			printf("Can't get to the home directory.\n");
