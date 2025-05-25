@@ -12,6 +12,9 @@
 
 #include "../minishell.h"
 
+// Necesitamos g_shell_state para el manejo de SIGINT en heredoc
+extern volatile sig_atomic_t g_shell_state;
+
 // Encuentra el comando real detrás de las redirecciones
 static t_ast	*find_cmd_node(t_ast *node)
 {
@@ -150,20 +153,36 @@ static int	read_heredoc_lines(int pipefd, char *delim)
 		return (-1);
 	}
 
+	// Heredoc se considera como parte de la ejecución de un comando.
+	// g_shell_state ya debería estar en STATE_EXECUTING_COMMAND 
+	// (establecido en main.c antes de llamar a exec_heredoc).
+
 	while (1)
 	{
+		// Verificar si SIGINT fue recibido durante la ejecución (heredoc)
+		// El manejador habrá puesto g_shell_state = STATE_SIGINT_RECEIVED_IN_EXECUTION
+		if (g_shell_state == STATE_SIGINT_RECEIVED_IN_EXECUTION)
+		{
+			// No necesitamos resetear g_shell_state aquí, main.c lo hará.
+			return (-1); // Indicar interrupción
+		}
+
 		line = readline("> ");
+		
+		// Volver a verificar después de que readline retorne, por si SIGINT ocurrió
+		// exactamente durante la llamada a readline. El handler lo habrá manejado.
+		if (g_shell_state == STATE_SIGINT_RECEIVED_IN_EXECUTION)
+		{
+			if (line) free(line);
+			return (-1);
+		}
+
 		if (!line) // Ctrl+D (EOF)
 		{
-			ft_putstr_fd("here-document delimited by EOF\n", STDERR_FILENO);
-			return (0);
-		}
-		
-		if (g_sigint_received) // Ctrl+C
-		{
-			g_sigint_received = 0;
-			free(line);
-			return (-1);
+			ft_putstr_fd("here-document delimited by EOF (wanted '\''", STDERR_FILENO);
+			ft_putstr_fd(delim, STDERR_FILENO);
+			ft_putstr_fd("\'')\n", STDERR_FILENO);
+			return (0); // O un código de error si EOF no es aceptable aquí
 		}
 		
 		if (strlen(line) == strlen(delim) 
@@ -224,7 +243,6 @@ void	exec_heredoc(t_data *data, t_ast *node)
 	
 	original_stdin = dup(STDIN_FILENO);
 	
-	// Para heredoc: comando en node->left, delimitador en node->right
 	if (!node->right || !node->right->value)
 	{
 		ft_putstr_fd("syntax error: missing delimiter for <<\n", STDERR_FILENO);
@@ -245,10 +263,22 @@ void	exec_heredoc(t_data *data, t_ast *node)
 		return ;
 	}
 	
+	// g_shell_state es STATE_EXECUTING_COMMAND aquí, establecido por main.c
 	result = read_heredoc_lines(pipefd[1], delim);
 	close(pipefd[1]);
 	
-	if (result >= 0)
+	// Si read_heredoc_lines retornó -1, g_shell_state es STATE_SIGINT_RECEIVED_IN_EXECUTION
+	if (result == -1) // Interrumpido por SIGINT
+	{
+		data->wstatus = 130; // Cancelled by SIGINT
+		// main.c se encargará de resetear g_shell_state y redibujar el prompt.
+	}
+	else if (result == 0) // EOF (Ctrl+D)
+	{
+		// Manejar EOF como sea apropiado, quizás un error o continuar sin entrada.
+		// data->wstatus podría necesitar ajustarse.
+	}
+	else // result == 1 (éxito)
 	{
 		if (dup2(pipefd[0], STDIN_FILENO) == -1)
 		{
@@ -260,12 +290,10 @@ void	exec_heredoc(t_data *data, t_ast *node)
 			exec_ast(data, node->left);
 		}
 	}
-	else
-	{
-		data->wstatus = 130; // Cancelled by SIGINT
-	}
 	
 	close(pipefd[0]);
 	dup2(original_stdin, STDIN_FILENO);
 	close(original_stdin);
+	// Al salir de aquí, main.c eventualmente reseteará g_shell_state a STATE_PROMPT_NORMAL
+	// o manejará STATE_SIGINT_RECEIVED_IN_EXECUTION.
 }

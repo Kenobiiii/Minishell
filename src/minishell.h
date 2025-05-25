@@ -36,6 +36,16 @@
 # define ANSI_COLOR_RESET "\e[0m"
 # define ANSI_COLOR_BLUE "\e[1;34m"
 
+// Estados para la variable global g_shell_state
+#define STATE_PROMPT_NORMAL 0
+#define STATE_PROMPT_INTERRUPTED 1       // SIGINT en prompt/readline
+#define STATE_EXECUTING 2                // Comando ejecutándose
+#define STATE_EXECUTION_INTERRUPTED 3    // SIGINT durante ejecución
+
+// Declaración de la única variable global para el estado de señales
+// Esta se definirá en main.c
+// extern volatile sig_atomic_t g_shell_state;
+
 typedef enum e_type
 {
 	CMD,
@@ -270,7 +280,6 @@ int			last_cmd_status(t_data	*data);
 void		handle_sigint(int sig);
 void		handle_sigquit(int sig);
 void		setup_signals(void);
-void		set_execution_mode(int mode);
 void		setup_signals_for_child(void);
 
 //! Minishell_Function //

@@ -12,7 +12,8 @@
 
 #include "minishell.h"
 
-sig_atomic_t	g_sigint_received = 0;
+// Definición de la ÚNICA variable global para el estado de las señales
+volatile sig_atomic_t g_shell_state = STATE_PROMPT_NORMAL;
 
 static	int	is_only_empty_var(char *line)
 {
@@ -90,31 +91,70 @@ int	minishell(char **env)
 
 	init_data(&data, env);
 	setup_signals();
+
 	while (data.exit == 0)
 	{
-		if (g_sigint_received)
+		if (g_shell_state == STATE_PROMPT_INTERRUPTED)
 		{
-			g_sigint_received = 0;
 			data.wstatus = 130;
-			if (data.line)
-			{
-				free(data.line);
-				data.line = NULL;
-			}
+			// El manejador de señales ya hizo rl_redisplay()
+			if (data.line) { free(data.line); data.line = NULL; }
+			g_shell_state = STATE_PROMPT_NORMAL; 
+			// No necesitamos continue aquí si readline fue interrumpido y devolvió NULL,
+			// el siguiente chequeo (data.line == NULL && g_shell_state == STATE_PROMPT_INTERRUPTED) lo hará.
+			// Si readline no devolvió NULL pero el estado es PROMPT_INTERRUPTED (raro), 
+			// el prompt ya fue redibujado por el handler.
 		}
+		else if (g_shell_state == STATE_EXECUTION_INTERRUPTED)
+		{
+			data.wstatus = 130;
+			if (data.line) { free(data.line); data.line = NULL; }
+			g_shell_state = STATE_PROMPT_NORMAL; 
+			continue; // <<<< IMPORTANTE: Evitar la siguiente llamada a readline en esta iteración
+		}
+		else if (g_shell_state == STATE_EXECUTING) // Comando terminó normalmente
+		{
+			g_shell_state = STATE_PROMPT_NORMAL;
+		}
+
+		// Asegurar que el estado es PROMPT_NORMAL antes de readline, si no fue manejado arriba.
+		if(g_shell_state != STATE_PROMPT_NORMAL) {
+		    g_shell_state = STATE_PROMPT_NORMAL;
+		}
+
 		update_pwd(&data);
 		data.line = readline(data.prompt);
-		if (data.line == NULL)
+
+		// Si readline fue interrumpido (y devolvió NULL), g_shell_state es STATE_PROMPT_INTERRUPTED.
+		// El manejador ya redibujó el prompt. Solo necesitamos saltar esta iteración.
+		if (data.line == NULL && g_shell_state == STATE_PROMPT_INTERRUPTED) 
+		{
+			continue; 
+		}
+
+		if (data.line == NULL) // Ctrl+D normal
 		{
 			printf("exit\n");
 			break ;
 		}
-		if (!line_syntax(&data))
-			continue ;
-		if (is_builtins(&data, data.ast->value) == 0)
-			exec_func(&data);
-		free_while(&data);
-		continue ;
+
+		if (data.line && *data.line)
+		{
+			if (!line_syntax(&data))
+			{
+				free_while(&data);
+				continue ;
+			}
+			
+			g_shell_state = STATE_EXECUTING;
+			if (is_builtins(&data, data.ast->value) == 0)
+				exec_func(&data);
+		}
+		else if (data.line && !*data.line) 
+        {
+        }
+
+		free_while(&data); 
 	}
 	free_minishell(&data);
 	return (0);

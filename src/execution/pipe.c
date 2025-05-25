@@ -100,7 +100,5 @@ void	exec_pipe(t_data *data, t_ast *node)
 
 	if (handle_process_error(pipe(pipefd), "pipe") < 0)
 		return ;
-	set_execution_mode(1); // Entrando en modo ejecución
 	handle_pipe_processes(data, node, pipefd);
-	set_execution_mode(0); // Saliendo del modo ejecución
 }
