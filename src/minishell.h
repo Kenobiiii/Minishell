@@ -299,6 +299,15 @@ void		setup_signals_for_child(void);
 
 //! Minishell_Function //
 int			minishell(char **env);
+int			line_syntax(t_data *data);
+
+//! main_utils.c //
+int			handle_signal_states(t_data *data);
+int			handle_readline_result(t_data *data);
+void		process_command_line(t_data *data);
+
+//! main_checks.c //
+int			check_line_errors(t_data *data);
 
 #endif
 /**

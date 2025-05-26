@@ -13,7 +13,7 @@
 #include "minishell.h"
 
 // Definición de la ÚNICA variable global para el estado de las señales
-volatile sig_atomic_t g_shell_state = STATE_PROMPT_NORMAL;
+volatile sig_atomic_t	g_shell_state = STATE_PROMPT_NORMAL;
 
 static	int	is_only_empty_var(char *line)
 {
@@ -62,22 +62,8 @@ int	line_syntax(t_data	*data)
 	if (is_empty_var_with_cmd(data, data->line))
 	{
 	}
-	if (!ft_isspace(data->line))
-		return (free_while(data));
-	if (!check_syntax(data->line))
-	{
-		ft_putstr_fd("minishell: syntax error\n", 2);
-		data->wstatus = 2;
-		return (free_while(data));
-	}
-	if (!openquotes(data->line))
-	{
-		perror("command not found");
-		data->wstatus = 127;
-		return (free_while(data));
-	}
-	if (!handle_invslash_pcomma(data->line))
-		return (free_while(0));
+	if (!check_line_errors(data))
+		return (0);
 	ft_tokens(data, data->line);
 	data->ast = ft_build_ast(data, data->tokens);
 	if (data->ast == NULL)
@@ -88,73 +74,23 @@ int	line_syntax(t_data	*data)
 int	minishell(char **env)
 {
 	t_data	data;
+	int		result;
 
 	init_data(&data, env);
 	setup_signals();
-
 	while (data.exit == 0)
 	{
-		if (g_shell_state == STATE_PROMPT_INTERRUPTED)
-		{
-			data.wstatus = 130;
-			// El manejador de señales ya hizo rl_redisplay()
-			if (data.line) { free(data.line); data.line = NULL; }
-			g_shell_state = STATE_PROMPT_NORMAL; 
-			// No necesitamos continue aquí si readline fue interrumpido y devolvió NULL,
-			// el siguiente chequeo (data.line == NULL && g_shell_state == STATE_PROMPT_INTERRUPTED) lo hará.
-			// Si readline no devolvió NULL pero el estado es PROMPT_INTERRUPTED (raro), 
-			// el prompt ya fue redibujado por el handler.
-		}
-		else if (g_shell_state == STATE_EXECUTION_INTERRUPTED)
-		{
-			data.wstatus = 130;
-			if (data.line) { free(data.line); data.line = NULL; }
-			g_shell_state = STATE_PROMPT_NORMAL; 
-			continue;
-		}
-		else if (g_shell_state == STATE_EXECUTING) // Comando terminó normalmente
-		{
-			g_shell_state = STATE_PROMPT_NORMAL;
-		}
-
-		// Asegurar que el estado es PROMPT_NORMAL antes de readline, si no fue manejado arriba.
-		if(g_shell_state != STATE_PROMPT_NORMAL) {
-		    g_shell_state = STATE_PROMPT_NORMAL;
-		}
-
+		if (handle_signal_states(&data))
+			continue ;
 		update_pwd(&data);
 		data.line = readline(data.prompt);
-
-		// Si readline fue interrumpido (y devolvió NULL), g_shell_state es STATE_PROMPT_INTERRUPTED.
-		// El manejador ya redibujó el prompt. Solo necesitamos saltar esta iteración.
-		if (data.line == NULL && g_shell_state == STATE_PROMPT_INTERRUPTED) 
-		{
-			continue; 
-		}
-
-		if (data.line == NULL) // Ctrl+D normal
-		{
-			printf("exit\n");
+		result = handle_readline_result(&data);
+		if (result == -1)
 			break ;
-		}
-
-		if (data.line && *data.line)
-		{
-			if (!line_syntax(&data))
-			{
-				free_while(&data);
-				continue ;
-			}
-			
-			g_shell_state = STATE_EXECUTING;
-			if (is_builtins(&data, data.ast->value) == 0)
-				exec_func(&data);
-		}
-		else if (data.line && !*data.line) 
-        {
-        }
-
-		free_while(&data); 
+		if (result == 0)
+			continue ;
+		process_command_line(&data);
+		free_while(&data);
 	}
 	free_minishell(&data);
 	return (0);

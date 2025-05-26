@@ -7,6 +7,8 @@ CFLAGS = -Wall -Werror -Wextra
 USER = paromero
 OBJ_DIR = objs
 SRCS = src/main.c \
+		src/main_utils.c \
+		src/main_checks.c \
 		src/init/init.c \
 		src/parse/ft_check_syntax.c \
 		src/parse/ft_line_utils.c \
