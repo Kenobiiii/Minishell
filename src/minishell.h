@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 19:06:45 by paromero          #+#    #+#             */
-/*   Updated: 2025/05/25 17:27:13 by paromero         ###   ########.fr       */
+/*   Updated: 2025/05/26 22:31:28 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,11 +37,11 @@
 # define ANSI_COLOR_BLUE "\e[1;34m"
 
 // Estados para la variable global g_shell_state
-#define STATE_PROMPT_NORMAL 0
-#define STATE_PROMPT_INTERRUPTED 1       // SIGINT en prompt/readline
-#define STATE_EXECUTING 2                // Comando ejecutándose
-#define STATE_EXECUTION_INTERRUPTED 3    // SIGINT durante ejecución
-#define STATE_HEREDOC_INTERRUPTED 4      // SIGINT en heredoc
+# define STATE_PROMPT_NORMAL 0
+# define STATE_PROMPT_INTERRUPTED 1       // SIGINT en prompt/readline
+# define STATE_EXECUTING 2                // Comando ejecutándose
+# define STATE_EXECUTION_INTERRUPTED 3    // SIGINT durante ejecución
+# define STATE_HEREDOC_INTERRUPTED 4      // SIGINT en heredoc
 
 // Declaración de la única variable global para el estado de señales
 // Esta se definirá en main.c
@@ -77,9 +77,9 @@ typedef struct s_tokens
 
 typedef struct s_ast_args
 {
-	t_ast	**root;
-	t_ast	**cmd;
-	t_ast	**last_op;
+	t_ast		**root;
+	t_ast		**cmd;
+	t_ast		**last_op;
 	t_tokens	*tokens;
 }	t_ast_args;
 
@@ -185,7 +185,8 @@ int			is_red(t_ast **last_op);
 int			handle_file_access(t_data *data, char *filename, int type);
 int			handle_redirect_checks(t_data *data, t_tokens *tokens);
 int			handle_redirect_update(t_ast *current, t_tokens *tokens);
-int			handle_redirect_node(t_ast **root, t_ast **last_op, t_tokens *tokens);
+int			handle_redirect_node(t_ast **root, t_ast **last_op,
+				t_tokens *tokens);
 
 //! ft_ast_red_utils.c //
 int			is_redirect_token(t_tokens *tokens);
