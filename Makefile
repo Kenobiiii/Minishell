@@ -36,6 +36,9 @@ SRCS = src/main.c \
 		src/execution/signals.c \
 		src/execution/pipe.c \
 		src/execution/redirections.c \
+		src/execution/redirect_utils.c \
+		src/execution/heredoc.c \
+		src/execution/heredoc_utils.c \
 		src/builts_ins/echo_builtin.c \
 		src/builts_ins/builtin.c \
 		src/builts_ins/pwd_builtin.c \
