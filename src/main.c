@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 17:54:48 by paromero          #+#    #+#             */
-/*   Updated: 2025/05/27 17:32:38 by paromero         ###   ########.fr       */
+/*   Updated: 2025/05/27 19:26:06 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,42 +14,6 @@
 
 // Definición de la ÚNICA variable global para el estado de las señales
 volatile sig_atomic_t	g_shell_state = STATE_PROMPT_NORMAL;
-
-static	int	is_only_empty_var(char *line)
-{
-	while (*line && (*line == ' ' || *line == '\t'))
-		line++;
-	if (ft_strncmp(line, "$EMPTY", 6) == 0)
-	{
-		line += 6;
-		while (*line)
-		{
-			if (*line != ' ' && *line != '\t')
-				return (0);
-			line++;
-		}
-		return (1);
-	}
-	return (0);
-}
-
-static	int	is_empty_var_with_cmd(t_data *data, char *line)
-{
-	char	*temp;
-
-	while (*line && (*line == ' ' || *line == '\t'))
-		line++;
-	if (ft_strncmp(line, "$EMPTY", 6) == 0 && line[6] == ' ')
-	{
-		temp = ft_strdup(line + 7);
-		if (!temp)
-			return (0);
-		free(data->line);
-		data->line = temp;
-		return (1);
-	}
-	return (0);
-}
 
 int	minishell(char **env)
 {

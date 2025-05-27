@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 17:29:43 by paromero          #+#    #+#             */
-/*   Updated: 2025/04/09 17:33:54 by paromero         ###   ########.fr       */
+/*   Updated: 2025/05/27 19:26:06 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,8 @@ static int	check_start_pipe(char *line)
 	return (1);
 }
 
-static void	handle_quotes(char *line, int *i, int *in_quote, char *quote_type)
+static void	handle_syntax_quotes(char *line, int *i, int *in_quote,
+	char *quote_type)
 {
 	if ((line[*i] == '\'' || line[*i] == '"') && !*in_quote)
 	{
@@ -73,7 +74,7 @@ int	check_syntax(char *line)
 		return (0);
 	while (line[i])
 	{
-		handle_quotes(line, &i, &in_quote, &quote_type);
+		handle_syntax_quotes(line, &i, &in_quote, &quote_type);
 		if (!in_quote)
 		{
 			if (line[i] == '|' && !check_pipe_syntax(line, &i))

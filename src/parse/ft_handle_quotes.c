@@ -3,77 +3,29 @@
 /*                                                        :::      ::::::::   */
 /*   ft_handle_quotes.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anggalle <anggalle@student.42.fr>          +#+  +:+       +#+        */
+/*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 12:33:32 by paromero          #+#    #+#             */
-/*   Updated: 2025/03/26 18:45:55 by anggalle         ###   ########.fr       */
+/*   Updated: 2025/05/27 19:26:06 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-int	ft_quotelen(char	*line, char quote)
-{
-	int	i;
-	int	count;
-
-	i = 0;
-	count = 0;
-	if (line[i] == quote)
-		i++;
-	while (line[i] && line[i] != quote)
-	{
-		count++;
-		i++;
-	}
-	return (count);
-}
-
 char	*ft_handle_single(char	*line)
 {
-	char	*new_line;
-	int		i;
-	int		j;
-
-	j = 0;
-	i = 0;
-	new_line = (char *)malloc(sizeof(char) * (ft_strlen(line) + 1));
-	if (!new_line)
-		return (0);
-	while (line[i])
-	{
-		if (line[i] != '\'')
-			new_line[j++] = line[i];
-		i++;
-	}
-	new_line[j] = '\0';
-	return (new_line);
+	return (ft_handle_quote(line, '\''));
 }
 
 char	*ft_handle_double(char	*line)
 {
-	char	*new_line;
-	int		i;
-	int		j;
-
-	j = 0;
-	i = 0;
-	new_line = (char *)malloc(sizeof(char) * (ft_strlen(line) + 1));
-	if (!new_line)
-		return (0);
-	while (line[i])
-	{
-		if (line[i] != '"')
-			new_line[j++] = line[i];
-		i++;
-	}
-	new_line[j] = '\0';
-	return (new_line);
+	return (ft_handle_quote(line, '"'));
 }
 
 int	handle_quotes(t_data *data, char **matrix, int count_x, int count_y)
 {
 	char	*new_line;
+	char	*temp;
 
 	if (matrix[count_x][count_y] == '\'')
 	{
@@ -86,8 +38,9 @@ int	handle_quotes(t_data *data, char **matrix, int count_x, int count_y)
 	else if (matrix[count_x][count_y] == '"')
 	{
 		new_line = ft_handle_double(matrix[count_x]);
-		new_line = ft_handledollar(data, new_line);
-		new_line = ft_mask_operator(new_line);
+		temp = ft_handledollar(data, new_line);
+		free(new_line);
+		new_line = ft_mask_operator(temp);
 		free(matrix[count_x]);
 		matrix[count_x] = new_line;
 		return (1);

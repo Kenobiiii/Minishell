@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 19:06:45 by paromero          #+#    #+#             */
-/*   Updated: 2025/05/26 22:31:28 by paromero         ###   ########.fr       */
+/*   Updated: 2025/05/27 19:26:06 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,19 +140,26 @@ char		**ft_quotesplit(char const *s, char c,	t_data	*data);
 //! ft_quotesplit_utils.c //
 void		process_quotes(const char *s, size_t *i, char *quote);
 void		handle_special_operators(const char *s, size_t *i);
+int			is_double_operator(const char *s, size_t i);
 
 //! ft_handle_quotes.c //
 void		ft_handle_quotes(t_data	*data, char	**matrix);
+
+//! ft_handle_quotes_utils.c //
+char		*ft_handle_quote(char *line, char quote_char);
+int			ft_quotelen(char	*line, char quote);
 
 //! ft_handle_dollar.c //
 char		*ft_handledollar(t_data *data, char *line);
 
 //! ft_handle_dollar_utils.c //
 char		*get_env_value(t_data *data, const char *name);
+int			get_var_name_len(const char *str, int start);
+char		*extract_var(const char *line, int *i);
+void		handle_exit_status(t_data *data, char *result, int *j);
 
 //! parse_path //
 void		free_cmd_path(char	**matrix,	char	*cmd);
-char		*find_path_in_env(t_data *data);
 char		*find_variable_in_env(t_data *data, char *var);
 char		*get_cmd_path(t_data *data, char *cmd);
 
@@ -322,6 +329,8 @@ int			line_syntax(t_data *data);
 int			handle_signal_states(t_data *data);
 int			handle_readline_result(t_data *data);
 void		process_command_line(t_data *data);
+int			is_only_empty_var(char *line);
+int			is_empty_var_with_cmd(t_data *data, char *line);
 
 //! main_checks.c //
 int			check_line_errors(t_data *data);

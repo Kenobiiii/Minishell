@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 18:47:59 by paromero          #+#    #+#             */
-/*   Updated: 2025/05/14 18:59:54 by paromero         ###   ########.fr       */
+/*   Updated: 2025/05/27 19:26:06 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,8 +55,7 @@ char	*check_access(char *cmd)
 
 int	handle_special_chars(char **array, char const *s, size_t *i)
 {
-	if ((s[*i] == '<' && s[*i + 1] == '<')
-		|| (s[*i] == '>' && s[*i + 1] == '>'))
+	if (is_double_operator(s, *i))
 	{
 		array[0] = ft_substr(s, *i, 2);
 		(*i) += 2;

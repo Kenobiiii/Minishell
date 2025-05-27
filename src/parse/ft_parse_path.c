@@ -6,27 +6,11 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 12:59:22 by anggalle          #+#    #+#             */
-/*   Updated: 2025/04/08 18:43:50 by paromero         ###   ########.fr       */
+/*   Updated: 2025/05/27 19:26:06 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
-char	*find_path_in_env(t_data *data) //EN TEORÍA QUITAR
-{
-	t_env	*aux_env;
-
-	aux_env = data->env;
-	while (aux_env->value)
-	{
-		if (ft_strncmp(aux_env->value, "PATH=", 5) == 0)
-		{
-			return (aux_env->value);
-		}
-		aux_env = aux_env->next;
-	}
-	return (NULL);
-}
 
 char	*find_variable_in_env(t_data *data, char *var)
 {
