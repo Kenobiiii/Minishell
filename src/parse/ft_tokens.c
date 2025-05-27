@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 20:08:34 by paromero          #+#    #+#             */
-/*   Updated: 2025/05/14 19:06:04 by paromero         ###   ########.fr       */
+/*   Updated: 2025/05/27 17:18:04 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ t_tokens	*ft_new_token(char *str)
 
 	processed_str = ft_strdup(str);
 	if (processed_str[0] == '\x01')
-		ft_memmove(processed_str, processed_str + 1, strlen(processed_str));
+		ft_memmove(processed_str, processed_str + 1, ft_strlen(processed_str));
 	new_node = malloc(sizeof(t_tokens));
 	if (!new_node)
 		return (NULL);

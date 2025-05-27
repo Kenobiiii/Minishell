@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 13:59:23 by anggalle          #+#    #+#             */
-/*   Updated: 2025/05/14 18:40:06 by paromero         ###   ########.fr       */
+/*   Updated: 2025/05/27 17:18:04 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ char	**list_to_array(t_env *head)
 	i = 0;
 	while (head)
 	{
-		array[i] = strdup(head->value);
+		array[i] = ft_strdup(head->value);
 		if (!array[i++])
 		{
 			j = 0;

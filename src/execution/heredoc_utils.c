@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 22:14:52 by paromero          #+#    #+#             */
-/*   Updated: 2025/05/26 22:18:04 by paromero         ###   ########.fr       */
+/*   Updated: 2025/05/27 17:18:04 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,8 @@ static int	process_readline_result(char *line, char *delim)
 
 static int	check_delimiter_match(char *line, char *delim)
 {
-	if (strlen(line) == strlen(delim)
-		&& strncmp(line, delim, strlen(delim)) == 0)
+	if (ft_strlen(line) == ft_strlen(delim)
+		&& ft_strncmp(line, delim, ft_strlen(delim)) == 0)
 	{
 		free(line);
 		return (1);

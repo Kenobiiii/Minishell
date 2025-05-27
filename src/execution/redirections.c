@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/30 14:27:38 by anggalle          #+#    #+#             */
-/*   Updated: 2025/05/26 22:14:52 by paromero         ###   ########.fr       */
+/*   Updated: 2025/05/27 17:18:02 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ extern volatile sig_atomic_t	g_shell_state;
 
 int	write_heredoc_line(int pipefd, char *line)
 {
-	if (write(pipefd, line, strlen(line)) == -1
+	if (write(pipefd, line, ft_strlen(line)) == -1
 		|| write(pipefd, "\n", 1) == -1)
 	{
 		free(line);
