@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 00:00:00 by anggalle          #+#    #+#             */
-/*   Updated: 2025/05/25 21:55:43 by paromero         ###   ########.fr       */
+/*   Updated: 2025/05/27 17:32:41 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,26 @@ int	handle_readline_result(t_data *data)
 		printf("exit\n");
 		return (-1);
 	}
+	return (1);
+}
+
+int	line_syntax(t_data	*data)
+{
+	add_history(data->line);
+	if (is_only_empty_var(data->line))
+	{
+		data->wstatus = 0;
+		return (free_while(data));
+	}
+	if (is_empty_var_with_cmd(data, data->line))
+	{
+	}
+	if (!check_line_errors(data))
+		return (0);
+	ft_tokens(data, data->line);
+	data->ast = ft_build_ast(data, data->tokens);
+	if (data->ast == NULL)
+		return (free_while(data));
 	return (1);
 }
 
