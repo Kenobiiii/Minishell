@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 11:06:52 by paromero          #+#    #+#             */
-/*   Updated: 2025/05/27 19:26:06 by paromero         ###   ########.fr       */
+/*   Updated: 2025/05/27 19:45:20 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ char	*ft_handledollar(t_data *data, char *line)
 
 	i = 0;
 	j = 0;
-	result = ft_calloc(ft_strlen(line) * 10 + 1, sizeof(char));
+	result = ft_calloc(ft_strlen(line) * 100 + 1, sizeof(char));
 	if (!result)
 		return (NULL);
 	while (line[i])
