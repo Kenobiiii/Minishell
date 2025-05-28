@@ -78,11 +78,13 @@ int	minishell(char **env)
 		free_while(&data);
 	}
 	free_minishell(&data);
-	return (0);
+	return (data.last_exit_status);
 }
 
 int	main(int ac, char **av, char **env)
 {
+	int	exit_status;
+
 	if (ac != 1)
 	{
 		printf("Error: More than one arguments\n");
@@ -90,6 +92,6 @@ int	main(int ac, char **av, char **env)
 	}
 	(void)ac;
 	(void)av;
-	minishell(env);
-	return (0);
+	exit_status = minishell(env);
+	return (exit_status);
 }

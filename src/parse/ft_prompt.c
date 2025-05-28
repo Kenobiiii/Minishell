@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 18:42:01 by paromero          #+#    #+#             */
-/*   Updated: 2025/04/08 18:42:33 by paromero         ###   ########.fr       */
+/*   Updated: 2025/05/28 17:47:18 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,7 @@ void	update_prompt(t_data *data)
 
 	last_component = get_last_component(data->cwd);
 	prompt_size = ft_strlen("$Minishell()> ")
-		+ ft_strlen(last_component)
-		+ 40;
+		+ ft_strlen(last_component) + 40;
 	new_prompt = malloc(prompt_size);
 	if (!new_prompt)
 		return ;
@@ -48,6 +47,8 @@ void	update_prompt(t_data *data)
 	ft_strlcat(new_prompt, ANSI_COLOR_GREEN, prompt_size);
 	ft_strlcat(new_prompt, "> ", prompt_size);
 	ft_strlcat(new_prompt, ANSI_COLOR_RESET, prompt_size);
+	if (data->prompt)
+		free(data->prompt);
 	data->prompt = new_prompt;
 }
 
@@ -56,6 +57,7 @@ int	update_pwd(t_data	*data)
 	char	*new_pwd;
 	char	cwd[PATH_MAX];
 	t_env	*tmp;
+	char	*pwd_value;
 
 	new_pwd = getcwd(cwd, sizeof(cwd));
 	tmp = data->env;
@@ -64,7 +66,8 @@ int	update_pwd(t_data	*data)
 	if (tmp)
 	{
 		free (tmp->value);
-		tmp->value = ft_strcat("PWD=", new_pwd);
+		pwd_value = ft_strcat("PWD=", new_pwd);
+		tmp->value = pwd_value;
 	}
 	free (data->cwd);
 	data->cwd = ft_strdup(new_pwd);

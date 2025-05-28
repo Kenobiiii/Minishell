@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 11:59:00 by anggalle          #+#    #+#             */
-/*   Updated: 2025/05/28 17:27:02 by paromero         ###   ########.fr       */
+/*   Updated: 2025/05/28 17:42:23 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,13 +22,13 @@ static void	exec_pipe_left(t_data *data, t_ast *node, int pipefd[2])
 	if (dup2(pipefd[1], STDOUT_FILENO) == -1)
 	{
 		perror("dup2");
-		free_while(data);
+		free_minishell(data);
 		exit(EXIT_FAILURE);
 	}
 	close(pipefd[0]);
 	close(pipefd[1]);
 	exec_ast(data, node->left);
-	free_while(data);
+	free_minishell(data);
 	exit(data->wstatus);
 }
 
@@ -43,7 +43,7 @@ static void	exec_pipe_right(t_data *data, t_ast *node, int pipefd[2])
 	if (dup2(pipefd[0], STDIN_FILENO) == -1)
 	{
 		perror("dup2");
-		free_while(data);
+		free_minishell(data);
 		exit(EXIT_FAILURE);
 	}
 	close(pipefd[0]);
@@ -53,7 +53,7 @@ static void	exec_pipe_right(t_data *data, t_ast *node, int pipefd[2])
 		exec_ast(data, node->right);
 	else
 		exec_ast(data, node->right);
-	free_while(data);
+	free_minishell(data);
 	exit(data->wstatus);
 }
 

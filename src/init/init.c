@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 17:53:02 by paromero          #+#    #+#             */
-/*   Updated: 2025/05/28 16:29:48 by paromero         ###   ########.fr       */
+/*   Updated: 2025/05/28 17:42:23 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,8 +78,11 @@ int	init_env(t_data *data, char *env[])
 int	init_empty_env(t_data *data)
 {
 	t_env	*current;
+	char	*pwd_value;
 
-	data->env = create_env_node(ft_strcat("PWD=", data->cwd));
+	pwd_value = ft_strcat("PWD=", data->cwd);
+	data->env = create_env_node(pwd_value);
+	free(pwd_value);
 	if (!data->env)
 		return (0);
 	current = data->env;
@@ -102,7 +105,7 @@ int	init_data(t_data *data, char **env)
 	data->exit = 0;
 	data->last_exit_status = 0;
 	data->pid = -1;
-	data->prompt = "$Minishell> ";
+	data->prompt = ft_strdup("$Minishell> ");
 	data->cwd = ft_strdup(getcwd(cwd, sizeof(cwd)));
 	data->tokens = NULL;
 	data->ast = NULL;
