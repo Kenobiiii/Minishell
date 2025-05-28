@@ -22,11 +22,13 @@ static void	exec_pipe_left(t_data *data, t_ast *node, int pipefd[2])
 	if (dup2(pipefd[1], STDOUT_FILENO) == -1)
 	{
 		perror("dup2");
+		free_while(data);
 		exit(EXIT_FAILURE);
 	}
 	close(pipefd[0]);
 	close(pipefd[1]);
 	exec_ast(data, node->left);
+	free_while(data);
 	exit(data->wstatus);
 }
 
@@ -41,6 +43,7 @@ static void	exec_pipe_right(t_data *data, t_ast *node, int pipefd[2])
 	if (dup2(pipefd[0], STDIN_FILENO) == -1)
 	{
 		perror("dup2");
+		free_while(data);
 		exit(EXIT_FAILURE);
 	}
 	close(pipefd[0]);
@@ -50,6 +53,7 @@ static void	exec_pipe_right(t_data *data, t_ast *node, int pipefd[2])
 		exec_ast(data, node->right);
 	else
 		exec_ast(data, node->right);
+	free_while(data);
 	exit(data->wstatus);
 }
 

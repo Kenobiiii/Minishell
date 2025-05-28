@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 16:30:00 by paromero          #+#    #+#             */
-/*   Updated: 2025/05/28 17:27:02 by paromero         ###   ########.fr       */
+/*   Updated: 2025/05/28 17:32:16 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,8 @@ int	handle_redirect_update(t_ast *current, t_tokens *tokens)
 	return (1);
 }
 
-//? Searches for redirection nodes of the same type and updates them or creates new ones
+//? Searches for redirection nodes of the same type
+//?  and updates them or creates new ones
 int	handle_redirect_node(t_ast **root,
 	t_ast **last_op, t_tokens *tokens)
 {
