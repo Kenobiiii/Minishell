@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 19:06:45 by paromero          #+#    #+#             */
-/*   Updated: 2025/05/27 19:26:06 by paromero         ###   ########.fr       */
+/*   Updated: 2025/05/28 15:56:35 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -347,9 +347,10 @@ int			line_syntax(t_data *data);
 //! main_utils.c //
 int			handle_signal_states(t_data *data);
 int			handle_readline_result(t_data *data);
-void		process_command_line(t_data *data);
+int			is_builtin_command(char *cmd);
 int			is_only_empty_var(char *line);
 int			is_empty_var_with_cmd(t_data *data, char *line);
+void		execute_builtin_with_redirections(t_data *data);
 
 //! main_checks.c //
 int			check_line_errors(t_data *data);

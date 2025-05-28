@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 00:00:00 by anggalle          #+#    #+#             */
-/*   Updated: 2025/05/27 19:26:06 by paromero         ###   ########.fr       */
+/*   Updated: 2025/05/28 15:57:02 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,71 +53,35 @@ int	handle_readline_result(t_data *data)
 	return (1);
 }
 
-int	line_syntax(t_data	*data)
+int	is_builtin_command(char *cmd)
 {
-	add_history(data->line);
-	if (is_only_empty_var(data->line))
-	{
-		data->wstatus = 0;
-		return (free_while(data));
-	}
-	if (is_empty_var_with_cmd(data, data->line))
-	{
-	}
-	if (!handle_invslash_pcomma(data->line))
-	{
-		data->wstatus = 2;
-		return (0);
-	}
-	if (!check_line_errors(data))
-		return (0);
-	ft_tokens(data, data->line);
-	data->ast = ft_build_ast(data, data->tokens);
-	if (data->ast == NULL)
-		return (free_while(data));
-	return (1);
+	if (ft_strncmp(cmd, "echo", 5) == 0)
+		return (1);
+	if (ft_strncmp(cmd, "pwd", 4) == 0)
+		return (1);
+	if (ft_strncmp(cmd, "cd", 3) == 0)
+		return (1);
+	if (ft_strncmp(cmd, "export", 7) == 0)
+		return (1);
+	if (ft_strncmp(cmd, "unset", 6) == 0)
+		return (1);
+	if (ft_strncmp(cmd, "env", 4) == 0)
+		return (1);
+	if (ft_strncmp(cmd, "exit", 5) == 0)
+		return (1);
+	return (0);
 }
 
-void	process_command_line(t_data *data)
+void	execute_builtin_with_redirections(t_data *data)
 {
-	int	saved_stdin = -1;
-	int	saved_stdout = -1;
+	int	saved_stdin;
+	int	saved_stdout;
 	int	builtin_result;
 
-	if (data->line && *data->line)
-	{
-		if (!line_syntax(data))
-		{
-			free_while(data);
-			return ;
-		}
-		g_shell_state = STATE_EXECUTING;
-		
-		// Verificar si es un built-in (SIN ejecutarlo todavía)
-		if (ft_strncmp(data->ast->value, "echo", 5) == 0 ||
-			ft_strncmp(data->ast->value, "pwd", 4) == 0 ||
-			ft_strncmp(data->ast->value, "cd", 3) == 0 ||
-			ft_strncmp(data->ast->value, "export", 7) == 0 ||
-			ft_strncmp(data->ast->value, "unset", 6) == 0 ||
-			ft_strncmp(data->ast->value, "env", 4) == 0 ||
-			ft_strncmp(data->ast->value, "exit", 5) == 0)
-		{
-			// Es un built-in, aplicar redirecciones temporalmente
-			saved_stdin = dup(STDIN_FILENO);
-			saved_stdout = dup(STDOUT_FILENO);
-			apply_redirections_for_builtin(data);
-			
-			// AHORA ejecutar el built-in con las redirecciones aplicadas
-			builtin_result = is_builtins(data, data->ast->value);
-			(void)builtin_result; // Evitar warning de variable no usada
-			
-			// Restaurar redirecciones
-			restore_redirections_for_builtin(data, saved_stdin, saved_stdout);
-		}
-		else
-		{
-			// No es un built-in, ejecutar comando externo
-			exec_func(data);
-		}
-	}
+	saved_stdin = dup(STDIN_FILENO);
+	saved_stdout = dup(STDOUT_FILENO);
+	apply_redirections_for_builtin(data);
+	builtin_result = is_builtins(data, data->ast->value);
+	(void)builtin_result;
+	restore_redirections_for_builtin(data, saved_stdin, saved_stdout);
 }
