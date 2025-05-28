@@ -50,8 +50,6 @@ int	openquotes(char	*line)
 	count_single = 0;
 	count_double = 0;
 	i = 0;
-	if (line[i] == '"' || line[0] == '\'')
-		return (0);
 	while (line[i])
 	{
 		if (line[i] == '"' && count_single % 2 == 0)
@@ -60,7 +58,7 @@ int	openquotes(char	*line)
 			count_single++;
 		i++;
 	}
-	if (count_double % 2 == 0 && count_single % 2 == 0)
+	if (count_double % 2 != 0 || count_single % 2 != 0)
 		return (1);
 	return (0);
 }
