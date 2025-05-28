@@ -61,10 +61,16 @@ void	ft_handle_quotes(t_data	*data, char	**matrix)
 	{
 		quote_found = 0;
 		count_y = 0;
-		while (matrix[count_x][count_y] && quote_found != 1)
+		while (quote_found != 1 && matrix[count_x][count_y])
 		{
-			quote_found = handle_quotes(data, matrix, count_x, count_y);
-			count_y++;
+			if (handle_quotes(data, matrix, count_x, count_y))
+			{
+				quote_found = 1;
+			}
+			else
+			{
+				count_y++;
+			}
 		}
 		if (!quote_found)
 		{

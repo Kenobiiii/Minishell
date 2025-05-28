@@ -76,15 +76,17 @@ int	handle_invslash_pcomma(char *line)
 		{
 			quote = line[i];
 			i++;
-			while (line[i] != quote)
+			while (line[i] && line[i] != quote)
 				i++;
+			if (!line[i])
+				return (1);
+			i++;
 			quote = 0;
 		}
 		else if (line[i] == '\\' || line[i] == ';')
-		{
 			return (syntax_error());
-		}
-		i++;
+		else
+			i++;
 	}
 	return (1);
 }
