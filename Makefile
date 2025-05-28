@@ -39,6 +39,10 @@ SRCS = src/main.c \
 		src/execution/signals.c \
 		src/execution/pipe.c \
 		src/execution/redirections.c \
+		src/execution/redirections_utils.c \
+		src/execution/redirections_multi.c \
+		src/execution/redirections_helpers.c \
+		src/execution/redirections_process.c \
 		src/execution/redirect_utils.c \
 		src/execution/heredoc.c \
 		src/execution/heredoc_utils.c \

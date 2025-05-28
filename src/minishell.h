@@ -272,7 +272,26 @@ int			handle_process_error(int result, char *error_msg);
 void		exec_redirect_out(t_data *data, t_ast *node);
 void		exec_redirect_in(t_data *data, t_ast *node);
 void		exec_redirect_append(t_data *data, t_ast *node);
+
+//! redirections_utils.c //
 int			write_heredoc_line(int pipefd, char *line);
+t_ast		*find_cmd_node(t_ast *node);
+int			count_output_redirections(t_ast *node);
+void		collect_redirections(t_ast *node, t_ast **redirections, int *index);
+int			open_redirection_file(t_ast *redirection);
+
+//! redirections_multi.c //
+void		process_multiple_output_redirections(t_data *data, t_ast *node);
+
+//! redirections_helpers.c //
+int			validate_input_redirect_node(t_data *data, t_ast *node);
+void		execute_redirect_helper(t_data *data, t_ast *node, int flags);
+int			handle_input_redirect_open(t_data *data, char *filename);
+
+//! redirections_process.c //
+int			process_redirection_files(t_data *data, t_ast **redirections,
+				int count);
+void		execute_command_after_redirections(t_data *data, t_ast *node);
 
 //! heredoc.c //
 void		exec_heredoc(t_data	*data, t_ast *node);
