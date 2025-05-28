@@ -71,7 +71,7 @@ void	add_or_update_env(t_env	**env, char *args)
 	}
 	else
 	{
-		new_node = create_env_node(ft_strdup(args));
+		new_node = create_env_node(args);
 		if (!*env)
 		{
 			*env = new_node;
@@ -116,6 +116,7 @@ int	export_builtin(t_data *data)
 	{
 		env_matrix = list_to_array(data->env);
 		print_env_sorted(env_matrix);
+		free_array((const char **)env_matrix);
 		data->wstatus = 0;
 		return (1);
 	}
