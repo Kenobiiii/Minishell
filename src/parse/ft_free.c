@@ -34,6 +34,10 @@ int	free_while(t_data	*data)
 		free (data->prompt);
 		data->prompt = NULL;
 	}
+	
+	// Cerrar descriptores de redirección entre comandos
+	close_redirection_fds(data);
+	
 	return (0);
 }
 

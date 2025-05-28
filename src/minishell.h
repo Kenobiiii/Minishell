@@ -109,7 +109,12 @@ typedef struct s_data
 	pid_t		pid; //- Proceso hijo y padre
 	t_env		*env; //- Puntero a estructuar de env
 	t_tokens	*tokens; //- puntero a estructura de tokens
-	t_ast		*ast; //- puntero a estructura ast (Abstract Syntax Tree)	
+	t_ast		*ast; //- puntero a estructura ast (Abstract Syntax Tree)
+	
+	// Descriptores de archivo para redirecciones
+	int			input_redir_fd;   // Para < y <<
+	int			output_redir_fd;  // Para > y >>
+	int			heredoc_pipe_fd;  // Para heredoc (extremo de lectura del pipe)
 }	t_data;
 
 //* 				INIT					//
@@ -118,6 +123,10 @@ typedef struct s_data
 int			init_data(t_data *data, char **env);
 int			init_env(t_data *data, char *env[]);
 t_env		*create_env_node(const char *value);
+void		reset_redirection_fds(t_data *data);
+void		close_redirection_fds(t_data *data);
+int			apply_redirections_for_builtin(t_data *data);
+void		restore_redirections_for_builtin(t_data *data, int saved_stdin, int saved_stdout);
 
 //* 				PARSE					//
 

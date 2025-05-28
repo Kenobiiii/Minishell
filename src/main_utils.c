@@ -80,6 +80,10 @@ int	line_syntax(t_data	*data)
 
 void	process_command_line(t_data *data)
 {
+	int	saved_stdin = -1;
+	int	saved_stdout = -1;
+	int	builtin_result;
+
 	if (data->line && *data->line)
 	{
 		if (!line_syntax(data))
@@ -88,7 +92,32 @@ void	process_command_line(t_data *data)
 			return ;
 		}
 		g_shell_state = STATE_EXECUTING;
-		if (is_builtins(data, data->ast->value) == 0)
+		
+		// Verificar si es un built-in (SIN ejecutarlo todavía)
+		if (ft_strncmp(data->ast->value, "echo", 5) == 0 ||
+			ft_strncmp(data->ast->value, "pwd", 4) == 0 ||
+			ft_strncmp(data->ast->value, "cd", 3) == 0 ||
+			ft_strncmp(data->ast->value, "export", 7) == 0 ||
+			ft_strncmp(data->ast->value, "unset", 6) == 0 ||
+			ft_strncmp(data->ast->value, "env", 4) == 0 ||
+			ft_strncmp(data->ast->value, "exit", 5) == 0)
+		{
+			// Es un built-in, aplicar redirecciones temporalmente
+			saved_stdin = dup(STDIN_FILENO);
+			saved_stdout = dup(STDOUT_FILENO);
+			apply_redirections_for_builtin(data);
+			
+			// AHORA ejecutar el built-in con las redirecciones aplicadas
+			builtin_result = is_builtins(data, data->ast->value);
+			(void)builtin_result; // Evitar warning de variable no usada
+			
+			// Restaurar redirecciones
+			restore_redirections_for_builtin(data, saved_stdin, saved_stdout);
+		}
+		else
+		{
+			// No es un built-in, ejecutar comando externo
 			exec_func(data);
+		}
 	}
 }

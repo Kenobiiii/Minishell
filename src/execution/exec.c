@@ -12,9 +12,32 @@
 
 #include "../minishell.h"
 
+static void	setup_child_redirections(t_data *data)
+{
+	// Configurar STDIN si hay redirección de entrada o heredoc
+	if (data->input_redir_fd != -1)
+	{
+		dup2(data->input_redir_fd, STDIN_FILENO);
+		close(data->input_redir_fd);
+	}
+	else if (data->heredoc_pipe_fd != -1)
+	{
+		dup2(data->heredoc_pipe_fd, STDIN_FILENO);
+		close(data->heredoc_pipe_fd);
+	}
+	
+	// Configurar STDOUT si hay redirección de salida
+	if (data->output_redir_fd != -1)
+	{
+		dup2(data->output_redir_fd, STDOUT_FILENO);
+		close(data->output_redir_fd);
+	}
+}
+
 static void	handle_child(t_data *data, char *path, t_ast *node)
 {
 	setup_signals_for_child();
+	setup_child_redirections(data);
 	if (!path)
 		exit_minishell(data, "command not found", 127);
 	if (execve(path, node->args, (char **)list_to_array(data->env)) == -1)
@@ -35,6 +58,8 @@ void	exec_simple_cmd(t_data *data, t_ast *node)
 		handle_child(data, path, node);
 	else if (pid > 0)
 	{
+		// El padre cierra sus copias de los descriptores de redirección
+		close_redirection_fds(data);
 		waitpid(pid, &data->wstatus, 0);
 		analyse_status(data);
 		free(path);
@@ -42,6 +67,7 @@ void	exec_simple_cmd(t_data *data, t_ast *node)
 	else
 	{
 		free(path);
+		close_redirection_fds(data);
 		exit_minishell(data, "Error in fork", EXIT_FAILURE);
 	}
 }

@@ -21,48 +21,48 @@ t_ast	*find_last_redirection(t_ast *node)
 	return (node);
 }
 
-static int	validate_heredoc_node(t_data *data, t_ast *node, int original_stdin)
-{
-	if (!node)
-	{
-		ft_putstr_fd("error: heredoc node is NULL\n", STDERR_FILENO);
-		data->wstatus = 1;
-		return (-1);
-	}
-	if (!node->right || !node->right->value)
-	{
-		ft_putstr_fd("syntax error: missing delimiter for <<\n", STDERR_FILENO);
-		data->wstatus = 2;
-		dup2(original_stdin, STDIN_FILENO);
-		close(original_stdin);
-		return (-1);
-	}
-	return (0);
-}
-
 void	exec_heredoc(t_data *data, t_ast *node)
 {
 	char	*delim;
 	int		pipefd[2];
 	int		result;
-	int		original_stdin;
 
-	original_stdin = dup(STDIN_FILENO);
-	if (validate_heredoc_node(data, node, original_stdin) == -1)
-		return ;
-	delim = node->right->value;
-	if (setup_heredoc_pipe(data, original_stdin, pipefd) == -1)
-		return ;
-	result = read_heredoc_lines(pipefd[1], delim);
-	close(pipefd[1]);
-	if (handle_heredoc_result(result, data, pipefd, node) == -1)
+	if (!node || !node->right || !node->right->value)
 	{
-		close(pipefd[0]);
-		dup2(original_stdin, STDIN_FILENO);
-		close(original_stdin);
+		ft_putstr_fd("syntax error: missing delimiter for <<\n", STDERR_FILENO);
+		data->wstatus = 2;
 		return ;
 	}
-	close(pipefd[0]);
-	dup2(original_stdin, STDIN_FILENO);
-	close(original_stdin);
+	
+	delim = node->right->value;
+	
+	// Crear el pipe para el heredoc
+	if (pipe(pipefd) < 0)
+	{
+		perror("pipe");
+		data->wstatus = 1;
+		return ;
+	}
+	
+	// Leer las líneas del heredoc y escribirlas al pipe
+	result = read_heredoc_lines(pipefd[1], delim);
+	close(pipefd[1]);  // Cerrar el extremo de escritura
+	
+	if (result == -1)
+	{
+		close(pipefd[0]);
+		data->wstatus = 130;
+		return ;
+	}
+	
+	// Cerrar el descriptor anterior si existía
+	if (data->heredoc_pipe_fd != -1)
+		close(data->heredoc_pipe_fd);
+	
+	// Guardar el extremo de lectura del pipe para el proceso hijo
+	data->heredoc_pipe_fd = pipefd[0];
+	
+	// Ejecutar recursivamente el comando de la izquierda
+	if (node->left)
+		exec_ast(data, node->left);
 }
