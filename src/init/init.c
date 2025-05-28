@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 17:53:02 by paromero          #+#    #+#             */
-/*   Updated: 2025/05/25 16:42:49 by paromero         ###   ########.fr       */
+/*   Updated: 2025/05/28 16:29:48 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,12 +108,9 @@ int	init_data(t_data *data, char **env)
 	data->ast = NULL;
 	data->only_redirections = 1;
 	data->wstatus = 0;
-	
-	// Inicializar descriptores de archivo de redirección
 	data->input_redir_fd = -1;
 	data->output_redir_fd = -1;
 	data->heredoc_pipe_fd = -1;
-	
 	rl_clear_history();
 	if (env == NULL || env[0] == NULL)
 		init_empty_env(data);
@@ -124,89 +121,4 @@ int	init_data(t_data *data, char **env)
 		increment_shlvl(data->env);
 	}
 	return (1);
-}
-
-/**
- * TODO Mensaje de error custom, depende de lo que le pase salte un error u otro
- */
-
-/**
- * Resetea los descriptores de archivo de redirección a -1
- * sin cerrarlos (asume que ya fueron cerrados o transferidos)
- */
-void	reset_redirection_fds(t_data *data)
-{
-	data->input_redir_fd = -1;
-	data->output_redir_fd = -1;
-	data->heredoc_pipe_fd = -1;
-}
-
-/**
- * Cierra todos los descriptores de archivo de redirección abiertos
- * y los resetea a -1
- */
-void	close_redirection_fds(t_data *data)
-{
-	if (data->input_redir_fd != -1)
-	{
-		close(data->input_redir_fd);
-		data->input_redir_fd = -1;
-	}
-	if (data->output_redir_fd != -1)
-	{
-		close(data->output_redir_fd);
-		data->output_redir_fd = -1;
-	}
-	if (data->heredoc_pipe_fd != -1)
-	{
-		close(data->heredoc_pipe_fd);
-		data->heredoc_pipe_fd = -1;
-	}
-}
-
-/**
- * Aplica las redirecciones para built-ins (que no hacen fork)
- * Retorna 1 si se aplicaron redirecciones, 0 si no
- */
-int	apply_redirections_for_builtin(t_data *data)
-{
-	int	redirections_applied = 0;
-	
-	// Aplicar redirección de entrada
-	if (data->input_redir_fd != -1)
-	{
-		dup2(data->input_redir_fd, STDIN_FILENO);
-		redirections_applied = 1;
-	}
-	else if (data->heredoc_pipe_fd != -1)
-	{
-		dup2(data->heredoc_pipe_fd, STDIN_FILENO);
-		redirections_applied = 1;
-	}
-	
-	// Aplicar redirección de salida
-	if (data->output_redir_fd != -1)
-	{
-		dup2(data->output_redir_fd, STDOUT_FILENO);
-		redirections_applied = 1;
-	}
-	
-	return (redirections_applied);
-}
-
-/**
- * Restaura stdin y stdout a sus valores originales después de ejecutar un built-in
- */
-void	restore_redirections_for_builtin(t_data *data, int saved_stdin, int saved_stdout)
-{
-	// Restaurar stdin y stdout originales
-	dup2(saved_stdin, STDIN_FILENO);
-	dup2(saved_stdout, STDOUT_FILENO);
-	
-	// Cerrar los descriptores guardados
-	close(saved_stdin);
-	close(saved_stdout);
-	
-	// Cerrar los descriptores de redirección
-	close_redirection_fds(data);
 }

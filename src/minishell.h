@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 19:06:45 by paromero          #+#    #+#             */
-/*   Updated: 2025/05/28 16:02:11 by paromero         ###   ########.fr       */
+/*   Updated: 2025/05/28 16:29:50 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,16 +36,11 @@
 # define ANSI_COLOR_RESET "\e[0m"
 # define ANSI_COLOR_BLUE "\e[1;34m"
 
-// Estados para la variable global g_shell_state
 # define STATE_PROMPT_NORMAL 0
-# define STATE_PROMPT_INTERRUPTED 1       // SIGINT en prompt/readline
-# define STATE_EXECUTING 2                // Comando ejecutándose
-# define STATE_EXECUTION_INTERRUPTED 3    // SIGINT durante ejecución
-# define STATE_HEREDOC_INTERRUPTED 4      // SIGINT en heredoc
-
-// Declaración de la única variable global para el estado de señales
-// Esta se definirá en main.c
-// extern volatile sig_atomic_t g_shell_state;
+# define STATE_PROMPT_INTERRUPTED 1
+# define STATE_EXECUTING 2
+# define STATE_EXECUTION_INTERRUPTED 3
+# define STATE_HEREDOC_INTERRUPTED 4
 
 typedef enum e_type
 {
@@ -58,7 +53,7 @@ typedef enum e_type
 	AND,
 	OR
 }	t_type;
-//- struct para guardar los comandos simples
+
 typedef struct s_ast
 {
 	t_type			type;
@@ -99,16 +94,16 @@ typedef struct s_expansion
 
 typedef struct s_data
 {
-	char		*line; //- linea comando actual
-	char		*prompt; //- Promp de salida de la minishell (ej: minishell> )
-	char		*cwd; //- directorio actual
-	int			exit; //- Manejo de salida
-	int			last_exit_status; //-salida ultimo comando ejecutado ($?)
+	char		*line;
+	char		*prompt;
+	char		*cwd;
+	int			exit;
+	int			last_exit_status;
 	int			wstatus;
 	int			only_redirections;
-	pid_t		pid; //- Proceso hijo y padre
-	t_env		*env; //- Puntero a estructuar de env
-	t_tokens	*tokens; //- puntero a estructura de tokens
+	pid_t		pid;
+	t_env		*env;
+	t_tokens	*tokens;
 	t_ast		*ast; //- puntero a estructura ast (Abstract Syntax Tree)
 	int			input_redir_fd;
 	int			output_redir_fd;
@@ -121,6 +116,13 @@ typedef struct s_data
 int			init_data(t_data *data, char **env);
 int			init_env(t_data *data, char *env[]);
 t_env		*create_env_node(const char *value);
+void		reset_redirection_fds(t_data *data);
+void		close_redirection_fds(t_data *data);
+int			apply_redirections_for_builtin(t_data *data);
+void		restore_redirections_for_builtin(t_data *data,
+				int saved_stdin, int saved_stdout);
+
+//! ft_init_utils.c //
 void		reset_redirection_fds(t_data *data);
 void		close_redirection_fds(t_data *data);
 int			apply_redirections_for_builtin(t_data *data);
@@ -329,10 +331,6 @@ int			unset_builtin(t_data *data);
 //! last_exit_status_builtin.c //
 int			last_cmd_status(t_data	*data);
 
-//! printfuncs //
-// int			print_tokens(t_tokens *token);
-// void		print_type(t_tokens *token);
-
 //! signals.c //
 void		handle_sigint(int sig);
 void		handle_sigquit(int sig);
@@ -356,10 +354,9 @@ int			check_line_errors(t_data *data);
 
 #endif
 /**
- * - explicación
- * * importante
- * ! alertas
- * ? dudas
- * TODO por hacer
- * DONE hecho
+ * * Important
+ * ! Alerts
+ * ? Explanation
+ * TODO To Do
+ * DONE Done
  */
