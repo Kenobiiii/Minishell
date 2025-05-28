@@ -52,17 +52,15 @@ SRCS = src/main.c \
 		src/builts_ins/exit_builtin.c \
 		src/builts_ins/last_exit_status_builtin.c
 
-OBJS = $(patsubst src/%.c, $(OBJ_DIR)/%.o, $(SRCS))  # src/main.c → objs/main.o
+OBJS = $(patsubst src/%.c, $(OBJ_DIR)/%.o, $(SRCS))
 
 NAME = minishell
 
-# Configuración para libft
 LIBFT_DIR = libft
 LIBFT = $(LIBFT_DIR)/libft.a
 INCLUDES = -I./$(LIBFT_DIR) -I/usr/include/readline
 LIBS = -L./$(LIBFT_DIR) -lft -lreadline -lncurses
 
-# Colores
 GREEN = \033[1;32m
 RESET = \033[0m
 
@@ -73,10 +71,9 @@ $(NAME): $(OBJS)
 	@$(CC) $(CFLAGS) $(OBJS) $(LIBS) -o $(NAME)
 	@echo "$(GREEN)Executable created: $(NAME)$(RESET)"
 
-# Regla corregida: sin SRC_DIR y creando subdirectorios
 $(OBJ_DIR)/%.o: src/%.c | $(OBJ_DIR)
 	@echo "$(GREEN)Compiling $<...$(RESET)"
-	@mkdir -p $(dir $@)  # Crea subdirectorios (ej: objs/parse/)
+	@mkdir -p $(dir $@)
 	@$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 	@echo "$(GREEN)$< compiled!$(RESET)"
 
