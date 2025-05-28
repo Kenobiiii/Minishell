@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anggalle <anggalle@student.42.fr>          +#+  +:+       +#+        */
+/*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 17:42:48 by anggalle          #+#    #+#             */
-/*   Updated: 2025/03/26 17:52:45 by anggalle         ###   ########.fr       */
+/*   Updated: 2025/05/28 16:30:54 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 static void	setup_child_redirections(t_data *data)
 {
-	// Configurar STDIN si hay redirección de entrada o heredoc
 	if (data->input_redir_fd != -1)
 	{
 		dup2(data->input_redir_fd, STDIN_FILENO);
@@ -25,8 +24,6 @@ static void	setup_child_redirections(t_data *data)
 		dup2(data->heredoc_pipe_fd, STDIN_FILENO);
 		close(data->heredoc_pipe_fd);
 	}
-	
-	// Configurar STDOUT si hay redirección de salida
 	if (data->output_redir_fd != -1)
 	{
 		dup2(data->output_redir_fd, STDOUT_FILENO);
@@ -58,7 +55,6 @@ void	exec_simple_cmd(t_data *data, t_ast *node)
 		handle_child(data, path, node);
 	else if (pid > 0)
 	{
-		// El padre cierra sus copias de los descriptores de redirección
 		close_redirection_fds(data);
 		waitpid(pid, &data->wstatus, 0);
 		analyse_status(data);

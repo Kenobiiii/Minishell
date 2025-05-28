@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 22:14:52 by paromero          #+#    #+#             */
-/*   Updated: 2025/05/26 22:14:52 by paromero         ###   ########.fr       */
+/*   Updated: 2025/05/28 16:33:28 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,48 +21,58 @@ t_ast	*find_last_redirection(t_ast *node)
 	return (node);
 }
 
-void	exec_heredoc(t_data *data, t_ast *node)
+static int	validate_heredoc_input(t_data *data, t_ast *node)
 {
-	char	*delim;
-	int		pipefd[2];
-	int		result;
-
 	if (!node || !node->right || !node->right->value)
 	{
 		ft_putstr_fd("syntax error: missing delimiter for <<\n", STDERR_FILENO);
 		data->wstatus = 2;
-		return ;
+		return (-1);
 	}
-	
-	delim = node->right->value;
-	
-	// Crear el pipe para el heredoc
+	return (0);
+}
+
+static int	create_heredoc_pipe(t_data *data, int pipefd[2])
+{
 	if (pipe(pipefd) < 0)
 	{
 		perror("pipe");
 		data->wstatus = 1;
-		return ;
+		return (-1);
 	}
-	
-	// Leer las líneas del heredoc y escribirlas al pipe
+	return (0);
+}
+
+static int	process_heredoc_content(t_data *data, int pipefd[2], char *delim)
+{
+	int	result;
+
 	result = read_heredoc_lines(pipefd[1], delim);
-	close(pipefd[1]);  // Cerrar el extremo de escritura
-	
+	close(pipefd[1]);
 	if (result == -1)
 	{
 		close(pipefd[0]);
 		data->wstatus = 130;
-		return ;
+		return (-1);
 	}
-	
-	// Cerrar el descriptor anterior si existía
+	return (0);
+}
+
+void	exec_heredoc(t_data *data, t_ast *node)
+{
+	char	*delim;
+	int		pipefd[2];
+
+	if (validate_heredoc_input(data, node) == -1)
+		return ;
+	delim = node->right->value;
+	if (create_heredoc_pipe(data, pipefd) == -1)
+		return ;
+	if (process_heredoc_content(data, pipefd, delim) == -1)
+		return ;
 	if (data->heredoc_pipe_fd != -1)
 		close(data->heredoc_pipe_fd);
-	
-	// Guardar el extremo de lectura del pipe para el proceso hijo
 	data->heredoc_pipe_fd = pipefd[0];
-	
-	// Ejecutar recursivamente el comando de la izquierda
 	if (node->left)
 		exec_ast(data, node->left);
 }
