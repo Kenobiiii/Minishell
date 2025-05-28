@@ -105,5 +105,6 @@ int	echo_builtin(t_data *data)
 	}
 	if (print_new_line)
 		ft_putstr_fd("\n", STDOUT_FILENO);
+	data->wstatus = 0;
 	return (1);
 }

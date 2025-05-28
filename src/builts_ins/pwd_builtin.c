@@ -20,5 +20,6 @@ int	pwd_builtin(t_data *data)
 	ft_putstr_fd(path, STDOUT_FILENO);
 	ft_putstr_fd("\n", STDOUT_FILENO);
 	free(path);
+	data->wstatus = 0;
 	return (1);
 }

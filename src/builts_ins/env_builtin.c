@@ -28,5 +28,6 @@ int	env_builtin(t_data *data)
 		printf("Too many arguments\n");
 	else
 		print_env(data->env);
+	data->wstatus = 0;
 	return (1);
 }

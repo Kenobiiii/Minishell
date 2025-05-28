@@ -86,28 +86,43 @@ void	add_or_update_env(t_env	**env, char *args)
 	}
 }
 
-int	export_builtin(t_data *data)
+static void	process_export_arguments(t_data *data, int *has_error)
 {
-	char	**env_matrix;
-	int		i;
+	int	i;
 
 	i = 1;
-	env_matrix = list_to_array(data->env);
-	if (!data->ast->args[1])
-	{
-		print_env_sorted(env_matrix);
-		return (1);
-	}
 	while (data->ast->args[i])
 	{
 		if (!is_valid_identifier(data->ast->args[i]))
 		{
-			data->wstatus = 1;
-			return (1);
+			ft_putstr_fd("-minishell: export: `", STDERR_FILENO);
+			ft_putstr_fd(data->ast->args[i], STDERR_FILENO);
+			ft_putstr_fd("': not a valid identifier\n", STDERR_FILENO);
+			*has_error = 1;
 		}
 		else
 			add_or_update_env(&data->env, data->ast->args[i]);
-		i ++;
+		i++;
 	}
+}
+
+int	export_builtin(t_data *data)
+{
+	char	**env_matrix;
+	int		has_error;
+
+	has_error = 0;
+	if (!data->ast->args[1])
+	{
+		env_matrix = list_to_array(data->env);
+		print_env_sorted(env_matrix);
+		data->wstatus = 0;
+		return (1);
+	}
+	process_export_arguments(data, &has_error);
+	if (has_error)
+		data->wstatus = 1;
+	else
+		data->wstatus = 0;
 	return (1);
 }

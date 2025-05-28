@@ -90,5 +90,6 @@ int	unset_builtin(t_data *data)
 			remove_variable(&data->env, data->ast->args[i]);
 		i++;
 	}
+	data->wstatus = 0;
 	return (ret);
 }
