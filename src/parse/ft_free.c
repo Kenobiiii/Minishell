@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 18:02:07 by paromero          #+#    #+#             */
-/*   Updated: 2025/04/02 19:24:23 by paromero         ###   ########.fr       */
+/*   Updated: 2025/05/28 15:58:47 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,10 +34,7 @@ int	free_while(t_data	*data)
 		free (data->prompt);
 		data->prompt = NULL;
 	}
-	
-	// Cerrar descriptores de redirección entre comandos
 	close_redirection_fds(data);
-	
 	return (0);
 }
 

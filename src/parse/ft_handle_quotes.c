@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 12:33:32 by paromero          #+#    #+#             */
-/*   Updated: 2025/05/27 19:26:06 by paromero         ###   ########.fr       */
+/*   Updated: 2025/05/28 16:00:32 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,30 +48,33 @@ int	handle_quotes(t_data *data, char **matrix, int count_x, int count_y)
 	return (0);
 }
 
+static int	process_quotes_in_line(t_data *data, char **matrix, int count_x)
+{
+	int	count_y;
+	int	quote_found;
+
+	quote_found = 0;
+	count_y = 0;
+	while (quote_found != 1 && matrix[count_x][count_y])
+	{
+		if (handle_quotes(data, matrix, count_x, count_y))
+			quote_found = 1;
+		else
+			count_y++;
+	}
+	return (quote_found);
+}
+
 void	ft_handle_quotes(t_data	*data, char	**matrix)
 {
 	char	*new_line;
 	int		count_x;
-	int		count_y;
 	int		quote_found;
 
 	count_x = 0;
-	new_line = NULL;
 	while (matrix[count_x])
 	{
-		quote_found = 0;
-		count_y = 0;
-		while (quote_found != 1 && matrix[count_x][count_y])
-		{
-			if (handle_quotes(data, matrix, count_x, count_y))
-			{
-				quote_found = 1;
-			}
-			else
-			{
-				count_y++;
-			}
-		}
+		quote_found = process_quotes_in_line(data, matrix, count_x);
 		if (!quote_found)
 		{
 			new_line = ft_handledollar(data, matrix[count_x]);
