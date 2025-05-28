@@ -6,15 +6,15 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 11:59:00 by anggalle          #+#    #+#             */
-/*   Updated: 2025/05/14 19:10:25 by paromero         ###   ########.fr       */
+/*   Updated: 2025/05/28 17:27:02 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
 /**
- * Ejecuta el lado izquierdo de una tubería
- * Redirige la salida estándar al extremo de escritura de la tubería
+ * Executes the left side of a pipe
+ * Redirects standard output to the write end of the pipe
  */
 static void	exec_pipe_left(t_data *data, t_ast *node, int pipefd[2])
 {
@@ -31,9 +31,9 @@ static void	exec_pipe_left(t_data *data, t_ast *node, int pipefd[2])
 }
 
 /**
- * Ejecuta el lado derecho de una tubería
- * Redirige la entrada estándar al extremo de lectura de la tubería
- * Maneja correctamente las redirecciones si están presentes
+ * Executes the right side of a pipe
+ * Redirects standard input to the read end of the pipe
+ * Correctly handles redirections if present
  */
 static void	exec_pipe_right(t_data *data, t_ast *node, int pipefd[2])
 {
@@ -54,8 +54,8 @@ static void	exec_pipe_right(t_data *data, t_ast *node, int pipefd[2])
 }
 
 /**
- * Espera a que terminen los procesos hijo y actualiza el estado de salida
- * Solo se considera el estado de salida del último comando (derecho)
+ * Waits for child processes to finish and updates the exit status
+ * Only the exit status of the last command (right side) is considered
  */
 static void	wait_for_processes(t_data *data, pid_t pid_left, pid_t pid_right)
 {
@@ -71,7 +71,7 @@ static void	wait_for_processes(t_data *data, pid_t pid_left, pid_t pid_right)
 }
 
 /**
- * Maneja la creación y ejecución de los procesos para cada lado de la tubería
+ * Handles creation and execution of processes for each side of the pipe
  */
 static void	handle_pipe_processes(t_data *data, t_ast *node, int pipefd[2])
 {
@@ -92,7 +92,7 @@ static void	handle_pipe_processes(t_data *data, t_ast *node, int pipefd[2])
 }
 
 /**
- * Crea una tubería y ejecuta los comandos conectados por ella
+ * Creates a pipe and executes the commands connected by it
  */
 void	exec_pipe(t_data *data, t_ast *node)
 {

@@ -6,13 +6,13 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 16:30:00 by paromero          #+#    #+#             */
-/*   Updated: 2025/05/25 17:13:40 by paromero         ###   ########.fr       */
+/*   Updated: 2025/05/28 17:27:02 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-//? Maneja archivos de salida y append
+//? Handles output and append files
 static int	handle_output_file(t_data *data, char *filename, int type)
 {
 	int	fd;
@@ -33,7 +33,7 @@ static int	handle_output_file(t_data *data, char *filename, int type)
 	return (1);
 }
 
-//? Verifica el acceso a archivos para operaciones de redirección
+//? Checks file access for redirection operations
 int	handle_file_access(t_data *data, char *filename, int type)
 {
 	if (type == REDIRECT_IN)
@@ -50,7 +50,7 @@ int	handle_file_access(t_data *data, char *filename, int type)
 	return (1);
 }
 
-//? Verifica la validez de los tokens de redirección y sus argumentos
+//? Checks the validity of redirection tokens and their arguments
 int	handle_redirect_checks(t_data *data, t_tokens *tokens)
 {
 	char	*filename;
@@ -68,7 +68,7 @@ int	handle_redirect_checks(t_data *data, t_tokens *tokens)
 	return (handle_file_access(data, filename, tokens->type));
 }
 
-//? Actualiza un nodo de redirección existente con un nuevo valor
+//? Updates an existing redirection node with a new value
 int	handle_redirect_update(t_ast *current, t_tokens *tokens)
 {
 	if (current->right)
@@ -87,7 +87,7 @@ int	handle_redirect_update(t_ast *current, t_tokens *tokens)
 	return (1);
 }
 
-//? Busca nodos de redirección del mismo tipo y los actualiza o crea nuevos
+//? Searches for redirection nodes of the same type and updates them or creates new ones
 int	handle_redirect_node(t_ast **root,
 	t_ast **last_op, t_tokens *tokens)
 {

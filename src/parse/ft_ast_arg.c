@@ -6,13 +6,13 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 18:29:00 by paromero          #+#    #+#             */
-/*   Updated: 2025/04/08 18:36:20 by paromero         ###   ########.fr       */
+/*   Updated: 2025/05/28 17:27:02 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-//? Copia los argumentos existentes a un nuevo array y añade un nuevo argumento
+//? Copies existing arguments to a new array and adds a new argument
 void	copy_args(char **new_args, t_ast *cmd_node, int i, char *arg)
 {
 	int	j;
@@ -34,7 +34,7 @@ void	copy_args(char **new_args, t_ast *cmd_node, int i, char *arg)
 	new_args[j + 1] = NULL;
 }
 
-//? Añade un nuevo argumento a un nodo de comando existente
+//? Adds a new argument to an existing command node
 void	ft_add_argument(t_ast *cmd_node, char *arg)
 {
 	int		i;
@@ -51,7 +51,7 @@ void	ft_add_argument(t_ast *cmd_node, char *arg)
 	cmd_node->args = new_args;
 }
 
-//? Maneja un argumento de comando en el contexto de una redirección
+//? Handles a command argument in the context of a redirection
 void	handle_command_as_arg(t_ast **cmd, t_ast **redirect,
 	t_tokens *tokens)
 {

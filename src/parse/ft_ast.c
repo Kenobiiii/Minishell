@@ -6,13 +6,13 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 17:26:30 by paromero          #+#    #+#             */
-/*   Updated: 2025/05/25 17:27:13 by paromero         ###   ########.fr       */
+/*   Updated: 2025/05/28 17:27:02 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-//? Crea un nuevo nodo de comando y lo conecta al AST si es necesario
+//? Creates a new command node and connects it to the AST if necessary
 static	void	handle_new_command(t_ast **root, t_ast **cmd,
 		t_ast **last_op, t_tokens *tokens)
 {
@@ -34,7 +34,7 @@ static	void	handle_new_command(t_ast **root, t_ast **cmd,
 		(*last_op)->right = *cmd;
 }
 
-//? Procesa un token de comando y lo añade al AST
+//? Processes a command token and adds it to the AST
 void	ft_handle_command_node(t_ast **root, t_ast **cmd,
 	t_ast **last_op, t_tokens *tokens)
 {
@@ -62,7 +62,7 @@ void	ft_handle_command_node(t_ast **root, t_ast **cmd,
 		handle_new_command(root, cmd, last_op, tokens);
 }
 
-//? Procesa un token operador (pipe, redirección, &&, ||) y lo añade al AST
+//? Processes an operator token (pipe, redirection, &&, ||) and adds it to the AST
 int	ft_handle_operator_node(t_data *data, t_ast_args *args)
 {
 	t_ast	*new_op;

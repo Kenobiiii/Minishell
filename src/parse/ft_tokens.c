@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 20:08:34 by paromero          #+#    #+#             */
-/*   Updated: 2025/05/27 17:18:04 by paromero         ###   ########.fr       */
+/*   Updated: 2025/05/28 17:27:02 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int	ft_types(char	*value)
 	return (CMD);
 }
 
-//? Procesa un token individual en el bucle
+//? Processes an individual token in the loop
 static int	process_single_token(t_data *data, t_tokens **current,
 		char **token_array, int i)
 {

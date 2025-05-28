@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 13:59:23 by anggalle          #+#    #+#             */
-/*   Updated: 2025/05/27 17:18:04 by paromero         ###   ########.fr       */
+/*   Updated: 2025/05/28 17:27:02 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ void	analyse_status(t_data *data)
 }
 
 /**
- * Maneja los errores de procesos y muestra mensajes descriptivos
+ * Handles process errors and displays descriptive messages
  * 
  * @param result El resultado de la llamada al sistema
  * @param error_msg El mensaje de error a mostrar

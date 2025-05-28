@@ -6,20 +6,20 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 17:13:17 by paromero          #+#    #+#             */
-/*   Updated: 2025/05/25 17:43:12 by paromero         ###   ########.fr       */
+/*   Updated: 2025/05/28 17:27:02 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-//? Verifica si el token es de redirección
+//? Checks if the token is a redirection token
 int	is_redirect_token(t_tokens *tokens)
 {
 	return (tokens->type == REDIRECT_IN || tokens->type == REDIRECT_OUT
 		|| tokens->type == REDIN2 || tokens->type == REDOUT2);
 }
 
-//? Verifica si el operador es un operador de redirección
+//? Checks if the operator is a redirection operator
 int	is_red(t_ast **last_op)
 {
 	if (last_op && *last_op && ((*last_op)->type == REDIN2
@@ -30,7 +30,7 @@ int	is_red(t_ast **last_op)
 	return (0);
 }
 
-//? Maneja redirecciones en operadores
+//? Handles redirections in operators
 int	handle_redirect_operator(t_ast_args *args)
 {
 	t_ast	*new_op;
@@ -49,7 +49,7 @@ int	handle_redirect_operator(t_ast_args *args)
 	return (1);
 }
 
-//? Maneja la creación de nodos de redirección y su conexión con comandos
+//? Handles creation of redirection nodes and their connection with commands
 void	handle_redirection(t_ast **root, t_ast **cmd,
 		t_ast **last_op, t_tokens *tokens)
 {

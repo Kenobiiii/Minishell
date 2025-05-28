@@ -6,15 +6,15 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/28 16:21:25 by paromero          #+#    #+#             */
-/*   Updated: 2025/05/28 16:22:48 by paromero         ###   ########.fr       */
+/*   Updated: 2025/05/28 17:27:02 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
 /**
- * Resetea los descriptores de archivo de redirección a -1
- * sin cerrarlos (asume que ya fueron cerrados o transferidos)
+ * Resets redirection file descriptors to -1
+ * without closing them (assumes they were already closed or transferred)
  */
 void	reset_redirection_fds(t_data *data)
 {
@@ -24,8 +24,8 @@ void	reset_redirection_fds(t_data *data)
 }
 
 /**
- * Cierra todos los descriptores de archivo de redirección abiertos
- * y los resetea a -1
+ * Closes all open redirection file descriptors
+ * and resets them to -1
  */
 void	close_redirection_fds(t_data *data)
 {
@@ -47,8 +47,8 @@ void	close_redirection_fds(t_data *data)
 }
 
 /**
- * Aplica las redirecciones para built-ins (que no hacen fork)
- * Retorna 1 si se aplicaron redirecciones, 0 si no
+ * Applies redirections for built-ins (which don't fork)
+ * Returns 1 if redirections were applied, 0 if not
  */
 int	apply_redirections_for_builtin(t_data *data)
 {
@@ -75,7 +75,7 @@ int	apply_redirections_for_builtin(t_data *data)
 
 /**
  *? Restaura stdin y stdout a sus valores originales,
- *? después de ejecutar un built-in
+ *? after executing a built-in
  */
 void	restore_redirections_for_builtin(t_data *data,
 	int saved_stdin, int saved_stdout)

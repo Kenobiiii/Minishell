@@ -6,13 +6,13 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 13:19:35 by paromero          #+#    #+#             */
-/*   Updated: 2025/05/25 17:33:18 by paromero         ###   ########.fr       */
+/*   Updated: 2025/05/28 17:27:02 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-//? Verifica si el último operador es un operador de heredoc (<<)
+//? Checks if the last operator is a heredoc operator (<<)
 int	is_redin2(t_ast **last_operator)
 {
 	if (last_operator && *last_operator)
@@ -23,7 +23,7 @@ int	is_redin2(t_ast **last_operator)
 	return (0);
 }
 
-//? Maneja argumentos adicionales cuando ya hay comando y delimitador
+//? Handles additional arguments when there's already a command and delimiter
 static void	handle_additional_args(t_ast **current_cmd, t_ast *new_node,
 		t_tokens *tokens)
 {
@@ -47,7 +47,7 @@ static void	handle_additional_args(t_ast **current_cmd, t_ast *new_node,
 	}
 }
 
-//? Maneja el caso especial de heredoc (<<) con configuraciones de nodos
+//? Handles the special case of heredoc (<<) with node configurations
 void	redin2(t_ast **current_cmd, t_ast **last_operator,
 		t_ast *new_node, t_tokens *tokens)
 {

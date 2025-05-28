@@ -6,13 +6,13 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 18:26:41 by paromero          #+#    #+#             */
-/*   Updated: 2025/05/25 17:27:13 by paromero         ###   ########.fr       */
+/*   Updated: 2025/05/28 17:27:02 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-//? Crea un nuevo nodo para el AST con el tipo y valor especificados
+//? Creates a new node for the AST with the specified type and value
 t_ast	*ft_create_ast_node(t_type type, char *value)
 {
 	t_ast	*node;
@@ -28,8 +28,8 @@ t_ast	*ft_create_ast_node(t_type type, char *value)
 	return (node);
 }
 
-//? Conecta un nuevo operador con el nodo de comando actual 
-//? y actualiza la raíz del AST
+//? Connects a new operator with the current command node 
+//? and updates the AST root
 void	connect_operator(t_ast **root, t_ast **cmd,
 	t_ast **last_op, t_ast *new_op)
 {
@@ -43,7 +43,7 @@ void	connect_operator(t_ast **root, t_ast **cmd,
 		*cmd = NULL;
 }
 
-//? Crea un nuevo nodo operador y lo conecta al AST
+//? Creates a new operator node and connects it to the AST
 void	handle_new_node(t_ast **root, t_ast **cmd,
 	t_ast **last_op, t_ast *new_op)
 {
@@ -56,7 +56,7 @@ void	handle_new_node(t_ast **root, t_ast **cmd,
 	}
 }
 
-//? Inicializa las variables del AST
+//? Initializes the AST variables
 void	init_ast_vars(t_ast **root, t_ast **cmd, t_ast **last_op,
 	t_ast_args *args)
 {
@@ -68,7 +68,7 @@ void	init_ast_vars(t_ast **root, t_ast **cmd, t_ast **last_op,
 	args->last_op = last_op;
 }
 
-//? Procesa un token individual
+//? Processes an individual token
 int	process_token(t_data *data, t_ast_args *args)
 {
 	if (args->tokens->type == CMD)
