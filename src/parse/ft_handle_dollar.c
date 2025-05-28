@@ -47,31 +47,42 @@ static int	copy_env_value(t_data *data,
 	return (1);
 }
 
+static void	process_dollar_expansion(t_data *data, t_expansion *exp)
+{
+	if (exp->line[*exp->i] == '$' && exp->line[*exp->i + 1] == '?')
+	{
+		handle_exit_status(data, exp->result, exp->j);
+		*exp->i += 2;
+	}
+	else if (exp->line[*exp->i] == '$' && ft_isalnum(exp->line[*exp->i + 1]))
+	{
+		copy_env_value(data, extract_var(exp->line, exp->i),
+			exp->result, exp->j);
+	}
+	else
+		exp->result[(*exp->j)++] = exp->line[(*exp->i)++];
+}
+
 char	*ft_handledollar(t_data *data, char *line)
 {
-	char	*result;
-	int		i;
-	int		j;
+	char		*result;
+	int			i;
+	int			j;
+	int			buffer_size;
+	t_expansion	exp;
 
 	i = 0;
 	j = 0;
-	result = ft_calloc(ft_strlen(line) * 100 + 1, sizeof(char));
+	buffer_size = calculate_expanded_size(data, line);
+	result = ft_calloc(buffer_size, sizeof(char));
 	if (!result)
 		return (NULL);
+	exp.line = line;
+	exp.result = result;
+	exp.i = &i;
+	exp.j = &j;
 	while (line[i])
-	{
-		if (line[i] == '$' && line[i + 1] == '?')
-		{
-			handle_exit_status(data, result, &j);
-			i += 2;
-		}
-		else if (line[i] == '$' && ft_isalnum(line[i + 1]))
-		{
-			copy_env_value(data, extract_var(line, &i), result, &j);
-		}
-		else
-			result[j++] = line[i++];
-	}
+		process_dollar_expansion(data, &exp);
 	result[j] = '\0';
 	return (result);
 }

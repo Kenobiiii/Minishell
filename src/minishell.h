@@ -89,6 +89,14 @@ typedef struct s_env
 	struct s_env	*next;
 }	t_env;
 
+typedef struct s_expansion
+{
+	char	*line;
+	char	*result;
+	int		*i;
+	int		*j;
+}	t_expansion;
+
 typedef struct s_data
 {
 	char		*line; //- linea comando actual
@@ -103,8 +111,6 @@ typedef struct s_data
 	t_tokens	*tokens; //- puntero a estructura de tokens
 	t_ast		*ast; //- puntero a estructura ast (Abstract Syntax Tree)	
 }	t_data;
-
-extern sig_atomic_t	g_sigint_received;
 
 //* 				INIT					//
 
@@ -151,6 +157,10 @@ int			ft_quotelen(char	*line, char quote);
 
 //! ft_handle_dollar.c //
 char		*ft_handledollar(t_data *data, char *line);
+char		*find_envvar(t_data *data, const char *dollarline);
+
+//! ft_handle_dollar_size.c //
+int			calculate_expanded_size(t_data *data, char *line);
 
 //! ft_handle_dollar_utils.c //
 char		*get_env_value(t_data *data, const char *name);
