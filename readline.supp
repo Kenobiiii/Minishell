@@ -1,0 +1,179 @@
+# Valgrind suppression file for readline library
+# These leaks are from the system readline library and are not our responsibility
+
+{
+   readline_malloc_leak
+   Memcheck:Leak
+   match-leak-kinds: definite,indirect,possible
+   ...
+   fun:malloc
+   ...
+   fun:readline
+}
+
+{
+   readline_calloc_leak
+   Memcheck:Leak
+   match-leak-kinds: definite,indirect,possible
+   ...
+   fun:calloc
+   ...
+   fun:readline
+}
+
+{
+   readline_realloc_leak
+   Memcheck:Leak
+   match-leak-kinds: definite,indirect,possible
+   ...
+   fun:realloc
+   ...
+   fun:readline
+}
+
+{
+   readline_library_leak
+   Memcheck:Leak
+   match-leak-kinds: definite,indirect,possible
+   ...
+   obj:*/libreadline.so*
+}
+
+{
+   readline_library_leak2
+   Memcheck:Leak
+   match-leak-kinds: definite,indirect,possible
+   ...
+   obj:*/libreadline.so.*
+}
+
+{
+   add_history_leak
+   Memcheck:Leak
+   match-leak-kinds: definite,indirect,possible
+   ...
+   fun:add_history
+}
+
+{
+   readline_internal_leak
+   Memcheck:Leak
+   match-leak-kinds: definite,indirect,possible
+   ...
+   fun:*readline*
+}
+
+{
+   termcap_leak1
+   Memcheck:Leak
+   match-leak-kinds: definite,indirect,possible
+   ...
+   fun:tgetent
+}
+
+{
+   termcap_leak2
+   Memcheck:Leak
+   match-leak-kinds: definite,indirect,possible
+   ...
+   fun:tgetstr
+}
+
+{
+   ncurses_leak
+   Memcheck:Leak
+   match-leak-kinds: definite,indirect,possible
+   ...
+   fun:_nc_*
+}
+
+{
+   ncurses_leak2
+   Memcheck:Leak
+   match-leak-kinds: definite,indirect,possible
+   ...
+   obj:*/libncurses*
+}
+
+{
+   tinfo_leak
+   Memcheck:Leak
+   match-leak-kinds: definite,indirect,possible
+   ...
+   obj:*/libtinfo*
+}
+
+{
+   readline_history_leak
+   Memcheck:Leak
+   match-leak-kinds: definite,indirect,possible
+   ...
+   fun:history_*
+}
+
+{
+   readline_rl_leak
+   Memcheck:Leak
+   match-leak-kinds: definite,indirect,possible
+   ...
+   fun:rl_*
+}
+
+{
+   readline_completion_leak
+   Memcheck:Leak
+   match-leak-kinds: definite,indirect,possible
+   ...
+   fun:*completion*
+}
+
+{
+   readline_filename_completion
+   Memcheck:Leak
+   match-leak-kinds: definite,indirect,possible
+   ...
+   fun:filename_completion_function
+}
+
+{
+   readline_username_completion
+   Memcheck:Leak
+   match-leak-kinds: definite,indirect,possible
+   ...
+   fun:username_completion_function
+}
+
+# Generic suppressions for system libraries that readline depends on
+{
+   libc_dl_leak
+   Memcheck:Leak
+   match-leak-kinds: definite,indirect,possible
+   ...
+   obj:*/libc-*.so
+   ...
+   fun:readline
+}
+
+{
+   ld_linux_leak
+   Memcheck:Leak
+   match-leak-kinds: definite,indirect,possible
+   ...
+   obj:*/ld-linux-x86-64.so*
+}
+
+{
+   dlopen_leak
+   Memcheck:Leak
+   match-leak-kinds: definite,indirect,possible
+   ...
+   fun:dlopen*
+}
+
+{
+   dlsym_leak
+   Memcheck:Leak
+   match-leak-kinds: definite,indirect,possible
+   ...
+   fun:dlsym*
+}

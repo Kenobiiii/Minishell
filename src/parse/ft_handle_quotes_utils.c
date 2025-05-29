@@ -17,18 +17,30 @@ char	*ft_handle_type_quote(char *line, char quote_char)
 	char	*new_line;
 	int		i;
 	int		j;
+	int		len;
 
+	len = ft_strlen(line);
+	if (len < 2)
+		return (ft_strdup(line)); // No quotes to remove
+	
+	new_line = (char *)malloc(sizeof(char) * len);
+	if (!new_line)
+		return (NULL);
+	
 	j = 0;
 	i = 0;
-	new_line = (char *)malloc(sizeof(char) * (ft_strlen(line) + 1));
-	if (!new_line)
-		return (0);
-	while (line[i])
+	
+	// Skip the first quote if it matches
+	if (line[i] == quote_char)
+		i++;
+	
+	// Copy everything except the last quote
+	while (i < len && !(i == len - 1 && line[i] == quote_char))
 	{
-		if (line[i] != quote_char)
-			new_line[j++] = line[i];
+		new_line[j++] = line[i];
 		i++;
 	}
+	
 	new_line[j] = '\0';
 	return (new_line);
 }

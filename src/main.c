@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 17:54:48 by paromero          #+#    #+#             */
-/*   Updated: 2025/05/29 16:24:50 by paromero         ###   ########.fr       */
+/*   Updated: 2025/05/29 18:29:25 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,12 @@ void	process_command_line(t_data *data)
 {
 	if (data->line && *data->line)
 	{
+		// Check if line contains only spaces
+		if (!ft_isspace(data->line))
+		{
+			free_while(data);
+			return ;
+		}
 		if (!line_syntax(data))
 		{
 			free_while(data);

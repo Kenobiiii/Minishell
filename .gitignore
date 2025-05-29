@@ -6,6 +6,6 @@ minishell
 *.a
 *.o
 a.out
-*.sh
+# *.sh
 
 minishell_tester

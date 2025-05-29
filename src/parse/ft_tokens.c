@@ -59,9 +59,14 @@ int	ft_tokens(t_data *data, char *str)
 	int			type;
 
 	token_array = ft_quotesplit(str, ' ', data);
+	if (!token_array)
+		return (0);
 	data->tokens = ft_new_token(token_array[0]);
 	if (!data->tokens)
+	{
+		free_matrix(token_array);
 		return (0);
+	}
 	data->only_redirections = 1;
 	current = data->tokens;
 	i = 1;
@@ -84,12 +89,19 @@ t_tokens	*ft_new_token(char *str)
 	t_tokens	*new_node;
 	char		*processed_str;
 
+	if (!str)
+		return (NULL);
 	processed_str = ft_strdup(str);
+	if (!processed_str)
+		return (NULL);
 	if (processed_str[0] == '\x01')
 		ft_memmove(processed_str, processed_str + 1, ft_strlen(processed_str));
 	new_node = malloc(sizeof(t_tokens));
 	if (!new_node)
+	{
+		free(processed_str);
 		return (NULL);
+	}
 	new_node->value = processed_str;
 	new_node->next = NULL;
 	return (new_node);
