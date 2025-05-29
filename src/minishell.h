@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 19:06:45 by paromero          #+#    #+#             */
-/*   Updated: 2025/05/28 16:29:50 by paromero         ###   ########.fr       */
+/*   Updated: 2025/05/29 17:26:23 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,10 +159,10 @@ void		handle_special_operators(const char *s, size_t *i);
 int			is_double_operator(const char *s, size_t i);
 
 //! ft_handle_quotes.c //
-void		ft_handle_quotes(t_data	*data, char	**matrix);
+void		ft_process_all_quotes(t_data	*data, char	**matrix);
 
 //! ft_handle_quotes_utils.c //
-char		*ft_handle_quote(char *line, char quote_char);
+char		*ft_handle_type_quote(char *line, char quote_char);
 int			ft_quotelen(char	*line, char quote);
 
 //! ft_handle_dollar.c //

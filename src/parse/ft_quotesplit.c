@@ -118,6 +118,6 @@ char	**ft_quotesplit(char const *s, char c, t_data *data)
 		free_matrix(array);
 		return (NULL);
 	}
-	ft_handle_quotes(data, array);
+	ft_process_all_quotes(data, array);
 	return (array);
 }

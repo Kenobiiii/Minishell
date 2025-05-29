@@ -6,13 +6,13 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 17:00:00 by paromero          #+#    #+#             */
-/*   Updated: 2025/05/27 19:26:06 by paromero         ###   ########.fr       */
+/*   Updated: 2025/05/29 17:26:23 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-char	*ft_handle_quote(char *line, char quote_char)
+char	*ft_handle_type_quote(char *line, char quote_char)
 {
 	char	*new_line;
 	int		i;
