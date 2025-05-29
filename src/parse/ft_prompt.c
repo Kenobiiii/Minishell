@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 18:42:01 by paromero          #+#    #+#             */
-/*   Updated: 2025/05/28 17:47:18 by paromero         ###   ########.fr       */
+/*   Updated: 2025/05/29 16:41:04 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,8 @@ int	update_pwd(t_data	*data)
 	char	*pwd_value;
 
 	new_pwd = getcwd(cwd, sizeof(cwd));
+	if (!new_pwd)
+		new_pwd = "Deleted cd";
 	tmp = data->env;
 	while (ft_strncmp(tmp->value, "PWD=", 4) != 0)
 		tmp = tmp->next;
