@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 17:53:02 by paromero          #+#    #+#             */
-/*   Updated: 2025/05/28 17:42:23 by paromero         ###   ########.fr       */
+/*   Updated: 2025/05/29 16:25:52 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,28 +75,6 @@ int	init_env(t_data *data, char *env[])
 	return (1);
 }
 
-int	init_empty_env(t_data *data)
-{
-	t_env	*current;
-	char	*pwd_value;
-
-	pwd_value = ft_strcat("PWD=", data->cwd);
-	data->env = create_env_node(pwd_value);
-	free(pwd_value);
-	if (!data->env)
-		return (0);
-	current = data->env;
-	current->next = create_env_node("SHLVL=1");
-	if (!current->next)
-		return (0);
-	current = current->next;
-	current->next = create_env_node("_=/usr/bin/env");
-	if (!current->next)
-		return (0);
-	current = current->next;
-	return (1);
-}
-
 int	init_data(t_data *data, char **env)
 {
 	char	cwd[PATH_MAX];
@@ -115,13 +93,8 @@ int	init_data(t_data *data, char **env)
 	data->output_redir_fd = -1;
 	data->heredoc_pipe_fd = -1;
 	rl_clear_history();
-	if (env == NULL || env[0] == NULL)
-		init_empty_env(data);
-	else
-	{
-		if (!init_env(data, env))
-			env_error(data);
-		increment_shlvl(data->env);
-	}
+	if (!init_env(data, env))
+		env_error(data);
+	increment_shlvl(data->env);
 	return (1);
 }

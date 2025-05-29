@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 17:54:48 by paromero          #+#    #+#             */
-/*   Updated: 2025/05/28 15:55:23 by paromero         ###   ########.fr       */
+/*   Updated: 2025/05/29 16:24:50 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,11 @@ int	main(int ac, char **av, char **env)
 	if (ac != 1)
 	{
 		printf("Error: More than one arguments\n");
+		return (0);
+	}
+	if (env == NULL || env[0] == NULL)
+	{
+		printf("Error: No enviroment found\n");
 		return (0);
 	}
 	(void)ac;
