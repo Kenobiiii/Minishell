@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 12:59:22 by anggalle          #+#    #+#             */
-/*   Updated: 2025/05/27 19:26:06 by paromero         ###   ########.fr       */
+/*   Updated: 2025/05/29 16:48:11 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ char	*find_variable_in_env(t_data *data, char *var)
 	char	*env_var;
 
 	aux_env = data->env;
-	while (aux_env->value)
+	while (aux_env && aux_env->value)
 	{
 		if (ft_strncmp(aux_env->value, var, ft_strlen(var)) == 0)
 		{

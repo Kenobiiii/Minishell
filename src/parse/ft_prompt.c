@@ -63,7 +63,7 @@ int	update_pwd(t_data	*data)
 	if (!new_pwd)
 		new_pwd = "Deleted cd";
 	tmp = data->env;
-	while (ft_strncmp(tmp->value, "PWD=", 4) != 0)
+	while (tmp && ft_strncmp(tmp->value, "PWD=", 4) != 0)
 		tmp = tmp->next;
 	if (tmp)
 	{
