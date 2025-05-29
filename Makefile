@@ -59,6 +59,7 @@ SRCS = src/main.c \
 
 OBJS = $(patsubst src/%.c, $(OBJ_DIR)/%.o, $(SRCS))
 
+HEADERS = src/minishell.h
 NAME = minishell
 
 LIBFT_DIR = libft
@@ -76,7 +77,7 @@ $(NAME): $(OBJS)
 	@$(CC) $(CFLAGS) $(OBJS) $(LIBS) -o $(NAME)
 	@echo "$(GREEN)Executable created: $(NAME)$(RESET)"
 
-$(OBJ_DIR)/%.o: src/%.c | $(OBJ_DIR)
+$(OBJ_DIR)/%.o: src/%.c $(HEADERS) | $(OBJ_DIR)
 	@echo "$(GREEN)Compiling $<...$(RESET)"
 	@mkdir -p $(dir $@)
 	@$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
