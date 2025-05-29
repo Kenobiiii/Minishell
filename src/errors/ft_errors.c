@@ -47,9 +47,10 @@ void	exit_minishell(t_data *data, const char *error_message, int exit_code)
 			ft_putstr_fd("minishell: Permission denied\n", 2);
 			exit_code = 126;
 		}
-		else if (errno == ENOENT && exit_code == 127)
+		else if (exit_code == 127)
 		{
 			ft_putstr_fd("minishell: ", 2);
+			ft_putstr_fd((char *)error_message, 2);
 			ft_putstr_fd(": command not found\n", 2);
 		}
 		else

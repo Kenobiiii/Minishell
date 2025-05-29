@@ -36,7 +36,7 @@ static void	handle_child(t_data *data, char *path, t_ast *node)
 	setup_signals_for_child();
 	setup_child_redirections(data);
 	if (!path)
-		exit_minishell(data, "command not found", 127);
+		exit_minishell(data, node->value, 127);
 	if (execve(path, node->args, (char **)list_to_array(data->env)) == -1)
 	{
 		free(path);
@@ -73,7 +73,16 @@ void	exec_ast(t_data *data, t_ast *node)
 	if (!node)
 		return ;
 	if (node->type == CMD)
-		exec_simple_cmd(data, node);
+	{
+		if (is_builtin_command(node->value))
+		{
+			data->ast = node;
+			is_builtins(data, node->value);
+			exit(data->wstatus);
+		}
+		else
+			exec_simple_cmd(data, node);
+	}
 	else if (node->type == REDIRECT_OUT)
 		exec_redirect_out(data, node);
 	else if (node->type == REDIRECT_IN)
