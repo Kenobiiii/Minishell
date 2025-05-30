@@ -21,32 +21,16 @@ t_ast	*find_last_redirection(t_ast *node)
 	return (node);
 }
 
-static int	validate_heredoc_input(t_data *data, t_ast *node)
+static int	setup_heredoc_pipe(t_data *data, int pipefd[2], char *delim)
 {
-	if (!node || !node->right || !node->right->value)
-	{
-		ft_putstr_fd("syntax error: missing delimiter for <<\n", STDERR_FILENO);
-		data->wstatus = 2;
-		return (-1);
-	}
-	return (0);
-}
+	int	result;
 
-static int	create_heredoc_pipe(t_data *data, int pipefd[2])
-{
 	if (pipe(pipefd) < 0)
 	{
 		perror("pipe");
 		data->wstatus = 1;
 		return (-1);
 	}
-	return (0);
-}
-
-static int	process_heredoc_content(t_data *data, int pipefd[2], char *delim)
-{
-	int	result;
-
 	result = read_heredoc_lines(pipefd[1], delim);
 	close(pipefd[1]);
 	if (result == -1)
@@ -68,39 +52,46 @@ static void	collect_heredoc_chain(t_ast *node, t_ast **heredocs, int *count)
 	heredocs[(*count)++] = node;
 }
 
-void	exec_heredoc(t_data *data, t_ast *node)
+static void	process_heredoc_loop(t_data *data, t_ast **heredocs, int count)
 {
-	t_ast	*heredocs[10];
-	int		count = 0;
 	int		i;
 	char	*delim;
 	int		pipefd[2];
 
-	if (validate_heredoc_input(data, node) == -1)
-		return ;
-	collect_heredoc_chain(node, heredocs, &count);
-	for (i = 0; i < count; i++)
+	i = 0;
+	while (i < count)
 	{
 		delim = heredocs[i]->right->value;
-		if (create_heredoc_pipe(data, pipefd) == -1)
+		if (setup_heredoc_pipe(data, pipefd, delim) == -1)
 			return ;
-		if (process_heredoc_content(data, pipefd, delim) == -1)
-		{
-			close(pipefd[0]);
-			return ;
-		}
 		if (i < count - 1)
-		{
 			close(pipefd[0]);
-		}
 		else
 		{
 			if (data->heredoc_pipe_fd != -1)
 				close(data->heredoc_pipe_fd);
 			data->heredoc_pipe_fd = pipefd[0];
 		}
+		i++;
 	}
-	t_ast	*cmd_node = node;
+}
+
+void	exec_heredoc(t_data *data, t_ast *node)
+{
+	t_ast	*heredocs[10];
+	int		count;
+	t_ast	*cmd_node;
+
+	count = 0;
+	if (!node || !node->right || !node->right->value)
+	{
+		ft_putstr_fd("syntax error: missing delimiter for <<\n", STDERR_FILENO);
+		data->wstatus = 2;
+		return ;
+	}
+	collect_heredoc_chain(node, heredocs, &count);
+	process_heredoc_loop(data, heredocs, count);
+	cmd_node = node;
 	while (cmd_node && cmd_node->type == REDIN2)
 		cmd_node = cmd_node->left;
 	if (cmd_node)
