@@ -477,7 +477,7 @@ test_quotes() {
     
     # Level 4: Complex variable scenarios
     echo -e "${BLUE}Level 4: Complex Variables${NC}"
-    run_test "Variable with text" 'echo "prefix_$USER_suffix"' "prefix_${USER}_suffix" 1
+    run_test "Variable with text" 'echo "prefix_$USER_suffix"' "prefix_" 1
     run_test "Multiple vars with text" 'echo "$USER:$HOME:end"' "${USER}:${HOME}:end" 1
     run_test "Dollar without var" 'echo "test$"' "test$" 1
     
