@@ -58,21 +58,65 @@ static int	process_heredoc_content(t_data *data, int pipefd[2], char *delim)
 	return (0);
 }
 
+// Helper function to collect all heredoc nodes in order
+static void collect_heredoc_chain(t_ast *node, t_ast **heredocs, int *count)
+{
+	if (!node || node->type != REDIN2)
+		return;
+	
+	// First collect from left child if it's also a heredoc
+	if (node->left && node->left->type == REDIN2)
+		collect_heredoc_chain(node->left, heredocs, count);
+	
+	// Then add current node
+	heredocs[(*count)++] = node;
+}
+
 void	exec_heredoc(t_data *data, t_ast *node)
 {
+	t_ast	*heredocs[10]; // Reasonable limit for nested heredocs
+	int		count = 0;
+	int		i;
 	char	*delim;
 	int		pipefd[2];
 
 	if (validate_heredoc_input(data, node) == -1)
 		return ;
-	delim = node->right->value;
-	if (create_heredoc_pipe(data, pipefd) == -1)
-		return ;
-	if (process_heredoc_content(data, pipefd, delim) == -1)
-		return ;
-	if (data->heredoc_pipe_fd != -1)
-		close(data->heredoc_pipe_fd);
-	data->heredoc_pipe_fd = pipefd[0];
-	if (node->left)
-		exec_ast(data, node->left);
+	
+	// Collect all heredocs in the chain
+	collect_heredoc_chain(node, heredocs, &count);
+	
+	// Process all heredocs in order, but only keep the last one's output
+	for (i = 0; i < count; i++)
+	{
+		delim = heredocs[i]->right->value;
+		if (create_heredoc_pipe(data, pipefd) == -1)
+			return ;
+		if (process_heredoc_content(data, pipefd, delim) == -1)
+		{
+			close(pipefd[0]);
+			return;
+		}
+		
+		// Close previous heredoc pipe if this isn't the last one
+		if (i < count - 1)
+		{
+			close(pipefd[0]); // Discard this heredoc's input
+		}
+		else
+		{
+			// This is the last heredoc, keep its output
+			if (data->heredoc_pipe_fd != -1)
+				close(data->heredoc_pipe_fd);
+			data->heredoc_pipe_fd = pipefd[0];
+		}
+	}
+	
+	// Find the actual command to execute (skip all REDIN2 nodes)
+	t_ast *cmd_node = node;
+	while (cmd_node && cmd_node->type == REDIN2)
+		cmd_node = cmd_node->left;
+	
+	if (cmd_node)
+		exec_ast(data, cmd_node);
 }

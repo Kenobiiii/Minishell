@@ -95,7 +95,8 @@ int	handle_redirect_node(t_ast **root,
 	t_ast	*current;
 	int		found_same_redir;
 
-	if (tokens->type == REDIRECT_OUT || tokens->type == REDOUT2)
+	if (tokens->type == REDIRECT_OUT || tokens->type == REDOUT2 
+		|| tokens->type == REDIN2)
 		return (0);
 	current = *root;
 	found_same_redir = 0;
