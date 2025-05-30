@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 17:00:00 by paromero          #+#    #+#             */
-/*   Updated: 2025/05/29 17:26:23 by paromero         ###   ########.fr       */
+/*   Updated: 2025/05/30 12:12:36 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,26 +21,19 @@ char	*ft_handle_type_quote(char *line, char quote_char)
 
 	len = ft_strlen(line);
 	if (len < 2)
-		return (ft_strdup(line)); // No quotes to remove
-	
+		return (ft_strdup(line));
 	new_line = (char *)malloc(sizeof(char) * len);
 	if (!new_line)
 		return (NULL);
-	
 	j = 0;
 	i = 0;
-	
-	// Skip the first quote if it matches
 	if (line[i] == quote_char)
 		i++;
-	
-	// Copy everything except the last quote
 	while (i < len && !(i == len - 1 && line[i] == quote_char))
 	{
 		new_line[j++] = line[i];
 		i++;
 	}
-	
 	new_line[j] = '\0';
 	return (new_line);
 }

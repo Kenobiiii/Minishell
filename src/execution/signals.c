@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 18:42:47 by anggalle          #+#    #+#             */
-/*   Updated: 2025/05/25 21:49:03 by paromero         ###   ########.fr       */
+/*   Updated: 2025/05/30 12:13:04 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,25 +36,23 @@ void	handle_sigint(int sig)
 void	handle_sigquit(int sig)
 {
 	(void)sig;
-	// Durante ejecución: actualizar estado (el mensaje "Quit" se imprime en analyse_status)
 	if (g_shell_state == STATE_EXECUTING
 		|| g_shell_state == STATE_EXECUTION_INTERRUPTED)
 	{
 		g_shell_state = STATE_EXECUTION_INTERRUPTED;
 	}
-	// Durante prompt: no hacer nada (ignorar silenciosamente)
 }
 
 void	setup_signals(void)
 {
 	signal(SIGINT, handle_sigint);
-	signal(SIGQUIT, SIG_IGN);  // Ignorar SIGQUIT durante el prompt
+	signal(SIGQUIT, SIG_IGN);
 }
 
 void	setup_signals_for_execution(void)
 {
 	signal(SIGINT, handle_sigint);
-	signal(SIGQUIT, handle_sigquit);  // Manejar SIGQUIT durante ejecución
+	signal(SIGQUIT, handle_sigquit);
 }
 
 void	setup_signals_for_child(void)

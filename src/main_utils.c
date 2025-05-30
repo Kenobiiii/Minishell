@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 00:00:00 by anggalle          #+#    #+#             */
-/*   Updated: 2025/05/28 15:57:02 by paromero         ###   ########.fr       */
+/*   Updated: 2025/05/30 12:13:59 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ static void	reset_line_and_state(t_data *data)
 		data->line = NULL;
 	}
 	g_shell_state = STATE_PROMPT_NORMAL;
-	setup_signals();  // Restaurar señales del prompt
+	setup_signals();
 }
 
 int	handle_signal_states(t_data *data)
@@ -38,12 +38,12 @@ int	handle_signal_states(t_data *data)
 	else if (g_shell_state == STATE_EXECUTING)
 	{
 		g_shell_state = STATE_PROMPT_NORMAL;
-		setup_signals();  // Restaurar señales del prompt
+		setup_signals();
 	}
 	if (g_shell_state != STATE_PROMPT_NORMAL)
 	{
 		g_shell_state = STATE_PROMPT_NORMAL;
-		setup_signals();  // Restaurar señales del prompt
+		setup_signals();
 	}
 	return (0);
 }
