@@ -1,209 +1,619 @@
 #!/bin/bash
 
-# Master Test Suite - Runs all tests for Minishell
-# Comprehensive testing for functionality, memory safety, and robustness
+# UNIFIED MASTER TEST SUITE FOR MINISHELL
+# Usage: ./master_test.sh [module] [options]
+# Modules: quotes, signals, pipes, redirections, builtins, stress, extreme, all
+# Options: --valgrind, --no-color, --verbose
 
+# Color definitions
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
 CYAN='\033[0;36m'
+PURPLE='\033[0;35m'
 NC='\033[0m'
 
+# Configuration
 MINISHELL="./minishell"
+USE_COLOR=true
+USE_VALGRIND=false
+VERBOSE=true
+TOTAL_PASSED=0
+TOTAL_FAILED=0
+TOTAL_LEAKS=0
+TOTAL_SEGFAULTS=0
 
-echo -e "${CYAN}╔════════════════════════════════════════════════════════════╗${NC}"
-echo -e "${CYAN}║                 MINISHELL MASTER TEST SUITE                ║${NC}"
-echo -e "${CYAN}║          Comprehensive Testing & Validation               ║${NC}"
-echo -e "${CYAN}╚════════════════════════════════════════════════════════════╝${NC}"
-echo
+# Parse command line arguments
+MODULE=""
+while [[ $# -gt 0 ]]; do
+    case $1 in
+        quotes|signals|pipes|redirections|builtins|stress|extreme|all)
+            MODULE="$1"
+            shift
+            ;;
+        --valgrind)
+            USE_VALGRIND=true
+            shift
+            ;;
+        --no-color)
+            USE_COLOR=false
+            shift
+            ;;
+        --verbose)
+            VERBOSE=true
+            shift
+            ;;
+        -h|--help)
+            echo "Usage: $0 [module] [options]"
+            echo "Modules:"
+            echo "  quotes       - Quote handling tests"
+            echo "  signals      - Signal handling tests (automated)"
+            echo "  pipes        - Pipe functionality tests"
+            echo "  redirections - Redirection tests"
+            echo "  builtins     - Built-in command tests"
+            echo "  stress       - Comprehensive stress tests"
+            echo "  extreme      - Extreme edge cases"
+            echo "  all          - Run all tests (default)"
+            echo "Options:"
+            echo "  --valgrind   - Run with valgrind memory checking"
+            echo "  --no-color   - Disable colored output"
+            echo "  --verbose    - Verbose output"
+            echo "  --help       - Show this help"
+            exit 0
+            ;;
+        *)
+            echo "Unknown option: $1"
+            echo "Use --help for usage information"
+            exit 1
+            ;;
+    esac
+done
 
-# Check if minishell exists
-if [[ ! -f "$MINISHELL" ]]; then
-    echo -e "${RED}❌ Minishell executable not found: $MINISHELL${NC}"
-    echo "Please compile your minishell first with 'make'"
-    exit 1
+# Set default module if none specified
+if [[ -z "$MODULE" ]]; then
+    MODULE="all"
 fi
 
-echo -e "${BLUE}🔧 Minishell executable found: $MINISHELL${NC}"
-echo
+# Disable colors if requested
+if [[ "$USE_COLOR" == false ]]; then
+    RED=''
+    GREEN=''
+    YELLOW=''
+    BLUE=''
+    CYAN=''
+    PURPLE=''
+    NC=''
+fi
 
-# Function to run a test suite
-run_test_suite() {
-    local suite_name="$1"
-    local script_path="$2"
-    local description="$3"
-    
+# Helper functions
+print_header() {
+    local title="$1"
+    echo -e "${CYAN}╔════════════════════════════════════════════════════════════╗${NC}"
+    echo -e "${CYAN}║$(printf "%62s" "$title" | sed 's/ / /g')║${NC}"
+    echo -e "${CYAN}╚════════════════════════════════════════════════════════════╝${NC}"
+    echo
+}
+
+print_module_header() {
+    local module="$1"
+    local description="$2"
     echo -e "${YELLOW}╔══════════════════════════════════════════════════════════╗${NC}"
-    echo -e "${YELLOW}║ $suite_name${NC}"
+    echo -e "${YELLOW}║ $module${NC}"
     echo -e "${YELLOW}║ $description${NC}"
     echo -e "${YELLOW}╚══════════════════════════════════════════════════════════╝${NC}"
     echo
-    
-    if [[ ! -f "$script_path" ]]; then
-        echo -e "${RED}❌ Test script not found: $script_path${NC}"
-        return 1
-    fi
-    
-    bash "$script_path"
-    local exit_code=$?
-    
-    echo
-    case $exit_code in
-        0)
-            echo -e "${GREEN}✅ $suite_name PASSED${NC}"
-            ;;
-        1)
-            echo -e "${RED}💥 $suite_name CRITICAL FAILURE (Segfaults)${NC}"
-            return 1
-            ;;
-        2)
-            echo -e "${YELLOW}⚠️  $suite_name WARNING (Memory leaks)${NC}"
-            ;;
-        3)
-            echo -e "${YELLOW}⚠️  $suite_name MINOR FAILURES${NC}"
-            ;;
-        *)
-            echo -e "${RED}❌ $suite_name UNKNOWN ERROR (Exit code: $exit_code)${NC}"
-            ;;
-    esac
-    
-    echo
-    return $exit_code
 }
 
-# Track overall results
-TOTAL_SUITES=0
-PASSED_SUITES=0
-CRITICAL_FAILURES=0
-WARNINGS=0
+run_test() {
+    local test_name="$1"
+    local command="$2"
+    local expected="$3"
+    local should_pass="$4"
+    
+    if [[ "$VERBOSE" == true ]]; then
+        echo -e "${BLUE}Testing: $test_name${NC}"
+        echo "Command: $command"
+    else
+        echo -n "Testing: $test_name... "
+    fi
+    
+    # Create temporary files
+    echo "$command" > /tmp/minishell_test_input.txt
+    echo "exit" >> /tmp/minishell_test_input.txt
+    
+    local valgrind_cmd=""
+    if [[ "$USE_VALGRIND" == true ]]; then
+        valgrind_cmd="valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --error-exitcode=42 --log-file=/tmp/valgrind_output.txt --suppressions=readline.supp"
+    fi
+    
+    # Run the test
+    if [[ "$USE_VALGRIND" == true ]]; then
+        $valgrind_cmd $MINISHELL < /tmp/minishell_test_input.txt > /tmp/minishell_output.txt 2>&1
+    else
+        timeout 5 $MINISHELL < /tmp/minishell_test_input.txt > /tmp/minishell_output.txt 2>&1
+    fi
+    
+    local exit_code=$?
+    local minishell_output=$(cat /tmp/minishell_output.txt 2>/dev/null)
+    
+    # Check for segfault
+    if [[ $exit_code -eq 139 ]] || [[ $exit_code -eq 42 ]]; then
+        if [[ "$VERBOSE" == true ]]; then
+            echo -e "${RED}SEGFAULT DETECTED!${NC}"
+        else
+            echo -e "${RED}SEGFAULT${NC}"
+        fi
+        ((TOTAL_SEGFAULTS++))
+        ((TOTAL_FAILED++))
+        return
+    fi
+    
+    # Check for timeout
+    if [[ $exit_code -eq 124 ]]; then
+        if [[ "$VERBOSE" == true ]]; then
+            echo -e "${RED}TIMEOUT!${NC}"
+        else
+            echo -e "${RED}TIMEOUT${NC}"
+        fi
+        ((TOTAL_FAILED++))
+        return
+    fi
+    
+    # Check valgrind output for memory leaks
+    local has_leak=false
+    if [[ "$USE_VALGRIND" == true ]] && [[ -f /tmp/valgrind_output.txt ]]; then
+        local valgrind_output=$(cat /tmp/valgrind_output.txt)
+        if echo "$valgrind_output" | grep -q "definitely lost\|indirectly lost\|possibly lost" && \
+           ! echo "$valgrind_output" | grep -q "0 bytes in 0 blocks"; then
+            has_leak=true
+            ((TOTAL_LEAKS++))
+        fi
+    fi
+    
+    # Check expected output
+    local test_passed=true
+    if [[ $should_pass -eq 1 ]] && [[ -n "$expected" ]]; then
+        if ! echo "$minishell_output" | grep -q "$expected"; then
+            test_passed=false
+        fi
+    fi
+    
+    # Report results
+    if [[ "$test_passed" == true ]]; then
+        if [[ "$has_leak" == true ]]; then
+            if [[ "$VERBOSE" == true ]]; then
+                echo -e "${YELLOW}PASSED (with memory leak)${NC}"
+            else
+                echo -e "${YELLOW}PASSED (LEAK)${NC}"
+            fi
+        else
+            if [[ "$VERBOSE" == true ]]; then
+                echo -e "${GREEN}PASSED${NC}"
+            else
+                echo -e "${GREEN}PASSED${NC}"
+            fi
+        fi
+        ((TOTAL_PASSED++))
+    else
+        if [[ "$VERBOSE" == true ]]; then
+            echo -e "${RED}FAILED!${NC}"
+            echo "Expected: $expected"
+            echo "Got: $minishell_output"
+        else
+            echo -e "${RED}FAILED${NC}"
+        fi
+        ((TOTAL_FAILED++))
+    fi
+    
+    if [[ "$VERBOSE" == true ]]; then
+        echo "----------------------------------------"
+    fi
+}
 
-# Arrays to track which suites had issues
-declare -a FAILED_SUITES=()
-declare -a WARNING_SUITES=()
-declare -a CRITICAL_SUITES=()
+cleanup() {
+    rm -f /tmp/minishell_test_input.txt /tmp/minishell_output.txt /tmp/valgrind_output.txt 2>/dev/null
+}
 
-# 1. Basic Quote Tests
-if [[ -f "test_quotes.sh" ]]; then
-    ((TOTAL_SUITES++))
-    run_test_suite "BASIC QUOTE TESTS" "test_quotes.sh" "Testing basic quote functionality"
-    case $? in
-        0) ((PASSED_SUITES++)) ;;
-        1) ((CRITICAL_FAILURES++)); CRITICAL_SUITES+=("Basic Quote Tests") ;;
-        *) ((WARNINGS++)); WARNING_SUITES+=("Basic Quote Tests") ;;
-    esac
-fi
+# Check prerequisites
+check_prerequisites() {
+    if [[ ! -f "$MINISHELL" ]]; then
+        echo -e "${RED}❌ Minishell executable not found: $MINISHELL${NC}"
+        echo "Please compile your minishell first with 'make'"
+        exit 1
+    fi
+    
+    if [[ "$USE_VALGRIND" == true ]] && ! command -v valgrind >/dev/null 2>&1; then
+        echo -e "${RED}❌ Valgrind not found but --valgrind flag specified${NC}"
+        echo "Please install valgrind or run without --valgrind flag"
+        exit 1
+    fi
+    
+    # Create readline suppression file if it doesn't exist
+    if [[ "$USE_VALGRIND" == true ]] && [[ ! -f "readline.supp" ]]; then
+        cat > readline.supp << 'EOF'
+{
+   readline_leak
+   Memcheck:Leak
+   match-leak-kinds: definite,indirect,possible
+   ...
+   fun:readline
+}
+{
+   add_history_leak
+   Memcheck:Leak
+   match-leak-kinds: definite,indirect,possible
+   ...
+   fun:add_history
+}
+{
+   libreadline_leak
+   Memcheck:Leak
+   match-leak-kinds: definite,indirect,possible
+   ...
+   obj:*/libreadline.so*
+}
+EOF
+    fi
+}
 
-# 2. Final Validation Tests
-if [[ -f "final_test.sh" ]]; then
-    ((TOTAL_SUITES++))
-    run_test_suite "FINAL VALIDATION" "final_test.sh" "Final validation tests"
-    case $? in
-        0) ((PASSED_SUITES++)) ;;
-        1) ((CRITICAL_FAILURES++)); CRITICAL_SUITES+=("Final Validation") ;;
-        *) ((WARNINGS++)); WARNING_SUITES+=("Final Validation") ;;
-    esac
-fi
-
-# 3. Comprehensive Stress Tests
-if [[ -f "comprehensive_stress_test.sh" ]]; then
-    ((TOTAL_SUITES++))
-    run_test_suite "COMPREHENSIVE STRESS TESTS" "comprehensive_stress_test.sh" "Extensive testing with valgrind"
-    case $? in
-        0) ((PASSED_SUITES++)) ;;
-        1) ((CRITICAL_FAILURES++)); CRITICAL_SUITES+=("Comprehensive Stress Tests") ;;
-        *) ((WARNINGS++)); WARNING_SUITES+=("Comprehensive Stress Tests") ;;
-    esac
-fi
-
-# 4. Extreme Edge Case Tests
-if [[ -f "extreme_stress_test.sh" ]]; then
-    ((TOTAL_SUITES++))
-    run_test_suite "EXTREME EDGE CASES" "extreme_stress_test.sh" "Extreme performance and edge cases"
-    case $? in
-        0) ((PASSED_SUITES++)) ;;
-        1) ((CRITICAL_FAILURES++)); CRITICAL_SUITES+=("Extreme Edge Cases") ;;
-        *) ((WARNINGS++)); WARNING_SUITES+=("Extreme Edge Cases") ;;
-    esac
-fi
-
-# Additional manual tests that might be helpful
-echo -e "${YELLOW}╔══════════════════════════════════════════════════════════╗${NC}"
-echo -e "${YELLOW}║ INTERACTIVE TESTS RECOMMENDATIONS                       ║${NC}"
-echo -e "${YELLOW}╚══════════════════════════════════════════════════════════╝${NC}"
-echo
-echo -e "${CYAN}🔧 Manual tests you might want to run:${NC}"
-echo
-echo "1. Test with real shell commands:"
-echo "   ./minishell"
-echo "   ls -la"
-echo "   pwd"
-echo "   env | grep HOME"
-echo
-echo "2. Test signal handling:"
-echo "   ./minishell"
-echo "   sleep 10   (then press Ctrl+C)"
-echo "   (press Ctrl+D to exit)"
-echo
-echo "3. Test with your specific environment:"
-echo "   ./minishell"
-echo "   echo \$HOME"
-echo "   echo \"\$HOME\"'\$HOME'"
-echo "   cd /tmp && pwd"
-echo
-echo "4. Test redirections and pipes:"
-echo "   ./minishell"
-echo "   echo hello > test.txt"
-echo "   cat test.txt"
-echo "   ls | grep minishell"
-echo
-
-# Print final summary
-echo -e "${CYAN}╔════════════════════════════════════════════════════════════╗${NC}"
-echo -e "${CYAN}║                    FINAL SUMMARY                          ║${NC}"
-echo -e "${CYAN}╚════════════════════════════════════════════════════════════╝${NC}"
-echo
-echo -e "Total test suites run: ${BLUE}$TOTAL_SUITES${NC}"
-echo -e "Suites passed: ${GREEN}$PASSED_SUITES${NC}"
-echo -e "Critical failures: ${RED}$CRITICAL_FAILURES${NC}"
-echo -e "Warnings: ${YELLOW}$WARNINGS${NC}"
-echo
-
-# Show detailed information about failures
-if [[ ${#CRITICAL_SUITES[@]} -gt 0 ]]; then
-    echo -e "${RED}💥 CRITICAL FAILURES IN:${NC}"
-    for suite in "${CRITICAL_SUITES[@]}"; do
-        echo -e "   ${RED}• $suite${NC}"
-    done
+# Test modules
+test_quotes() {
+    local passed=0
+    local failed=0
+    local leaks=0
+    local segfaults=0
+    local start_total_passed=$TOTAL_PASSED
+    local start_total_failed=$TOTAL_FAILED
+    local start_total_leaks=$TOTAL_LEAKS
+    local start_total_segfaults=$TOTAL_SEGFAULTS
+    
+    print_module_header "QUOTES MODULE" "Testing quote handling and variable expansion"
+    
+    # Basic quote tests
+    run_test "Simple double quotes" 'echo "hello world"' "hello world" 1
+    run_test "Simple single quotes" "echo 'hello world'" "hello world" 1
+    run_test "Empty double quotes" 'echo ""' "" 1
+    run_test "Empty single quotes" "echo ''" "" 1
+    
+    # Variable expansion
+    run_test "Variable in double quotes" 'echo "$HOME"' "$HOME" 1
+    run_test "Variable in single quotes" "echo '\$HOME'" '\$HOME' 1
+    run_test "Multiple variables" 'echo "$HOME$USER"' "${HOME}${USER}" 1
+    
+    # Mixed quotes
+    run_test "Mixed quotes simple" 'echo "hello" '"'"'world'"'"'' "hello world" 1
+    run_test "Nested quotes" 'echo "outer '"'"'inner'"'"' quotes"' "outer inner quotes" 1
+    
+    # Edge cases
+    run_test "Quote at end of line" 'echo "test"' "test" 1
+    run_test "Multiple quoted strings" 'echo "first" "second"' "first second" 1
+    
+    # Calculate module results
+    passed=$((TOTAL_PASSED - start_total_passed))
+    failed=$((TOTAL_FAILED - start_total_failed))
+    leaks=$((TOTAL_LEAKS - start_total_leaks))
+    segfaults=$((TOTAL_SEGFAULTS - start_total_segfaults))
+    
+    echo -e "${PURPLE}Quotes Module Results: ${GREEN}$passed passed${NC}, ${RED}$failed failed${NC}, ${YELLOW}$leaks leaks${NC}, ${RED}$segfaults segfaults${NC}"
     echo
-fi
+}
 
-if [[ ${#WARNING_SUITES[@]} -gt 0 ]]; then
-    echo -e "${YELLOW}⚠️  WARNINGS IN:${NC}"
-    for suite in "${WARNING_SUITES[@]}"; do
-        echo -e "   ${YELLOW}• $suite${NC}"
-    done
+test_signals() {
+    local passed=0
+    local failed=0
+    local leaks=0
+    local segfaults=0
+    local start_total_passed=$TOTAL_PASSED
+    local start_total_failed=$TOTAL_FAILED
+    local start_total_leaks=$TOTAL_LEAKS
+    local start_total_segfaults=$TOTAL_SEGFAULTS
+    
+    print_module_header "SIGNALS MODULE" "Testing signal handling (automated tests only)"
+    
+    # Basic functionality tests
+    run_test "Basic command execution" 'echo "signal test"' "signal test" 1
+    run_test "Exit command" 'exit' "" 1
+    
+    # Signal handling simulation tests
+    run_test "Command with timeout" 'sleep 1' "" 1
+    
+    # Test signal handling infrastructure
+    echo -e "${BLUE}Testing signal handling infrastructure...${NC}"
+    
+    # Check if signal functions are compiled in
+    if nm "$MINISHELL" | grep -q "setup_signals"; then
+        echo -e "${GREEN}✅ Signal setup functions found in binary${NC}"
+        ((TOTAL_PASSED++))
+    else
+        echo -e "${RED}❌ Signal setup functions not found${NC}"
+        ((TOTAL_FAILED++))
+    fi
+    
+    if nm "$MINISHELL" | grep -q "handle_sigint\|handle_sigquit"; then
+        echo -e "${GREEN}✅ Signal handlers found in binary${NC}"
+        ((TOTAL_PASSED++))
+    else
+        echo -e "${RED}❌ Signal handlers not found${NC}"
+        ((TOTAL_FAILED++))
+    fi
+    
+    echo -e "${YELLOW}Note: Manual testing required for full signal validation:${NC}"
+    echo -e "${YELLOW}  • Ctrl+C at prompt (should show new prompt)${NC}"
+    echo -e "${YELLOW}  • Ctrl+\\ at prompt (should be ignored)${NC}"
+    echo -e "${YELLOW}  • Ctrl+\\ during 'sleep 10' (should show 'Quit')${NC}"
+    
+    # Calculate module results
+    passed=$((TOTAL_PASSED - start_total_passed))
+    failed=$((TOTAL_FAILED - start_total_failed))
+    leaks=$((TOTAL_LEAKS - start_total_leaks))
+    segfaults=$((TOTAL_SEGFAULTS - start_total_segfaults))
+    
+    echo -e "${PURPLE}Signals Module Results: ${GREEN}$passed passed${NC}, ${RED}$failed failed${NC}, ${YELLOW}$leaks leaks${NC}, ${RED}$segfaults segfaults${NC}"
     echo
-fi
+}
 
-if [[ $CRITICAL_FAILURES -gt 0 ]]; then
-    echo -e "${RED}💥 CRITICAL ISSUES DETECTED!${NC}"
-    echo -e "${RED}Your minishell has segfaults or serious memory errors.${NC}"
-    echo -e "${RED}Please fix these issues before submission.${NC}"
-    exit 1
-elif [[ $WARNINGS -gt 0 ]]; then
-    echo -e "${YELLOW}⚠️  Some issues detected (memory leaks or minor failures).${NC}"
-    echo -e "${YELLOW}Consider reviewing and fixing these for better quality.${NC}"
-    exit 2
-elif [[ $PASSED_SUITES -eq $TOTAL_SUITES ]] && [[ $TOTAL_SUITES -gt 0 ]]; then
-    echo -e "${GREEN}🎉 ALL TESTS PASSED!${NC}"
-    echo -e "${GREEN}Your minishell appears to be working correctly!${NC}"
-    echo -e "${GREEN}✅ No segfaults detected${NC}"
-    echo -e "${GREEN}✅ No memory leaks detected${NC}"
-    echo -e "${GREEN}✅ All functionality tests passed${NC}"
-    exit 0
-else
-    echo -e "${YELLOW}⚠️  No test suites found or some didn't run.${NC}"
-    echo -e "${YELLOW}Make sure all test scripts exist in the current directory.${NC}"
-    exit 3
-fi
+test_pipes() {
+    local passed=0
+    local failed=0
+    local leaks=0
+    local segfaults=0
+    local start_total_passed=$TOTAL_PASSED
+    local start_total_failed=$TOTAL_FAILED
+    local start_total_leaks=$TOTAL_LEAKS
+    local start_total_segfaults=$TOTAL_SEGFAULTS
+    
+    print_module_header "PIPES MODULE" "Testing pipe functionality"
+    
+    # Basic pipe tests
+    run_test "Simple pipe" 'echo "hello" | cat' "hello" 1
+    run_test "Echo to grep" 'echo "hello world" | grep "world"' "hello world" 1
+    run_test "Multiple pipes" 'echo "test" | cat | cat' "test" 1
+    
+    # Pipe with built-ins
+    run_test "Echo to echo via pipe" 'echo "first" | cat' "first" 1
+    
+    # Calculate module results
+    passed=$((TOTAL_PASSED - start_total_passed))
+    failed=$((TOTAL_FAILED - start_total_failed))
+    leaks=$((TOTAL_LEAKS - start_total_leaks))
+    segfaults=$((TOTAL_SEGFAULTS - start_total_segfaults))
+    
+    echo -e "${PURPLE}Pipes Module Results: ${GREEN}$passed passed${NC}, ${RED}$failed failed${NC}, ${YELLOW}$leaks leaks${NC}, ${RED}$segfaults segfaults${NC}"
+    echo
+}
+
+test_redirections() {
+    local passed=0
+    local failed=0
+    local leaks=0
+    local segfaults=0
+    local start_total_passed=$TOTAL_PASSED
+    local start_total_failed=$TOTAL_FAILED
+    local start_total_leaks=$TOTAL_LEAKS
+    local start_total_segfaults=$TOTAL_SEGFAULTS
+    
+    print_module_header "REDIRECTIONS MODULE" "Testing redirection functionality"
+    
+    # Output redirection
+    run_test "Output redirection" 'echo "test" > /tmp/test_out.txt && cat /tmp/test_out.txt' "test" 1
+    run_test "Append redirection" 'echo "line1" > /tmp/test_append.txt && echo "line2" >> /tmp/test_append.txt && cat /tmp/test_append.txt' "line1" 1
+    
+    # Input redirection
+    echo "input_test" > /tmp/test_input.txt
+    run_test "Input redirection" 'cat < /tmp/test_input.txt' "input_test" 1
+    
+    # Cleanup test files
+    rm -f /tmp/test_out.txt /tmp/test_append.txt /tmp/test_input.txt
+    
+    # Calculate module results
+    passed=$((TOTAL_PASSED - start_total_passed))
+    failed=$((TOTAL_FAILED - start_total_failed))
+    leaks=$((TOTAL_LEAKS - start_total_leaks))
+    segfaults=$((TOTAL_SEGFAULTS - start_total_segfaults))
+    
+    echo -e "${PURPLE}Redirections Module Results: ${GREEN}$passed passed${NC}, ${RED}$failed failed${NC}, ${YELLOW}$leaks leaks${NC}, ${RED}$segfaults segfaults${NC}"
+    echo
+}
+
+test_builtins() {
+    local passed=0
+    local failed=0
+    local leaks=0
+    local segfaults=0
+    local start_total_passed=$TOTAL_PASSED
+    local start_total_failed=$TOTAL_FAILED
+    local start_total_leaks=$TOTAL_LEAKS
+    local start_total_segfaults=$TOTAL_SEGFAULTS
+    
+    print_module_header "BUILTINS MODULE" "Testing built-in commands"
+    
+    # Echo tests
+    run_test "echo simple" 'echo hello' "hello" 1
+    run_test "echo with -n" 'echo -n hello' "hello" 1
+    
+    # pwd test
+    run_test "pwd command" 'pwd' "$(pwd)" 1
+    
+    # env test (just check it runs without error)
+    run_test "env command" 'env | head -1' "" 1
+    
+    # cd test (check if it exists, don't change directory)
+    run_test "cd to current dir" 'cd .' "" 1
+    
+    # Calculate module results
+    passed=$((TOTAL_PASSED - start_total_passed))
+    failed=$((TOTAL_FAILED - start_total_failed))
+    leaks=$((TOTAL_LEAKS - start_total_leaks))
+    segfaults=$((TOTAL_SEGFAULTS - start_total_segfaults))
+    
+    echo -e "${PURPLE}Builtins Module Results: ${GREEN}$passed passed${NC}, ${RED}$failed failed${NC}, ${YELLOW}$leaks leaks${NC}, ${RED}$segfaults segfaults${NC}"
+    echo
+}
+
+test_stress() {
+    local passed=0
+    local failed=0
+    local leaks=0
+    local segfaults=0
+    local start_total_passed=$TOTAL_PASSED
+    local start_total_failed=$TOTAL_FAILED
+    local start_total_leaks=$TOTAL_LEAKS
+    local start_total_segfaults=$TOTAL_SEGFAULTS
+    
+    print_module_header "STRESS MODULE" "Comprehensive stress testing"
+    
+    # Long strings
+    local long_string=$(printf "a%.0s" {1..100})
+    run_test "Long string" "echo \"$long_string\"" "$long_string" 1
+    
+    # Many arguments
+    run_test "Many arguments" 'echo a b c d e f g h i j k l m n o p' "a b c d e f g h i j k l m n o p" 1
+    
+    # Complex quotes
+    run_test "Complex mixed quotes" 'echo "start'"'"'middle'"'"'end"' "startmiddleend" 1
+    
+    # Multiple commands
+    run_test "Multiple commands" 'echo "first" && echo "second"' "first" 1
+    
+    # Calculate module results
+    passed=$((TOTAL_PASSED - start_total_passed))
+    failed=$((TOTAL_FAILED - start_total_failed))
+    leaks=$((TOTAL_LEAKS - start_total_leaks))
+    segfaults=$((TOTAL_SEGFAULTS - start_total_segfaults))
+    
+    echo -e "${PURPLE}Stress Module Results: ${GREEN}$passed passed${NC}, ${RED}$failed failed${NC}, ${YELLOW}$leaks leaks${NC}, ${RED}$segfaults segfaults${NC}"
+    echo
+}
+
+test_extreme() {
+    local passed=0
+    local failed=0
+    local leaks=0
+    local segfaults=0
+    local start_total_passed=$TOTAL_PASSED
+    local start_total_failed=$TOTAL_FAILED
+    local start_total_leaks=$TOTAL_LEAKS
+    local start_total_segfaults=$TOTAL_SEGFAULTS
+    
+    print_module_header "EXTREME MODULE" "Extreme edge cases"
+    
+    # Very long command line
+    local very_long=$(printf "very_long_test_%.0s" {1..50})
+    run_test "Very long command" "echo \"$very_long\"" "$very_long" 1
+    
+    # Special characters
+    run_test "Special characters" 'echo "!@#$%^&*()"' "!@#\$%^&*()" 1
+    
+    # Empty command
+    run_test "Empty command" '' "" 1
+    
+    # Whitespace handling
+    run_test "Multiple spaces" 'echo    "test"    ' "test" 1
+    
+    # Calculate module results
+    passed=$((TOTAL_PASSED - start_total_passed))
+    failed=$((TOTAL_FAILED - start_total_failed))
+    leaks=$((TOTAL_LEAKS - start_total_leaks))
+    segfaults=$((TOTAL_SEGFAULTS - start_total_segfaults))
+    
+    echo -e "${PURPLE}Extreme Module Results: ${GREEN}$passed passed${NC}, ${RED}$failed failed${NC}, ${YELLOW}$leaks leaks${NC}, ${RED}$segfaults segfaults${NC}"
+    echo
+}
+
+print_summary() {
+    echo -e "${CYAN}╔════════════════════════════════════════════════════════════╗${NC}"
+    echo -e "${CYAN}║                        FINAL SUMMARY                       ║${NC}"
+    echo -e "${CYAN}╚════════════════════════════════════════════════════════════╝${NC}"
+    echo
+    
+    echo -e "${GREEN}✅ Total Passed: $TOTAL_PASSED${NC}"
+    echo -e "${RED}❌ Total Failed: $TOTAL_FAILED${NC}"
+    if [[ $TOTAL_LEAKS -gt 0 ]]; then
+        echo -e "${YELLOW}🔍 Memory Leaks: $TOTAL_LEAKS${NC}"
+    fi
+    if [[ $TOTAL_SEGFAULTS -gt 0 ]]; then
+        echo -e "${RED}💥 Segfaults: $TOTAL_SEGFAULTS${NC}"
+    fi
+    
+    echo
+    local total_tests=$((TOTAL_PASSED + TOTAL_FAILED))
+    if [[ $total_tests -gt 0 ]]; then
+        local success_rate=$((TOTAL_PASSED * 100 / total_tests))
+        echo -e "${BLUE}Success Rate: $success_rate%${NC}"
+    fi
+    
+    # Determine exit code
+    if [[ $TOTAL_SEGFAULTS -gt 0 ]]; then
+        echo -e "${RED}🚨 Critical failures detected (segfaults)${NC}"
+        exit 1
+    elif [[ $TOTAL_FAILED -gt 0 ]]; then
+        echo -e "${YELLOW}⚠️  Some tests failed${NC}"
+        exit 2
+    elif [[ $TOTAL_LEAKS -gt 0 ]]; then
+        echo -e "${YELLOW}⚠️  Memory leaks detected${NC}"
+        exit 3
+    else
+        echo -e "${GREEN}🎉 All tests passed!${NC}"
+        exit 0
+    fi
+}
+
+# Main execution
+main() {
+    print_header "MINISHELL UNIFIED TEST SUITE"
+    
+    echo -e "${BLUE}Module: $MODULE${NC}"
+    if [[ "$USE_VALGRIND" == true ]]; then
+        echo -e "${BLUE}Using valgrind for memory checking${NC}"
+    fi
+    echo
+    
+    check_prerequisites
+    
+    case "$MODULE" in
+        "quotes")
+            test_quotes
+            ;;
+        "signals")
+            test_signals
+            ;;
+        "pipes")
+            test_pipes
+            ;;
+        "redirections")
+            test_redirections
+            ;;
+        "builtins")
+            test_builtins
+            ;;
+        "stress")
+            test_stress
+            ;;
+        "extreme")
+            test_extreme
+            ;;
+        "all")
+            test_quotes
+            test_signals
+            test_pipes
+            test_redirections
+            test_builtins
+            test_stress
+            test_extreme
+            ;;
+        *)
+            echo -e "${RED}Unknown module: $MODULE${NC}"
+            echo "Use --help for available modules"
+            exit 1
+            ;;
+    esac
+    
+    print_summary
+}
+
+# Trap to cleanup on exit
+trap cleanup EXIT
+
+# Run main function
+main "$@"
