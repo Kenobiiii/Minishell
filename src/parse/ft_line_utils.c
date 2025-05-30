@@ -66,27 +66,13 @@ int	openquotes(char	*line)
 int	handle_invslash_pcomma(char *line)
 {
 	int		i;
-	char	quote;
 
 	i = 0;
-	quote = 0;
 	while (line[i])
 	{
-		if (line[i] == '"' || line[i] == '\'')
-		{
-			quote = line[i];
-			i++;
-			while (line[i] && line[i] != quote)
-				i++;
-			if (!line[i])
-				return (1);
-			i++;
-			quote = 0;
-		}
-		else if (line[i] == '\\' || line[i] == ';')
+		if (line[i] == '\\' || line[i] == ';')
 			return (syntax_error());
-		else
-			i++;
+		i++;
 	}
 	return (1);
 }

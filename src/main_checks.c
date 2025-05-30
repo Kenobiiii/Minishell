@@ -14,6 +14,11 @@
 
 int	check_line_errors(t_data *data)
 {
+	if (!handle_invslash_pcomma(data->line))
+	{
+		data->wstatus = 2;
+		return (0);
+	}
 	if (openquotes(data->line))
 	{
 		data->wstatus = 2;

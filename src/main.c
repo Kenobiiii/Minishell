@@ -25,11 +25,6 @@ int	line_syntax(t_data	*data)
 	if (is_empty_var_with_cmd(data, data->line))
 	{
 	}
-	if (!handle_invslash_pcomma(data->line))
-	{
-		data->wstatus = 2;
-		return (0);
-	}
 	if (!check_line_errors(data))
 		return (0);
 	ft_tokens(data, data->line);
