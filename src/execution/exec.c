@@ -75,8 +75,14 @@ void	exec_ast(t_data *data, t_ast *node)
 		expand_command_variables(data, node);
 		if (is_builtin_command(node->value))
 		{
+			t_ast	*original_ast;
+			
+			// Temporarily set data->ast to current node for builtin access
+			original_ast = data->ast;
 			data->ast = node;
 			is_builtins(data, node->value);
+			// Restore original AST pointer for proper cleanup
+			data->ast = original_ast;
 		}
 		else
 			exec_simple_cmd(data, node);

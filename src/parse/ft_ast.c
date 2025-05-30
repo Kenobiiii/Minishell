@@ -22,11 +22,21 @@ static	void	handle_new_command(t_ast **root, t_ast **cmd,
 	if (!new_cmd)
 		return ;
 	new_cmd->args = malloc(sizeof(char *) * 2);
-	if (new_cmd->args)
+	if (!new_cmd->args)
 	{
-		new_cmd->args[0] = ft_strdup(tokens->value);
-		new_cmd->args[1] = NULL;
+		free(new_cmd->value);
+		free(new_cmd);
+		return ;
 	}
+	new_cmd->args[0] = ft_strdup(tokens->value);
+	if (!new_cmd->args[0])
+	{
+		free(new_cmd->args);
+		free(new_cmd->value);
+		free(new_cmd);
+		return ;
+	}
+	new_cmd->args[1] = NULL;
 	*cmd = new_cmd;
 	if (!*root)
 		*root = *cmd;

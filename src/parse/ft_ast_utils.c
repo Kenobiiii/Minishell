@@ -22,6 +22,11 @@ t_ast	*ft_create_ast_node(t_type type, char *value)
 		return (NULL);
 	node->type = type;
 	node->value = ft_strdup(value);
+	if (!node->value)
+	{
+		free(node);
+		return (NULL);
+	}
 	node->args = NULL;
 	node->right = NULL;
 	node->left = NULL;
