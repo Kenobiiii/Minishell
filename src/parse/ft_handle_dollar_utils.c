@@ -31,7 +31,14 @@ char	*get_env_value(t_data *data, const char *name)
 		}
 		env = env->next;
 	}
-	return (ft_strdup(""));
+	// Preserve variable for later expansion by returning original format
+	char *preserved = malloc(ft_strlen(name) + 2);
+	if (preserved)
+	{
+		preserved[0] = '$';
+		ft_strlcpy(preserved + 1, name, ft_strlen(name) + 1);
+	}
+	return (preserved ? preserved : ft_strdup(""));
 }
 
 int	get_var_name_len(const char *str, int start)

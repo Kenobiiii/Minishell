@@ -257,6 +257,9 @@ void		ft_free_ast(t_ast	*ast);
 void		exec_ast(t_data *data, t_ast *node);
 void		exec_simple_cmd(t_data *data, t_ast *node);
 
+//! variable_expansion.c //
+void		expand_command_variables(t_data *data, t_ast *node);
+
 //! logical_and_or.c //
 void		exec_logical_and(t_data *data, t_ast *node);
 void		exec_logical_or(t_data *data, t_ast *node);

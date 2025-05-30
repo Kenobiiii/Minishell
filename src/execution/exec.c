@@ -72,6 +72,7 @@ void	exec_ast(t_data *data, t_ast *node)
 {
 	if (node->type == CMD)
 	{
+		expand_command_variables(data, node);
 		if (is_builtin_command(node->value))
 		{
 			data->ast = node;
