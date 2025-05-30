@@ -49,20 +49,21 @@ void	setup_signals(void)
 	signal(SIGQUIT, SIG_IGN);
 }
 
-void	setup_signals_for_execution(void)
+void	configure_signals(int mode)
 {
-	signal(SIGINT, handle_sigint);
-	signal(SIGQUIT, handle_sigquit);
-}
-
-void	setup_signals_for_child(void)
-{
-	signal(SIGINT, SIG_DFL);
-	signal(SIGQUIT, SIG_DFL);
-}
-
-void	ignore_signals(void)
-{
-	signal(SIGINT, SIG_IGN);
-	signal(SIGQUIT, SIG_IGN);
+	if (mode == 0)
+	{
+		signal(SIGINT, handle_sigint);
+		signal(SIGQUIT, handle_sigquit);
+	}
+	else if (mode == 1)
+	{
+		signal(SIGINT, SIG_DFL);
+		signal(SIGQUIT, SIG_DFL);
+	}
+	else if (mode == 2)
+	{
+		signal(SIGINT, SIG_IGN);
+		signal(SIGQUIT, SIG_IGN);
+	}
 }

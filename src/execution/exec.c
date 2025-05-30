@@ -68,25 +68,26 @@ void	exec_simple_cmd(t_data *data, t_ast *node)
 	}
 }
 
+static void	exec_command_node(t_data *data, t_ast *node)
+{
+	t_ast	*original_ast;
+
+	expand_command_variables(data, node);
+	if (is_builtin_command(node->value))
+	{
+		original_ast = data->ast;
+		data->ast = node;
+		is_builtins(data, node->value);
+		data->ast = original_ast;
+	}
+	else
+		exec_simple_cmd(data, node);
+}
+
 void	exec_ast(t_data *data, t_ast *node)
 {
 	if (node->type == CMD)
-	{
-		expand_command_variables(data, node);
-		if (is_builtin_command(node->value))
-		{
-			t_ast	*original_ast;
-			
-			// Temporarily set data->ast to current node for builtin access
-			original_ast = data->ast;
-			data->ast = node;
-			is_builtins(data, node->value);
-			// Restore original AST pointer for proper cleanup
-			data->ast = original_ast;
-		}
-		else
-			exec_simple_cmd(data, node);
-	}
+		exec_command_node(data, node);
 	else if (node->type == REDIRECT_OUT)
 		exec_redirect_out(data, node);
 	else if (node->type == REDIRECT_IN)

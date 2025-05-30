@@ -24,11 +24,9 @@ void	expand_command_variables(t_data *data, t_ast *node)
 
 	if (!node || node->type != CMD || !node->args)
 		return ;
-	
 	i = 0;
 	while (node->args[i])
 	{
-		// Check if the argument contains variables that need expansion
 		if (ft_strchr(node->args[i], '$'))
 		{
 			expanded = ft_handledollar(data, node->args[i]);
