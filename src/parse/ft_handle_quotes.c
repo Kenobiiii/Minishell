@@ -6,32 +6,18 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 12:33:32 by paromero          #+#    #+#             */
-/*   Updated: 2025/05/30 12:12:01 by paromero         ###   ########.fr       */
+/*   Updated: 2025/05/30 20:40:22 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-int	ft_detect_quote_type(t_data *data, char **matrix, int count_x, int count_y)
+static char	*process_quote_content(t_data *data, char *processed_part,
+			char quote_type)
 {
-	char	*new_line;
 	char	*temp;
-	char	*processed_part;
-	char	quote_type;
-	int		start;
-	int		end;
-	int		i;
+	char	*new_line;
 
-	quote_type = matrix[count_x][count_y];
-	start = count_y;
-	end = start + 1;
-	while (matrix[count_x][end] && matrix[count_x][end] != quote_type)
-		end++;
-	if (!matrix[count_x][end])
-		return (0);
-	processed_part = ft_substr(matrix[count_x], start, end - start + 1);
-	if (!processed_part)
-		return (0);
 	if (quote_type == '\'')
 	{
 		temp = ft_handle_type_quote(processed_part, '\'');
@@ -45,34 +31,71 @@ int	ft_detect_quote_type(t_data *data, char **matrix, int count_x, int count_y)
 		new_line = ft_mask_operator(new_line);
 	}
 	else
-	{
-		free(processed_part);
-		return (0);
-	}
-	temp = malloc(ft_strlen(matrix[count_x]) + ft_strlen(new_line) + 1);
-	if (!temp)
-	{
-		free(new_line);
-		free(processed_part);
-		return (0);
-	}
+		return (NULL);
+	return (new_line);
+}
+
+static char	*build_new_string(char *original, char *new_content,
+			int start, int end)
+{
+	char	*result;
+	int		i;
+
+	result = malloc(ft_strlen(original) + ft_strlen(new_content) + 1);
+	if (!result)
+		return (NULL);
 	i = 0;
 	while (i < start)
 	{
-		temp[i] = matrix[count_x][i];
+		result[i] = original[i];
 		i++;
 	}
-	ft_strlcpy(temp + i, new_line, ft_strlen(new_line) + 1);
-	i += ft_strlen(new_line);
-	ft_strlcpy(temp + i, matrix[count_x] + end + 1, ft_strlen(matrix[count_x] + end + 1) + 1);
+	ft_strlcpy(result + i, new_content, ft_strlen(new_content) + 1);
+	i += ft_strlen(new_content);
+	ft_strlcpy(result + i, original + end + 1,
+		ft_strlen(original + end + 1) + 1);
+	return (result);
+}
+
+static char	*extract_quote_section(char *line, int start,
+	int *end, char quote_type)
+{
+	*end = start + 1;
+	while (line[*end] && line[*end] != quote_type)
+		(*end)++;
+	if (!line[*end])
+		return (NULL);
+	return (ft_substr(line, start, *end - start + 1));
+}
+
+int	ft_detect_quote_type(t_data *data, char **matrix, int count_x, int count_y)
+{
+	char	*new_line;
+	char	*processed_part;
+	char	*temp;
+	char	quote_type;
+	int		end;
+
+	quote_type = matrix[count_x][count_y];
+	processed_part = extract_quote_section(matrix[count_x], count_y, &end,
+			quote_type);
+	if (!processed_part)
+		return (0);
+	new_line = process_quote_content(data, processed_part, quote_type);
+	if (!new_line)
+	{
+		free(processed_part);
+		return (0);
+	}
+	temp = build_new_string(matrix[count_x], new_line, count_y, end);
 	free(matrix[count_x]);
+	matrix[count_x] = temp;
 	free(new_line);
 	free(processed_part);
-	matrix[count_x] = temp;
 	return (1);
 }
 
-static int	ft_find_quotes_in_line(t_data *data, char **matrix, int count_x)
+int	ft_find_quotes_in_line(t_data *data, char **matrix, int count_x)
 {
 	int	count_y;
 	int	quote_found;
@@ -90,24 +113,4 @@ static int	ft_find_quotes_in_line(t_data *data, char **matrix, int count_x)
 			count_y++;
 	}
 	return (quote_found);
-}
-
-void	ft_process_all_quotes(t_data	*data, char	**matrix)
-{
-	char	*new_line;
-	int		count_x;
-	int		quote_found;
-
-	count_x = 0;
-	while (matrix[count_x])
-	{
-		quote_found = ft_find_quotes_in_line(data, matrix, count_x);
-		if (!quote_found)
-		{
-			new_line = ft_handledollar(data, matrix[count_x]);
-			free(matrix[count_x]);
-			matrix[count_x] = new_line;
-		}
-		count_x++;
-	}
 }

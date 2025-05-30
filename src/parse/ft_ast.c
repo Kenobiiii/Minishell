@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 17:26:30 by paromero          #+#    #+#             */
-/*   Updated: 2025/05/28 17:31:57 by paromero         ###   ########.fr       */
+/*   Updated: 2025/05/30 20:45:01 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,16 +24,13 @@ static	void	handle_new_command(t_ast **root, t_ast **cmd,
 	new_cmd->args = malloc(sizeof(char *) * 2);
 	if (!new_cmd->args)
 	{
-		free(new_cmd->value);
-		free(new_cmd);
+		ft_free_command_node(new_cmd, 0);
 		return ;
 	}
 	new_cmd->args[0] = ft_strdup(tokens->value);
 	if (!new_cmd->args[0])
 	{
-		free(new_cmd->args);
-		free(new_cmd->value);
-		free(new_cmd);
+		ft_free_command_node(new_cmd, 1);
 		return ;
 	}
 	new_cmd->args[1] = NULL;

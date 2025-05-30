@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 20:08:34 by paromero          #+#    #+#             */
-/*   Updated: 2025/05/28 17:27:02 by paromero         ###   ########.fr       */
+/*   Updated: 2025/05/30 20:47:07 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,12 +51,22 @@ static int	process_single_token(t_data *data, t_tokens **current,
 	return (1);
 }
 
+static void	finalize_last_token(t_data *data, t_tokens *current,
+		char **token_array, int i)
+{
+	int	type;
+
+	type = ft_types(token_array[i - 1]);
+	current->type = type;
+	if (type == PIPE || type == AND || type == OR)
+		data->only_redirections = 0;
+}
+
 int	ft_tokens(t_data *data, char *str)
 {
 	t_tokens	*current;
 	char		**token_array;
 	int			i;
-	int			type;
 
 	token_array = ft_quotesplit(str, ' ', data);
 	if (!token_array)
@@ -76,10 +86,7 @@ int	ft_tokens(t_data *data, char *str)
 			return (0);
 		i++;
 	}
-	type = ft_types(token_array[i - 1]);
-	current->type = type;
-	if (type == PIPE || type == AND || type == OR)
-		data->only_redirections = 0;
+	finalize_last_token(data, current, token_array, i);
 	free_matrix(token_array);
 	return (1);
 }

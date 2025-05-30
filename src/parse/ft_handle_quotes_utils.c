@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 17:00:00 by paromero          #+#    #+#             */
-/*   Updated: 2025/05/30 12:12:36 by paromero         ###   ########.fr       */
+/*   Updated: 2025/05/30 20:39:00 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,4 +53,24 @@ int	ft_quotelen(char	*line, char quote)
 		i++;
 	}
 	return (count);
+}
+
+void	ft_process_all_quotes(t_data	*data, char	**matrix)
+{
+	char	*new_line;
+	int		count_x;
+	int		quote_found;
+
+	count_x = 0;
+	while (matrix[count_x])
+	{
+		quote_found = ft_find_quotes_in_line(data, matrix, count_x);
+		if (!quote_found)
+		{
+			new_line = ft_handledollar(data, matrix[count_x]);
+			free(matrix[count_x]);
+			matrix[count_x] = new_line;
+		}
+		count_x++;
+	}
 }
