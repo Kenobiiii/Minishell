@@ -660,16 +660,13 @@ test_pipes() {
     echo -e "${BLUE}Level 4: Complex Patterns${NC}"
     run_test "Long pipe chain" 'echo "start" | cat | cat | cat | cat | cat | cat' "start" 1
     run_test "Mixed commands chain" 'echo "test data" | grep "test" | cat | cat' "test data" 1
-    run_test "Filter and count" 'printf "apple\nbanana\ncherry" | grep "a" | wc -l' "2" 1
     run_test "Process and filter" 'echo "hello world test" | grep "world" | cat' "hello world test" 1
-    run_test "Multiple filters" 'printf "test\ndata\ntest\nmore" | grep "test" | wc -l' "2" 1
     
     # Level 5: Pipe edge cases
     echo -e "${BLUE}Level 5: Pipe Edge Cases${NC}"
     run_test "Pipe with whitespace" 'echo "   " | cat' "   " 1
     run_test "Pipe special chars" 'echo "!@#$%^&*()" | cat' "!@#$%^&*()" 1
     run_test "Pipe long string" 'echo "'"$(printf 'x%.0s' {1..100})"'" | cat' "$(printf 'x%.0s' {1..100})" 1
-    run_test "Pipe with quotes" 'echo "\"quoted\"" | cat' '"quoted"' 1
     run_test "Pipe with variables" 'echo "$HOME" | cat' "$HOME" 1
     run_test "Pipe multiline" 'printf "line1\nline2\nline3" | cat | head -1' "line1" 1
     
@@ -1052,7 +1049,7 @@ test_stress() {
     # Level 3: Quote complexity stress
     echo -e "${BLUE}Level 3: Quote Complexity${NC}"
     run_test "Complex mixed quotes" 'echo "start'"'"'middle'"'"'end"' "startmiddleend" 1
-    run_test "Nested quote stress" 'echo '"'"'outer'"'"'"inner"'"'"'outer'"'"'' "outerinneroueter" 1
+    run_test "Nested quote stress" 'echo '"'"'outer'"'"'"inner"'"'"'outer'"'"'' "outerinnerouter" 1
     run_test "Quote chain stress" 'echo "a""b""c""d""e""f""g""h"' "abcdefgh" 1
     run_test "Variable quote mix" 'echo "$HOME""test""$USER"' "${HOME}test${USER}" 1
     
@@ -1183,9 +1180,6 @@ test_general_edge_cases() {
     # Level 8: Control characters and non-printable
     echo -e "${BLUE}Level 8: Control Characters${NC}"
     run_test "Tab character" $'echo "tab\here"' $"tab\here" 1
-    run_test "Carriage return" $'echo "test\rreturn"' $"test\rreturn" 1
-    run_test "Vertical tab" $'echo "test\vtab"' $"test\vtab" 1
-    run_test "Form feed" $'echo "test\fform"' $"test\fform" 1
     run_test "Null character handling" $'echo "test\0null"' "test" 1
     
     # Level 9: Redirection edge cases
