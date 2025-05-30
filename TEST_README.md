@@ -4,57 +4,58 @@
 
 This unified test suite provides comprehensive testing for your Minishell implementation with a modular approach. You can run specific test modules or the complete suite.
 
-## 🚀 Quick Start
+## 🚀 Quick Start & Usage
 
-### Run All Tests (Recommended)
+### Basic Execution
 ```bash
 # Compile your minishell first
 make
 
-# Run the complete test suite
+# Run the complete test suite (default)
+./master_test.sh
 ./master_test.sh all
-```
 
-### Run Specific Test Modules
-```bash
-# Test only quote handling
+# Run specific test modules
 ./master_test.sh quotes
-
-# Test signal handling (automated tests)
 ./master_test.sh signals
-
-# Test pipe functionality
 ./master_test.sh pipes
-
-# Test redirections
 ./master_test.sh redirections
-
-# Test built-in commands
 ./master_test.sh builtins
-
-# Run stress tests
 ./master_test.sh stress
-
-# Run extreme edge cases
 ./master_test.sh extreme
 ```
 
-### Advanced Usage with Options
+### Command Line Options
 ```bash
 # Run with valgrind memory checking
 ./master_test.sh quotes --valgrind
 
-# Run with verbose output
-./master_test.sh signals --verbose
-
 # Run without colors (for CI/scripts)
 ./master_test.sh all --no-color
 
+# Show help
+./master_test.sh --help
+
 # Combine options
-./master_test.sh stress --valgrind --verbose
+./master_test.sh stress --valgrind --no-color
 ```
 
-## 📁 Unified Test Architecture
+### Available Modules
+- `quotes` - Quote and variable expansion tests
+- `signals` - Signal handling tests (automated only)
+- `pipes` - Pipe functionality tests
+- `redirections` - File redirection tests
+- `builtins` - Built-in command tests
+- `stress` - Comprehensive stress testing
+- `extreme` - Extreme edge cases
+- `all` - Run all modules (default)
+
+### Available Options
+- `--valgrind` - Enable memory checking with valgrind
+- `--no-color` - Disable colored output
+- `--help` - Show help message
+
+## 📁 Test Architecture
 
 ### Core Test Script: `master_test.sh`
 - **Purpose**: Single entry point for all testing functionality
@@ -62,7 +63,7 @@ make
   - Modular test execution by category
   - Built-in valgrind integration
   - Color-coded results with optional disable
-  - Verbose and quiet modes
+  - Detailed output by default
   - Comprehensive error reporting
   - Memory leak detection (excluding readline)
   - Timeout protection
@@ -146,31 +147,37 @@ make
 - 🔵 **Blue**: Information
 - 🟣 **Purple**: Module summary
 
-### Test Results Format
+### Test Output Format
 ```
-Testing: Simple double quotes... PASSED
-Testing: Variable expansion... FAILED
-Testing: Memory leak test... PASSED (LEAK)
-Testing: Segfault test... SEGFAULT
+Testing: Simple double quotes
+Command: echo "hello world"
+PASSED
+----------------------------------------
+Testing: Variable expansion
+Command: echo "$HOME"
+FAILED
+Expected: /home/user
+Got: $HOME
+----------------------------------------
+Testing: Memory leak test
+Command: echo "test"
+PASSED (LEAK)
+----------------------------------------
 ```
 
-## 🛠️ Command Line Options
+## 🛠️ System Requirements
 
-### Modules
-- `quotes` - Quote and variable expansion tests
-- `signals` - Signal handling tests (automated only)
-- `pipes` - Pipe functionality tests
-- `redirections` - File redirection tests
-- `builtins` - Built-in command tests
-- `stress` - Comprehensive stress testing
-- `extreme` - Extreme edge cases
-- `all` - Run all modules (default)
+### Required Software
+- `bash` shell (for test execution)
+- `valgrind` (optional, for `--valgrind` flag)
+- Standard Unix utilities (`cat`, `grep`, `ls`, etc.)
+- `nm` utility (for binary symbol checking)
 
-### Options
-- `--valgrind` - Enable memory checking with valgrind
-- `--no-color` - Disable colored output
-- `--verbose` - Enable detailed output
-- `--help` - Show help message
+### Minishell Requirements
+- Executable named `minishell` in current directory
+- Accepts input from stdin
+- Supports `exit` command for clean termination
+- Implements basic shell functionality
 
 ## 🔍 Memory Safety Testing
 
@@ -305,6 +312,8 @@ TIMEOUT - Test exceeded time limit
 **Test Failures:**
 ```
 FAILED - Expected output didn't match actual output
+Expected: hello world
+Got: hello
 ```
 
 ## 📈 Performance Expectations
@@ -326,7 +335,7 @@ FAILED - Expected output didn't match actual output
 2. **Fix issues incrementally**: Address one module at a time
 3. **Use valgrind regularly**: `./master_test.sh quotes --valgrind`
 4. **Test frequently**: Run tests after each major change
-5. **Understand failures**: Use `--verbose` for detailed output
+5. **Understand failures**: Read detailed output carefully
 
 ### Pre-submission Checklist
 - [ ] `./master_test.sh all` passes (exit code 0)
@@ -344,17 +353,6 @@ Your minishell is ready when:
 - ✅ Manual signal tests behave correctly
 - ✅ Handles edge cases gracefully
 - ✅ Performance meets expectations
-
-## 📚 Additional Resources
-
-### Documentation
-- [Bash Manual](https://www.gnu.org/software/bash/manual/)
-- [Valgrind Documentation](https://valgrind.org/docs/manual/)
-- [Signal Handling Guide](https://www.gnu.org/software/libc/manual/html_node/Signal-Handling.html)
-
-### 42 School Resources
-- [42 School Minishell Subject](https://github.com/42School/42-Cursus/tree/master/minishell)
-- [Shell Implementation Guidelines](https://pubs.opengroup.org/onlinepubs/9699919799/utilities/sh.html)
 
 ---
 
@@ -403,217 +401,3 @@ sleep 10
 **Happy Testing! 🚀**
 
 *A well-tested minishell is a robust minishell. Use this unified test suite to ensure your implementation meets the highest standards.*
-
-## 🎯 Test Categories
-
-### Quote Handling Tests
-- Basic single/double quotes
-- Variable expansion rules
-- Mixed quote scenarios
-- Nested quotes
-- Unclosed quotes (error handling)
-- Empty quotes
-- Quote removal logic
-
-### Variable Expansion Tests
-- Environment variables (`$HOME`, `$PATH`)
-- Non-existent variables
-- Special variables (`$?`, `$$`)
-- Complex patterns (`${HOME}/test`)
-- Multiple variables
-
-### Pipe Tests
-- Basic pipes (`cmd1 | cmd2`)
-- Multiple pipe chains
-- Pipes with quotes
-- Empty pipe handling
-- Long pipe chains (100+ stages)
-
-### Redirection Tests
-- Output redirection (`>`)
-- Input redirection (`<`)
-- Append redirection (`>>`)
-- Multiple redirections
-- Invalid file handling
-
-### Command Tests
-- Built-in commands (`pwd`, `env`, `echo`)
-- External commands (`ls`, `cat`)
-- Non-existent commands
-- Commands with special characters
-
-### Memory Safety Tests
-- Memory leak detection
-- Segfault prevention
-- Double-free protection
-- Buffer overflow protection
-- Large allocation handling
-
-### Edge Cases
-- Empty commands
-- Very long inputs
-- Special characters
-- Unicode handling
-- Signal handling basics
-
-## 📊 Understanding Results
-
-### Exit Codes
-- **0**: All tests passed ✅
-- **1**: Critical failures (segfaults) 💥
-- **2**: Warnings (memory leaks) ⚠️
-- **3**: Minor failures ⚠️
-
-### Color Coding
-- 🟢 **Green**: Passed
-- 🔴 **Red**: Critical failure
-- 🟡 **Yellow**: Warning or minor issue
-- 🔵 **Blue**: Information
-
-### Memory Checking
-All tests use valgrind to detect:
-- Memory leaks
-- Invalid memory access
-- Use of uninitialized memory
-- Double-free errors
-
-## 🛠️ Requirements
-
-### System Requirements
-- `bash` shell
-- `valgrind` (for memory checking)
-- Standard Unix utilities (`cat`, `grep`, etc.)
-
-### Minishell Requirements
-- Executable named `minishell` in current directory
-- Accepts input from stdin
-- Supports `exit` command
-- Basic quote and variable handling
-
-## 🐛 Troubleshooting
-
-### Common Issues
-
-**1. "Minishell executable not found"**
-```bash
-# Solution: Compile your project
-make
-```
-
-**2. "Permission denied" errors**
-```bash
-# Solution: Make scripts executable
-chmod +x *.sh
-```
-
-**3. "Valgrind not found"**
-```bash
-# Ubuntu/Debian:
-sudo apt-get install valgrind
-
-# macOS:
-brew install valgrind
-```
-
-**4. Tests hanging**
-- Check if your minishell properly handles EOF
-- Ensure `exit` command works
-- Use Ctrl+C to interrupt if needed
-
-### Interpreting Valgrind Output
-
-**Memory Leaks:**
-```
-definitely lost: X bytes in Y blocks
-```
-- Fix: Ensure all malloc'd memory is freed
-
-**Invalid Access:**
-```
-Invalid read/write of size X
-```
-- Fix: Check array bounds and pointer validity
-
-**Uninitialized Memory:**
-```
-Use of uninitialised value
-```
-- Fix: Initialize all variables before use
-
-## 🛡️ Readline Leak Suppression
-
-All tests automatically suppress readline library leaks using the `readline.supp` suppression file. This is important because:
-
-- **Readline leaks are NOT your responsibility** - They come from the system library
-- **42 evaluators expect this** - Readline leaks should not count against your project
-- **Standard practice** - Professional codebases always suppress known library leaks
-
-### What's Suppressed:
-- `readline()` function leaks
-- `add_history()` leaks  
-- `libreadline.so` library leaks
-- Terminal capability (`termcap`/`ncurses`) leaks
-- History and completion function leaks
-
-### Verification:
-```bash
-# The tests will show "excluding readline" in memory leak reports
-# Only YOUR code's memory leaks will be reported as failures
-```
-
-## 📈 Performance Expectations
-
-### Normal Operation
-- Basic tests: < 5 seconds
-- Comprehensive tests: 30-60 seconds  
-- Extreme tests: 1-2 minutes
-
-### Memory Usage
-- Should not exceed system limits
-- No growing memory consumption
-- Clean shutdown with no leaks
-
-## 🎓 Test-Driven Development Tips
-
-1. **Start Small**: Run `test_quotes.sh` first
-2. **Fix Incrementally**: Address one failure at a time
-3. **Use Valgrind**: Always check for memory issues
-4. **Test Often**: Run tests after each change
-5. **Read Output**: Understand what failed and why
-
-## 📝 Adding Your Own Tests
-
-You can extend the test suite by:
-
-1. **Adding to existing scripts**:
-   ```bash
-   # Add to comprehensive_stress_test.sh
-   run_test_with_valgrind "My test" "echo 'my command'" "expected output" 1
-   ```
-
-2. **Creating new test scripts**:
-   ```bash
-   # Create my_custom_test.sh
-   # Add it to master_test.sh
-   ```
-
-## 🏆 Success Criteria
-
-Your minishell is ready when:
-- ✅ All test suites pass (exit code 0)
-- ✅ No segfaults detected
-- ✅ No memory leaks reported
-- ✅ Handles edge cases gracefully
-- ✅ Performance is reasonable
-
-## 📚 Additional Resources
-
-- [Valgrind Documentation](https://valgrind.org/docs/manual/)
-- [Bash Manual](https://www.gnu.org/software/bash/manual/)
-- [42 School Minishell Subject](https://github.com/42School/42-Cursus/tree/master/minishell)
-
----
-
-**Happy Testing! 🚀**
-
-*Remember: A well-tested minishell is a robust minishell.*
