@@ -77,7 +77,7 @@ static void	exec_command_node(t_data *data, t_ast *node)
 	{
 		original_ast = data->ast;
 		data->ast = node;
-		is_builtins(data, node->value);
+		execute_builtin_with_redirections(data);
 		data->ast = original_ast;
 	}
 	else

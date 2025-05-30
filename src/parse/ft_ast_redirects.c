@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 16:30:00 by paromero          #+#    #+#             */
-/*   Updated: 2025/05/28 17:32:16 by paromero         ###   ########.fr       */
+/*   Updated: 2025/05/30 20:27:32 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ int	handle_redirect_node(t_ast **root,
 	t_ast	*current;
 	int		found_same_redir;
 
-	if (tokens->type == REDIRECT_OUT || tokens->type == REDOUT2 
+	if (tokens->type == REDIRECT_OUT || tokens->type == REDOUT2
 		|| tokens->type == REDIN2)
 		return (0);
 	current = *root;
@@ -110,9 +110,7 @@ int	handle_redirect_node(t_ast **root,
 			*last_op = current;
 			break ;
 		}
-		if (current->right && (current->type == REDIRECT_IN
-				|| current->type == REDIRECT_OUT
-				|| current->type == REDIN2 || current->type == REDOUT2))
+		if (current->right && is_red(current))
 			current = current->right;
 		else
 			break ;
