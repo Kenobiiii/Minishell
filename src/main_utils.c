@@ -23,6 +23,7 @@ static void	reset_line_and_state(t_data *data)
 		data->line = NULL;
 	}
 	g_shell_state = STATE_PROMPT_NORMAL;
+	setup_signals();  // Restaurar señales del prompt
 }
 
 int	handle_signal_states(t_data *data)
@@ -35,9 +36,15 @@ int	handle_signal_states(t_data *data)
 		return (1);
 	}
 	else if (g_shell_state == STATE_EXECUTING)
+	{
 		g_shell_state = STATE_PROMPT_NORMAL;
+		setup_signals();  // Restaurar señales del prompt
+	}
 	if (g_shell_state != STATE_PROMPT_NORMAL)
+	{
 		g_shell_state = STATE_PROMPT_NORMAL;
+		setup_signals();  // Restaurar señales del prompt
+	}
 	return (0);
 }
 

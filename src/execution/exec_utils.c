@@ -72,6 +72,7 @@ void	free_array(const char **array)
 void	analyse_status(t_data *data)
 {
 	int	status;
+	int	termsig;
 
 	status = data->wstatus;
 	if (WIFEXITED(status))
@@ -80,7 +81,10 @@ void	analyse_status(t_data *data)
 	}
 	else if (WIFSIGNALED(status))
 	{
-		data->wstatus = 128 + WTERMSIG(status);
+		termsig = WTERMSIG(status);
+		if (termsig == SIGQUIT)
+			write(STDOUT_FILENO, "Quit\n", 5);
+		data->wstatus = 128 + termsig;
 	}
 	else
 	{

@@ -55,6 +55,7 @@ void	process_command_line(t_data *data)
 			return ;
 		}
 		g_shell_state = STATE_EXECUTING;
+		setup_signals_for_execution();  // Configurar señales para ejecución
 		if (is_builtin_command(data->ast->value))
 			execute_builtin_with_redirections(data);
 		else

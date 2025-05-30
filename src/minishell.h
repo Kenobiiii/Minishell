@@ -354,7 +354,9 @@ int			last_cmd_status(t_data	*data);
 void		handle_sigint(int sig);
 void		handle_sigquit(int sig);
 void		setup_signals(void);
+void		setup_signals_for_execution(void);
 void		setup_signals_for_child(void);
+void		ignore_signals(void);
 
 //! Minishell_Function //
 int			minishell(char **env);
