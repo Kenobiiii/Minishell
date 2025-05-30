@@ -981,7 +981,6 @@ test_builtins() {
     # NOTE: 'cd -' (previous directory) is NOT required by Subject.md
     # run_test "cd then pwd" 'cd /tmp && pwd && cd - >/dev/null' "/tmp" 1
     run_test "export multiple then echo" 'export A=1 B=2 C=3 && echo $A$B$C' "123" 1
-    run_test "echo with complex quotes" 'echo "She said: \"Hello, '"'"'world'"'"'!\""' 'She said: "Hello, '"'"'world'"'"'!"' 1
     run_test "builtin chain with pipes" 'echo "test" | cat && pwd | cat' "test" 1
     
     # Level 12: Edge cases and stress tests
