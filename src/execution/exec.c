@@ -33,7 +33,7 @@ static void	setup_child_redirections(t_data *data)
 
 static void	handle_child(t_data *data, char *path, t_ast *node)
 {
-	setup_signals_for_child();
+	configure_signals(1);
 	setup_child_redirections(data);
 	if (!path)
 		exit_minishell(data, node->value, 127);

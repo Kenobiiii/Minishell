@@ -18,7 +18,7 @@
  */
 static void	exec_pipe_left(t_data *data, t_ast *node, int pipefd[2])
 {
-	setup_signals_for_child();
+	configure_signals(1);
 	if (dup2(pipefd[1], STDOUT_FILENO) == -1)
 	{
 		perror("dup2");
@@ -39,7 +39,7 @@ static void	exec_pipe_left(t_data *data, t_ast *node, int pipefd[2])
  */
 static void	exec_pipe_right(t_data *data, t_ast *node, int pipefd[2])
 {
-	setup_signals_for_child();
+	configure_signals(1);
 	if (dup2(pipefd[0], STDIN_FILENO) == -1)
 	{
 		perror("dup2");

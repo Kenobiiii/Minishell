@@ -6,19 +6,17 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 18:39:37 by paromero          #+#    #+#             */
-/*   Updated: 2025/05/27 19:26:06 by paromero         ###   ########.fr       */
+/*   Updated: 2025/05/30 19:43:17 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-char	*get_env_value(t_data *data, const char *name)
+static char	*find_env_match(t_env *env, const char *name)
 {
-	t_env	*env;
 	char	*equal_sign;
 	int		key_len;
 
-	env = data->env;
 	while (env)
 	{
 		equal_sign = ft_strchr(env->value, '=');
@@ -31,14 +29,23 @@ char	*get_env_value(t_data *data, const char *name)
 		}
 		env = env->next;
 	}
-	// Preserve variable for later expansion by returning original format
-	char *preserved = malloc(ft_strlen(name) + 2);
-	if (preserved)
-	{
-		preserved[0] = '$';
-		ft_strlcpy(preserved + 1, name, ft_strlen(name) + 1);
-	}
-	return (preserved ? preserved : ft_strdup(""));
+	return (NULL);
+}
+
+char	*get_env_value(t_data *data, const char *name)
+{
+	char	*result;
+	char	*preserved;
+
+	result = find_env_match(data->env, name);
+	if (result)
+		return (result);
+	preserved = malloc(ft_strlen(name) + 2);
+	if (!preserved)
+		return (ft_strdup(""));
+	preserved[0] = '$';
+	ft_strlcpy(preserved + 1, name, ft_strlen(name) + 1);
+	return (preserved);
 }
 
 int	get_var_name_len(const char *str, int start)
@@ -74,6 +81,10 @@ void	handle_exit_status(t_data *data, char *result, int *j)
 		return ;
 	k = 0;
 	while (wstatus[k])
-		result[(*j)++] = wstatus[k++];
+	{
+		result[(*j)] = wstatus[k];
+		(*j)++;
+		k++;
+	}
 	free(wstatus);
 }

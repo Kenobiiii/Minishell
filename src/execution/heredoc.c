@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 22:14:52 by paromero          #+#    #+#             */
-/*   Updated: 2025/05/30 13:35:23 by paromero         ###   ########.fr       */
+/*   Updated: 2025/05/30 19:47:02 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ t_ast	*find_last_redirection(t_ast *node)
 	return (node);
 }
 
-static int	setup_heredoc_pipe(t_data *data, int pipefd[2], char *delim)
+static int	ft_setup_heredoc_pipe(t_data *data, int pipefd[2], char *delim)
 {
 	int	result;
 
@@ -43,7 +43,7 @@ static int	setup_heredoc_pipe(t_data *data, int pipefd[2], char *delim)
 }
 
 // Helper function to collect all heredoc nodes in order
-static void	collect_heredoc_chain(t_ast *node, t_ast **heredocs, int *count)
+void	collect_heredoc_chain(t_ast *node, t_ast **heredocs, int *count)
 {
 	if (!node || node->type != REDIN2)
 		return ;
@@ -52,7 +52,7 @@ static void	collect_heredoc_chain(t_ast *node, t_ast **heredocs, int *count)
 	heredocs[(*count)++] = node;
 }
 
-static void	process_heredoc_loop(t_data *data, t_ast **heredocs, int count)
+void	process_heredoc_loop(t_data *data, t_ast **heredocs, int count)
 {
 	int		i;
 	char	*delim;
@@ -62,7 +62,7 @@ static void	process_heredoc_loop(t_data *data, t_ast **heredocs, int count)
 	while (i < count)
 	{
 		delim = heredocs[i]->right->value;
-		if (setup_heredoc_pipe(data, pipefd, delim) == -1)
+		if (ft_setup_heredoc_pipe(data, pipefd, delim) == -1)
 			return ;
 		if (i < count - 1)
 			close(pipefd[0]);
