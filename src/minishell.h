@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 19:06:45 by paromero          #+#    #+#             */
-/*   Updated: 2025/05/29 17:26:23 by paromero         ###   ########.fr       */
+/*   Updated: 2025/05/30 13:32:36 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -254,7 +254,6 @@ void		ft_free_ast(t_ast	*ast);
 //* 				EXECUTION					//
 
 //! exec.c //
-void		exec_func(t_data *data);
 void		exec_ast(t_data *data, t_ast *node);
 void		exec_simple_cmd(t_data *data, t_ast *node);
 

@@ -1,0 +1,16 @@
+/tmp:
+$(printf a%.0s {1..100}).txt
+edge1.txt
+edge2.txt
+file with spaces
+minishell_output.txt
+minishell_test_input.txt
+pons-code-zsh
+same.txt
+snap-private-tmp
+stress_test.txt
+systemd-private-5176bcfe9a7d40a09d2ecfd59be81f09-polkit.service-9W1Qw4
+systemd-private-5176bcfe9a7d40a09d2ecfd59be81f09-systemd-logind.service-SKrMlc
+systemd-private-5176bcfe9a7d40a09d2ecfd59be81f09-systemd-resolved.service-rlDOFI
+systemd-private-5176bcfe9a7d40a09d2ecfd59be81f09-systemd-timesyncd.service-Hm4YEQ
+systemd-private-5176bcfe9a7d40a09d2ecfd59be81f09-wsl-pro.service-1Fm3JT

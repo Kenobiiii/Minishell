@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 17:54:48 by paromero          #+#    #+#             */
-/*   Updated: 2025/05/30 12:13:43 by paromero         ###   ########.fr       */
+/*   Updated: 2025/05/30 13:32:09 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,10 @@ void	process_command_line(t_data *data)
 		if (is_builtin_command(data->ast->value))
 			execute_builtin_with_redirections(data);
 		else
-			exec_func(data);
+		{
+			if (data->ast)
+				exec_ast(data, data->ast);
+		}
 	}
 }
 

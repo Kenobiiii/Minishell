@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 17:42:48 by anggalle          #+#    #+#             */
-/*   Updated: 2025/05/28 16:30:54 by paromero         ###   ########.fr       */
+/*   Updated: 2025/05/30 13:32:23 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,15 +70,12 @@ void	exec_simple_cmd(t_data *data, t_ast *node)
 
 void	exec_ast(t_data *data, t_ast *node)
 {
-	if (!node)
-		return ;
 	if (node->type == CMD)
 	{
 		if (is_builtin_command(node->value))
 		{
 			data->ast = node;
 			is_builtins(data, node->value);
-			exit(data->wstatus);
 		}
 		else
 			exec_simple_cmd(data, node);
@@ -97,9 +94,4 @@ void	exec_ast(t_data *data, t_ast *node)
 		exec_logical_and(data, node);
 	else if (node->type == OR)
 		exec_logical_or(data, node);
-}
-
-void	exec_func(t_data *data)
-{
-	exec_ast(data, data->ast);
 }
