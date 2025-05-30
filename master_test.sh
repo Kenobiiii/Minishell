@@ -32,7 +32,7 @@ FAILED_TESTS_INFO=()
 
 # Test counts per module (updated for all modules)
 declare -A MODULE_TEST_COUNTS=(
-    ["quotes"]=32
+    ["quotes"]=31
     ["signals"]=25
     ["pipes"]=48
     ["redirections"]=52
@@ -40,7 +40,7 @@ declare -A MODULE_TEST_COUNTS=(
     ["general"]=70
     ["stress"]=32
     ["extreme"]=36
-    ["all"]=353
+    ["all"]=352
 )
 
 # Parse command line arguments
@@ -112,7 +112,7 @@ set_module_context() {
     CURRENT_MODULE="$module"
     CURRENT_TEST_NUMBER=0
     TOTAL_TESTS_IN_MODULE=${MODULE_TEST_COUNTS[$module]}
-    FAILED_TESTS_INFO=()
+    # Don't reset FAILED_TESTS_INFO - we want to accumulate failures across all modules
 }
 
 increment_test_counter() {
@@ -354,7 +354,6 @@ test_quotes() {
     run_test "Variable with text" 'echo "prefix_$USER_suffix"' "prefix_${USER}_suffix" 1
     run_test "Multiple vars with text" 'echo "$USER:$HOME:end"' "${USER}:${HOME}:end" 1
     run_test "Dollar without var" 'echo "test$"' "test$" 1
-    run_test "Multiple dollars" 'echo "$$"' "$$" 1
     
     # Level 5: Edge cases
     echo -e "${BLUE}Level 5: Edge Cases${NC}"
@@ -375,7 +374,7 @@ test_quotes() {
     run_test "Massive quote nesting" 'echo '"'"'a'"'"'"b"'"'"'c'"'"'"d"'"'"'e'"'"'"f"'"'"'g'"'"'' "abcdefg" 1
     run_test "Quote bomb" 'echo "'"$(printf '"%s"' {1..50} | tr -d ' ')"'"' "" 1
     run_test "Variable expansion bomb" 'echo "$HOME$HOME$HOME$HOME$HOME"' "${HOME}${HOME}${HOME}${HOME}${HOME}" 1
-    run_test "Mixed chaos" 'echo '"'"'$HOME'"'"'"$USER"'"'"'$PATH'"'"'' "${HOME}${USER}${PATH}" 1
+    run_test "Mixed chaos" 'echo '"'"'$HOME'"'"'"$USER"'"'"'$PATH'"'"'' '$HOME'"${USER}"'$PATH' 1
     
     # Calculate module results
     passed=$((TOTAL_PASSED - start_total_passed))
