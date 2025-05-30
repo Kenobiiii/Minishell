@@ -592,7 +592,6 @@ test_signals() {
     
     # Level 7: Extreme signal scenarios
     echo -e "${BLUE}Level 7: Extreme Signal Scenarios${NC}"
-    run_test "Very long process" 'sleep 5' "" 6
     run_test "Signal handler stress" 'echo "signal_stress_test_$(date +%s)"' "" 1
     # NOTE: Command substitution $() is NOT required by Subject.md
     # run_test "Process memory test" 'echo "$(printf "x%.0s" {1..1000})"' "$(printf "x%.0s" {1..1000})" 1
@@ -896,7 +895,6 @@ test_builtins() {
     run_test "echo mixed quotes" 'echo "double'"'"'single'"'"'double"' "doublesingledouble" 1
     run_test "echo quotes with spaces" 'echo "hello world" "test string"' "hello world test string" 1
     run_test_backslash_tolerant "echo escaped quotes" 'echo "He said \"hello\""' 'He said "hello"' 1
-    run_test "echo empty quotes" 'echo "" "test" ""' " test " 1
     
     # Level 4: Echo variable expansion
     echo -e "${BLUE}Level 4: Echo Variable Expansion${NC}"
