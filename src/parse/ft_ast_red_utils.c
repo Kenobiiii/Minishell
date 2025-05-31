@@ -55,8 +55,35 @@ void	handle_redirection(t_ast **root, t_ast **cmd,
 {
 	t_ast	*original_cmd;
 	t_ast	*new_node;
+	t_ast	*logical_op_to_preserve;
 
+	if (!last_op || !*last_op)
+		return ;
+	
+	// Buscar un operador lógico (&&, ||) en el AST para preservarlo
+	logical_op_to_preserve = NULL;
+	if (*root)
+	{
+		t_ast *current = *root;
+		while (current)
+		{
+			if (current->type == AND || current->type == OR)
+			{
+				logical_op_to_preserve = current;
+				break;
+			}
+			if (current->right && (current->right->type == AND || current->right->type == OR))
+			{
+				logical_op_to_preserve = current->right;
+				break;
+			}
+			current = current->right;
+		}
+	}
+	
 	original_cmd = *cmd;
+	new_node = NULL;
+	
 	if (is_redin2(last_op))
 	{
 		new_node = ft_create_ast_node(CMD, tokens->value);
@@ -65,12 +92,37 @@ void	handle_redirection(t_ast **root, t_ast **cmd,
 	}
 	else
 	{
-		(*last_op)->right = ft_create_ast_node(CMD, tokens->value);
+		new_node = ft_create_ast_node(CMD, tokens->value);
+		if (new_node)
+		{
+			(*last_op)->right = new_node;
+		}
 	}
+	
+	// Verificar que el nodo se asignó correctamente
+	if (new_node && !is_redin2(last_op) && (*last_op)->right != new_node)
+	{
+		// Si no se asignó correctamente, liberar el nodo
+		if (new_node->value)
+			free(new_node->value);
+		if (new_node->args)
+			free_matrix(new_node->args);
+		free(new_node);
+	}
+	
 	if (!(*last_op)->left && original_cmd)
+	{
 		(*last_op)->left = original_cmd;
+	}
 	if (!*root)
+	{
 		*root = *last_op;
+	}
 	*cmd = *last_op;
-	*last_op = NULL;
+	
+	// Preservar el operador lógico si existe
+	if (logical_op_to_preserve && logical_op_to_preserve != *last_op)
+		*last_op = logical_op_to_preserve;
+	else
+		*last_op = NULL;
 }

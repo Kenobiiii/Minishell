@@ -30,6 +30,7 @@ t_ast	*ft_create_ast_node(t_type type, char *value)
 	node->args = NULL;
 	node->right = NULL;
 	node->left = NULL;
+	
 	return (node);
 }
 
@@ -52,10 +53,23 @@ void	connect_operator(t_ast **root, t_ast **cmd,
 void	handle_new_node(t_ast **root, t_ast **cmd,
 	t_ast **last_op, t_ast *new_op)
 {
+	if (!new_op)
+		return ;
+		
 	if (*cmd)
 		connect_operator(root, cmd, last_op, new_op);
 	else
 	{
+		// Si no hay cmd, conectar el nuevo operador al AST existente
+		if (*last_op)
+		{
+			(*last_op)->right = new_op;
+			new_op->left = *root;
+		}
+		else
+		{
+			new_op->left = *root;
+		}
 		*root = new_op;
 		*last_op = new_op;
 	}

@@ -52,7 +52,18 @@ void	redin2(t_ast **current_cmd, t_ast **last_operator,
 		t_ast *new_node, t_tokens *tokens)
 {
 	if (!last_operator || !*last_operator || !new_node || !tokens)
+	{
+		// Si no podemos usar new_node, debemos liberarlo
+		if (new_node)
+		{
+			if (new_node->value)
+				free(new_node->value);
+			if (new_node->args)
+				free_matrix(new_node->args);
+			free(new_node);
+		}
 		return ;
+	}
 	if (!(*last_operator)->left)
 		(*last_operator)->left = new_node;
 	else if (!(*last_operator)->right)

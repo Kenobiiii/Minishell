@@ -71,6 +71,8 @@ int	handle_redirect_checks(t_data *data, t_tokens *tokens)
 //? Updates an existing redirection node with a new value
 int	handle_redirect_update(t_ast *current, t_tokens *tokens)
 {
+	t_ast	*new_node;
+
 	if (current->right)
 	{
 		free(current->right->value);
@@ -80,9 +82,15 @@ int	handle_redirect_update(t_ast *current, t_tokens *tokens)
 	}
 	else
 	{
-		current->right = ft_create_ast_node(CMD, tokens->value);
-		if (!current->right || !current->right->value)
+		new_node = ft_create_ast_node(CMD, tokens->value);
+		if (!new_node)
 			return (0);
+		if (!new_node->value)
+		{
+			free(new_node);
+			return (0);
+		}
+		current->right = new_node;
 	}
 	return (1);
 }

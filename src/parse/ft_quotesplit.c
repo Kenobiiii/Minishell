@@ -26,7 +26,8 @@ static void	skip_quotes(const char *s, size_t *i, char c, char *quote)
 				(*i)++;
 			*quote = '\0';
 		}
-		else if (s[*i] == '<' || s[*i] == '>' || s[*i] == '|')
+		else if (s[*i] == '<' || s[*i] == '>' || s[*i] == '|'
+			|| (s[*i] == '2' && s[*i + 1] == '>'))
 			break ;
 		else
 			(*i)++;
@@ -49,7 +50,8 @@ static int	count_substr(char const *s, char c)
 		if (!s[i])
 			break ;
 		count++;
-		if (s[i] == '<' || s[i] == '>' || s[i] == '|')
+		if (s[i] == '<' || s[i] == '>' || s[i] == '|'
+			|| (s[i] == '2' && s[i + 1] == '>'))
 			handle_special_operators(s, &i);
 		else
 			skip_quotes(s, &i, c, &quote);
@@ -64,13 +66,15 @@ static int	process_substr(char **array, char const *s, size_t *i, char c)
 
 	start = *i;
 	quote = '\0';
-	if (s[*i] == '<' || s[*i] == '>' || s[*i] == '|')
+	if (s[*i] == '<' || s[*i] == '>' || s[*i] == '|'
+		|| (s[*i] == '2' && s[*i + 1] == '>'))
 		return (handle_special_chars(array, s, i));
 	while (s[*i] && (s[*i] != c || quote))
 	{
 		if (s[*i] == '"' || s[*i] == '\'')
 			process_quotes(s, i, &quote);
-		else if (s[*i] == '<' || s[*i] == '>' || s[*i] == '|')
+		else if (s[*i] == '<' || s[*i] == '>' || s[*i] == '|'
+			|| (s[*i] == '2' && s[*i + 1] == '>'))
 			break ;
 		else
 			(*i)++;

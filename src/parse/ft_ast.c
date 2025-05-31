@@ -53,7 +53,7 @@ void	ft_handle_command_node(t_ast **root, t_ast **cmd,
 		if (*cmd && (*cmd)->type == CMD)
 			cmd_redir = *cmd;
 		handle_redirection(root, cmd, last_op, tokens);
-		if (cmd_redir)
+		if (cmd_redir && *cmd && !(*cmd)->left)
 			(*cmd)->left = cmd_redir;
 	}
 	else if (*cmd)
@@ -85,6 +85,19 @@ int	ft_handle_operator_node(t_data *data, t_ast_args *args)
 		if (!new_op)
 			return (0);
 		handle_new_node(args->root, args->cmd, args->last_op, new_op);
+		
+		// Verificar que el nodo se conectó correctamente al AST
+		if (args->root && *args->root && new_op != *args->root && 
+			(!args->last_op || *args->last_op != new_op))
+		{
+			// Si el nodo no se conectó correctamente, liberarlo
+			if (new_op->value)
+				free(new_op->value);
+			if (new_op->args)
+				free_matrix(new_op->args);
+			free(new_op);
+			return (0);
+		}
 	}
 	return (1);
 }

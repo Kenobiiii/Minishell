@@ -28,6 +28,8 @@ int	ft_types(char	*value)
 		return (AND);
 	if (value[0] == '|' && value[1] == '|')
 		return (OR);
+	if (value[0] == '2' && value[1] == '>')
+		return (REDIRECT_OUT);
 	return (CMD);
 }
 

@@ -55,8 +55,14 @@ void	ft_add_argument(t_ast *cmd_node, char *arg)
 void	handle_command_as_arg(t_ast **cmd, t_ast **redirect,
 	t_tokens *tokens)
 {
+	t_ast	*new_node;
+
 	if (*cmd && (*cmd)->type == CMD)
 		ft_add_argument(*cmd, tokens->value);
 	else
-		(*redirect)->right = ft_create_ast_node(CMD, tokens->value);
+	{
+		new_node = ft_create_ast_node(CMD, tokens->value);
+		if (new_node)
+			(*redirect)->right = new_node;
+	}
 }

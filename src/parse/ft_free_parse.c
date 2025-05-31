@@ -51,6 +51,7 @@ void	ft_free_ast(t_ast	*ast)
 {
 	if (!ast)
 		return ;
+	
 	if (ast->left)
 		ft_free_ast(ast->left);
 	if (ast->right)
