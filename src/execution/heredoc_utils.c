@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 22:14:52 by paromero          #+#    #+#             */
-/*   Updated: 2025/05/27 17:18:04 by paromero         ###   ########.fr       */
+/*   Updated: 2025/05/31 11:39:40 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,25 +24,25 @@ static int	handle_eof_case(char *delim)
 	return (0);
 }
 
-static int	handle_sigint_case(void)
-{
-	g_shell_state = STATE_HEREDOC_INTERRUPTED;
-	return (-1);
-}
-
 static int	process_readline_result(char *line, char *delim)
 {
 	if (!line)
 	{
 		if (g_shell_state == STATE_EXECUTION_INTERRUPTED)
-			return (handle_sigint_case());
+		{
+			g_shell_state = STATE_HEREDOC_INTERRUPTED;
+			return (-1);
+		}
 		else
 			return (handle_eof_case(delim));
 	}
 	if (g_shell_state == STATE_EXECUTION_INTERRUPTED)
 	{
 		free(line);
-		return (handle_sigint_case());
+		{
+			g_shell_state = STATE_HEREDOC_INTERRUPTED;
+			return (-1);
+		}
 	}
 	return (1);
 }

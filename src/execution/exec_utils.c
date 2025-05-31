@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/21 13:59:23 by anggalle          #+#    #+#             */
-/*   Updated: 2025/05/28 17:27:02 by paromero         ###   ########.fr       */
+/*   Updated: 2025/05/31 11:37:49 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,11 +93,7 @@ void	analyse_status(t_data *data)
 }
 
 /**
- * Handles process errors and displays descriptive messages
- * 
- * @param result El resultado de la llamada al sistema
- * @param error_msg El mensaje de error a mostrar
- * @return El resultado de la llamada al sistema
+ *? Handles process errors and displays descriptive messages
  */
 int	handle_process_error(int result, char *error_msg)
 {

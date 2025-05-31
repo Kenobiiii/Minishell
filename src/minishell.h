@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 19:06:45 by paromero          #+#    #+#             */
-/*   Updated: 2025/05/31 11:31:54 by paromero         ###   ########.fr       */
+/*   Updated: 2025/05/31 11:40:00 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -237,7 +237,6 @@ void		redin2(t_ast **current_cmd, t_ast **last_operator,
 //! ft_errors.c //
 int			fd_error(t_data *data);
 int			syntax_error(void);
-int			env_error(t_data *data);
 char		*handle_invalid_cmd_path(char **cmd_path, char *total_cmd);
 void		exit_minishell(t_data *data, const char *error_message,
 				int exit_code);
@@ -303,7 +302,6 @@ void		exec_heredoc(t_data	*data, t_ast *node);
 
 //! redirect_utils.c //
 t_ast		*find_cmd_node(t_ast *node);
-t_ast		*find_last_redirection(t_ast *node);
 int			check_file_permissions(t_ast *current, t_data *data);
 void		apply_last_redirect(t_ast *redirect, t_ast *cmd, t_data *data);
 int			handle_heredoc_result(int result, t_data *data, int pipefd[2],

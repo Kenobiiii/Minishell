@@ -6,20 +6,11 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 22:14:52 by paromero          #+#    #+#             */
-/*   Updated: 2025/05/30 19:47:02 by paromero         ###   ########.fr       */
+/*   Updated: 2025/05/31 11:40:25 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
-extern volatile sig_atomic_t	g_shell_state;
-
-t_ast	*find_last_redirection(t_ast *node)
-{
-	if (!node || (node->type != REDIRECT_OUT && node->type != REDOUT2))
-		return (NULL);
-	return (node);
-}
 
 static int	ft_setup_heredoc_pipe(t_data *data, int pipefd[2], char *delim)
 {
@@ -42,7 +33,7 @@ static int	ft_setup_heredoc_pipe(t_data *data, int pipefd[2], char *delim)
 	return (0);
 }
 
-// Helper function to collect all heredoc nodes in order
+//? Helper function to collect all heredoc nodes in order
 void	collect_heredoc_chain(t_ast *node, t_ast **heredocs, int *count)
 {
 	if (!node || node->type != REDIN2)

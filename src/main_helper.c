@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 18:02:07 by paromero          #+#    #+#             */
-/*   Updated: 2025/05/31 09:07:37 by paromero         ###   ########.fr       */
+/*   Updated: 2025/05/31 11:53:24 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,12 +43,4 @@ void	execute_builtin_command(t_data *data)
 	builtin_result = is_builtins(data, data->ast->value);
 	(void)builtin_result;
 	restore_redirections_for_builtin(data, saved_stdin, saved_stdout);
-}
-
-void	process_command_execution(t_data *data)
-{
-	if (is_builtin_command(data->ast->value))
-		execute_builtin_command(data);
-	else
-		exec_func(data);
 }

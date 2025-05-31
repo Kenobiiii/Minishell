@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 17:53:02 by paromero          #+#    #+#             */
-/*   Updated: 2025/05/29 16:25:52 by paromero         ###   ########.fr       */
+/*   Updated: 2025/05/31 11:36:38 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,11 @@ int	init_data(t_data *data, char **env)
 	data->heredoc_pipe_fd = -1;
 	rl_clear_history();
 	if (!init_env(data, env))
-		env_error(data);
+	{
+		printf("Error initializing env");
+		free(data->env);
+		return (0);
+	}
 	increment_shlvl(data->env);
 	return (1);
 }
