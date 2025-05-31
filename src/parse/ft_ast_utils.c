@@ -54,14 +54,12 @@ void	handle_new_node(t_ast **root, t_ast **cmd,
 {
 	if (!new_op)
 		return ;
-	
 	if (*cmd)
 	{
 		connect_operator(root, cmd, last_op, new_op);
 	}
 	else
 	{
-		// Chain operators: make new_op the new root
 		new_op->left = *root;
 		*root = new_op;
 		*last_op = new_op;

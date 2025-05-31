@@ -82,9 +82,7 @@ int	ft_handle_operator_node(t_data *data, t_ast_args *args)
 		new_op = ft_create_ast_node(args->tokens->type, args->tokens->value);
 		if (!new_op)
 			return (0);
-		
 		handle_new_node(args->root, args->cmd, args->last_op, new_op);
-		
 		if (args->root && *args->root && new_op != *args->root
 			&& (!args->last_op || *args->last_op != new_op))
 		{
@@ -111,7 +109,6 @@ t_ast	*ft_build_ast(t_data *data, t_tokens *tokens)
 	parse_success = 1;
 	init_ast_vars(&root, &cmd, &last_op, &args);
 	args.tokens = tokens;
-	
 	while (tokens && parse_success)
 	{
 		args.tokens = tokens;
