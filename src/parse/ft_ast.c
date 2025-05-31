@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 17:26:30 by paromero          #+#    #+#             */
-/*   Updated: 2025/05/31 09:09:00 by paromero         ###   ########.fr       */
+/*   Updated: 2025/05/31 12:57:39 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,8 +69,6 @@ void	ft_handle_command_node(t_ast **root, t_ast **cmd,
 		handle_new_command(root, cmd, last_op, tokens);
 }
 
-//? Processes an operator token (pipe, redirection, &&, ||)
-//? and adds it to the AST
 int	ft_handle_operator_node(t_data *data, t_ast_args *args)
 {
 	t_ast	*new_op;
@@ -84,7 +82,9 @@ int	ft_handle_operator_node(t_data *data, t_ast_args *args)
 		new_op = ft_create_ast_node(args->tokens->type, args->tokens->value);
 		if (!new_op)
 			return (0);
+		
 		handle_new_node(args->root, args->cmd, args->last_op, new_op);
+		
 		if (args->root && *args->root && new_op != *args->root
 			&& (!args->last_op || *args->last_op != new_op))
 		{
@@ -111,6 +111,7 @@ t_ast	*ft_build_ast(t_data *data, t_tokens *tokens)
 	parse_success = 1;
 	init_ast_vars(&root, &cmd, &last_op, &args);
 	args.tokens = tokens;
+	
 	while (tokens && parse_success)
 	{
 		args.tokens = tokens;

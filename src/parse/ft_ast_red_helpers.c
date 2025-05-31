@@ -16,20 +16,22 @@
 t_ast	*find_logical_op_to_preserve(t_ast *root)
 {
 	t_ast	*current;
+	t_ast	*last_logical_op;
 
 	if (!root)
 		return (NULL);
 	current = root;
+	last_logical_op = NULL;
 	while (current)
 	{
 		if (current->type == AND || current->type == OR)
-			return (current);
+			last_logical_op = current;
 		if (current->right && (current->right->type == AND
 				|| current->right->type == OR))
-			return (current->right);
+			last_logical_op = current->right;
 		current = current->right;
 	}
-	return (NULL);
+	return (last_logical_op);
 }
 
 //? Creates and handles the redirection node based on type
@@ -70,8 +72,7 @@ void	finalize_redirection_ast(t_ast **root, t_ast **cmd,
 	if (!*root)
 		*root = *last_op;
 	*cmd = *last_op;
-	if (params->logical_op_to_preserve
-		&& params->logical_op_to_preserve != *last_op)
+	if (params->logical_op_to_preserve)
 		*last_op = params->logical_op_to_preserve;
 	else
 		*last_op = NULL;
