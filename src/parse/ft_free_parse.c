@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_free_parse.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anggalle <anggalle@student.42.fr>          +#+  +:+       +#+        */
+/*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 17:24:13 by paromero          #+#    #+#             */
-/*   Updated: 2025/02/20 12:26:11 by anggalle         ###   ########.fr       */
+/*   Updated: 2025/05/31 09:11:33 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,6 @@ void	ft_free_ast(t_ast	*ast)
 {
 	if (!ast)
 		return ;
-	
 	if (ast->left)
 		ft_free_ast(ast->left);
 	if (ast->right)

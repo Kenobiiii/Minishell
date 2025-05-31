@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 17:26:30 by paromero          #+#    #+#             */
-/*   Updated: 2025/05/30 20:45:01 by paromero         ###   ########.fr       */
+/*   Updated: 2025/05/31 09:09:00 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,12 +85,9 @@ int	ft_handle_operator_node(t_data *data, t_ast_args *args)
 		if (!new_op)
 			return (0);
 		handle_new_node(args->root, args->cmd, args->last_op, new_op);
-		
-		// Verificar que el nodo se conectó correctamente al AST
-		if (args->root && *args->root && new_op != *args->root && 
-			(!args->last_op || *args->last_op != new_op))
+		if (args->root && *args->root && new_op != *args->root
+			&& (!args->last_op || *args->last_op != new_op))
 		{
-			// Si el nodo no se conectó correctamente, liberarlo
 			if (new_op->value)
 				free(new_op->value);
 			if (new_op->args)

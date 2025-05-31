@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 18:02:07 by paromero          #+#    #+#             */
-/*   Updated: 2025/04/02 19:24:23 by paromero         ###   ########.fr       */
+/*   Updated: 2025/05/31 09:08:17 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,4 +79,4 @@ int	apply_redirections_for_builtin(t_data *data)
 		redirections_applied = 1;
 	}
 	return (redirections_applied);
-} 
+}

@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 13:19:35 by paromero          #+#    #+#             */
-/*   Updated: 2025/05/28 17:27:02 by paromero         ###   ########.fr       */
+/*   Updated: 2025/05/31 09:09:12 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,6 @@ void	redin2(t_ast **current_cmd, t_ast **last_operator,
 {
 	if (!last_operator || !*last_operator || !new_node || !tokens)
 	{
-		// Si no podemos usar new_node, debemos liberarlo
 		if (new_node)
 		{
 			if (new_node->value)

@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 18:02:07 by paromero          #+#    #+#             */
-/*   Updated: 2025/04/02 19:24:23 by paromero         ###   ########.fr       */
+/*   Updated: 2025/05/31 09:07:37 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,4 +51,4 @@ void	process_command_execution(t_data *data)
 		execute_builtin_command(data);
 	else
 		exec_func(data);
-} 
+}

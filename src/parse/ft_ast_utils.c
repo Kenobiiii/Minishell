@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 18:26:41 by paromero          #+#    #+#             */
-/*   Updated: 2025/05/28 17:27:02 by paromero         ###   ########.fr       */
+/*   Updated: 2025/05/31 09:12:03 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,6 @@ t_ast	*ft_create_ast_node(t_type type, char *value)
 	node->args = NULL;
 	node->right = NULL;
 	node->left = NULL;
-	
 	return (node);
 }
 
@@ -55,21 +54,17 @@ void	handle_new_node(t_ast **root, t_ast **cmd,
 {
 	if (!new_op)
 		return ;
-		
 	if (*cmd)
 		connect_operator(root, cmd, last_op, new_op);
 	else
 	{
-		// Si no hay cmd, conectar el nuevo operador al AST existente
 		if (*last_op)
 		{
 			(*last_op)->right = new_op;
 			new_op->left = *root;
 		}
 		else
-		{
 			new_op->left = *root;
-		}
 		*root = new_op;
 		*last_op = new_op;
 	}
