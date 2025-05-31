@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 17:13:17 by paromero          #+#    #+#             */
-/*   Updated: 2025/05/31 09:11:23 by paromero         ###   ########.fr       */
+/*   Updated: 2025/05/31 10:02:36 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ void	handle_redirection(t_ast **root, t_ast **cmd,
 	logical_op_to_preserve = NULL;
 	if (*root)
 	{
-		current = root;
+		current = *root;
 		while (current)
 		{
 			if (current->type == AND || current->type == OR)
