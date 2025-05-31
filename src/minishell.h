@@ -78,6 +78,12 @@ typedef struct s_ast_args
 	t_tokens	*tokens;
 }	t_ast_args;
 
+typedef struct s_finalize_params
+{
+	t_ast	*original_cmd;
+	t_ast	*logical_op_to_preserve;
+}	t_finalize_params;
+
 typedef struct s_env
 {
 	char			*value;
@@ -219,6 +225,15 @@ int			handle_redirect_node(t_ast **root, t_ast **last_op,
 
 //! ft_ast_red_utils.c //
 int			is_redirect_token(t_tokens *tokens);
+int			handle_redirect_operator(t_ast_args *args);
+
+//! ft_ast_red_helpers.c //
+t_ast		*find_logical_op_to_preserve(t_ast *root);
+t_ast		*create_redirection_node(t_ast **cmd, t_ast **last_op,
+				t_tokens *tokens);
+void		cleanup_unused_node(t_ast *new_node, t_ast **last_op);
+void		finalize_redirection_ast(t_ast **root, t_ast **cmd,
+				t_ast **last_op, t_finalize_params *params);
 int			handle_redirect_operator(t_ast_args *args);
 void		handle_redirection(t_ast **root, t_ast **cmd,
 				t_ast **last_op, t_tokens *tokens);
