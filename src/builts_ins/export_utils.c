@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 18:23:14 by paromero          #+#    #+#             */
-/*   Updated: 2025/04/09 18:24:02 by paromero         ###   ########.fr       */
+/*   Updated: 2025/05/31 11:31:52 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,20 +41,15 @@ void	sort_matrix(char **matrix)
 	}
 }
 
-void	print_export_matrix(char **matrix)
+void	print_env_sorted(char **env_matrix)
 {
 	int	i;
 
 	i = 0;
-	while (matrix[i])
+	sort_matrix(env_matrix);
+	while (env_matrix[i])
 	{
-		printf("declare -x %s\n", matrix[i]);
+		printf("declare -x %s\n", env_matrix[i]);
 		i ++;
 	}
-}
-
-void	print_env_sorted(char **env_matrix)
-{
-	sort_matrix(env_matrix);
-	print_export_matrix(env_matrix);
 }

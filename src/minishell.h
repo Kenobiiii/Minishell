@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 19:06:45 by paromero          #+#    #+#             */
-/*   Updated: 2025/05/30 20:44:35 by paromero         ###   ########.fr       */
+/*   Updated: 2025/05/31 11:31:54 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -334,12 +334,10 @@ void		exec_pipe(t_data *data, t_ast *node);
 //! export_builtint.c //
 int			export_builtin(t_data *data);
 void		print_env_sorted(char **env_matrix);
-void		print_export_matrix(char **matrix);
 void		sort_matrix(char **matrix);
 
 //! export_utils.c //
 void		print_env_sorted(char **env_matrix);
-void		print_export_matrix(char **matrix);
 void		sort_matrix(char **matrix);
 
 //! env_builtin.c //
