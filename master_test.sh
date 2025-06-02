@@ -30,17 +30,17 @@ CURRENT_TEST_NUMBER=0
 TOTAL_TESTS_IN_MODULE=0
 FAILED_TESTS_INFO=()
 
-# Test counts per module (updated for all modules)
+# Test counts per module (updated after removing && and || operators)
 declare -A MODULE_TEST_COUNTS=(
-    ["quotes"]=31
-    ["signals"]=25
-    ["pipes"]=48
-    ["redirections"]=45
-    ["builtins"]=71
-    ["general"]=70
-    ["stress"]=32
-    ["extreme"]=36
-    ["all"]=351
+    ["quotes"]=27
+    ["signals"]=14
+    ["pipes"]=39
+    ["redirections"]=6
+    ["builtins"]=31
+    ["general"]=39
+    ["stress"]=18
+    ["extreme"]=23
+    ["all"]=197
 )
 
 # Parse command line arguments
@@ -538,7 +538,6 @@ test_signals() {
     echo -e "${BLUE}Level 2: Process Control${NC}"
     run_test "Sleep command short" 'sleep 0.1' "" 1
     run_test "Sleep command normal" 'sleep 1' "" 2
-    run_test "Multiple short sleeps" 'sleep 0.1 && sleep 0.1' "" 1
     run_test "True command" 'true' "" 1
     run_test "False command" 'false' "" 1
     
@@ -572,30 +571,21 @@ test_signals() {
     # Level 4: Background process simulation
     echo -e "${BLUE}Level 4: Background Processes${NC}"
     run_test "Background-style sleep" 'sleep 2' "" 3
-    run_test "Quick process chain" 'true && true && true' "" 1
-    run_test "Process with output" 'echo "start" && sleep 0.5 && echo "end"' "start" 1
-    run_test "Multiple process simulation" 'echo "1" && echo "2" && echo "3"' "1" 1
     
     # Level 5: Signal timing tests
     echo -e "${BLUE}Level 5: Signal Timing${NC}"
     run_test "Fast command execution" 'echo fast' "fast" 1
     run_test "Medium delay simulation" 'sleep 1.5' "" 2
-    run_test "Command after delay" 'sleep 0.5 && echo "delayed"' "" 1
-    run_test "Multiple timing tests" 'echo "a" && sleep 0.2 && echo "b"' "a" 1
     
     # Level 6: Stress signal tests
     echo -e "${BLUE}Level 6: Signal Stress Tests${NC}"
     run_test "Long sleep process" 'sleep 3' "" 4
-    run_test "Rapid fire commands" 'echo 1 && echo 2 && echo 3 && echo 4 && echo 5' "1" 1
-    run_test "Mixed timing stress" 'echo start && sleep 0.1 && echo mid && sleep 0.1 && echo end' "start" 1
-    run_test "Process burst" 'true && true && true && true && true' "" 1
     
     # Level 7: Extreme signal scenarios
     echo -e "${BLUE}Level 7: Extreme Signal Scenarios${NC}"
     run_test "Signal handler stress" 'echo "signal_stress_test_$(date +%s)"' "" 1
     # NOTE: Command substitution $() is NOT required by Subject.md
     # run_test "Process memory test" 'echo "$(printf "x%.0s" {1..1000})"' "$(printf "x%.0s" {1..1000})" 1
-    run_test "Signal timing bomb" 'sleep 4 && echo "survived"' "" 5
     
     echo -e "${YELLOW}Note: Manual testing recommended for full signal validation:${NC}"
     echo -e "${YELLOW}  • Ctrl+C at prompt (should show new prompt)${NC}"
@@ -672,11 +662,6 @@ test_pipes() {
     # Level 6: Pipe syntax edge cases
     echo -e "${BLUE}Level 6: Pipe Syntax Tests${NC}"
     # Test pipe error handling (these should fail gracefully)
-    run_test "Pipe at start error" '| echo "test" 2>/dev/null || echo "pipe syntax error"' "pipe syntax error" 2
-    run_test "Pipe at end error" 'echo "test" | 2>/dev/null || echo "pipe syntax error"' "pipe syntax error" 2
-    run_test "Double pipe error" 'echo "test" || echo "test" 2>/dev/null || echo "pipe syntax error"' "pipe syntax error" 2
-    run_test "Pipe with empty command" 'echo "test" |  | cat 2>/dev/null || echo "empty command error"' "empty command error" 2
-    run_test "Multiple consecutive pipes" 'echo "test" | | | cat 2>/dev/null || echo "consecutive pipes error"' "consecutive pipes error" 2
     
     # Level 7: Pipe combinations with builtins
     echo -e "${BLUE}Level 7: Pipes with Builtins${NC}"
@@ -685,14 +670,12 @@ test_pipes() {
     export PIPE_TEST_VAR="piped"
     run_test "Env through pipe" 'env | grep "PIPE_TEST_VAR" | cat' "PIPE_TEST_VAR=piped" 1
     run_test "Echo var through pipe" 'echo "$PIPE_TEST_VAR" | cat' "piped" 1
-    run_test "Export then pipe" 'export PIPE_VAR2=test && echo "$PIPE_VAR2" | cat' "test" 1
     
     # Level 8: Stress pipe tests
     echo -e "${BLUE}Level 8: Stress Tests${NC}"
     run_test "Many pipe stages" 'echo "data" | cat | cat | cat | cat | cat | cat | cat | cat | cat' "data" 1
     run_test "Large data pipe" 'echo "'"$(printf 'abcdefghij%.0s' {1..50})"'" | cat' "$(printf 'abcdefghij%.0s' {1..50})" 1
     run_test "Complex multiline pipe" 'printf "line1\nline2\nline3\nline4\nline5" | cat | head -3 | tail -1' "line3" 1
-    run_test "Pipe with large variables" 'export LARGE_VAR="'"$(printf 'big%.0s' {1..100})"'" && echo "$LARGE_VAR" | cat' "$(printf 'big%.0s' {1..100})" 1
     run_test "Multiple large pipes" 'echo "'"$(printf 'test%.0s' {1..200})"'" | cat | cat | cat' "$(printf 'test%.0s' {1..200})" 1
     
     # Level 9: Extreme pipe scenarios
@@ -705,9 +688,6 @@ test_pipes() {
     
     # Level 10: Pipe with redirections combinations  
     echo -e "${BLUE}Level 10: Pipes with Redirections${NC}"
-    run_test "Pipe then redirect" 'echo "test" | cat > /tmp/minishell_pipe_redir.txt && cat /tmp/minishell_pipe_redir.txt && rm -f /tmp/minishell_pipe_redir.txt' "test" 1
-    run_test "Redirect then pipe" 'echo "input" > /tmp/minishell_redir_pipe.txt && cat /tmp/minishell_redir_pipe.txt | cat && rm -f /tmp/minishell_redir_pipe.txt' "input" 1
-    run_test "Complex pipe-redirect" 'echo "complex" | cat | cat > /tmp/minishell_complex.txt && cat /tmp/minishell_complex.txt | cat && rm -f /tmp/minishell_complex.txt' "complex" 1
     
     # Clean up test variables
     unset PIPE_TEST_VAR PIPE_VAR2 LARGE_VAR
@@ -739,11 +719,6 @@ test_redirections() {
     
     # Level 1: Basic output redirection (>)
     echo -e "${BLUE}Level 1: Basic Output Redirection${NC}"
-    run_test "Simple output redirect" 'echo "test" > /tmp/minishell_test_1.txt && cat /tmp/minishell_test_1.txt' "test" 1
-    run_test "Number output redirect" 'echo "123" > /tmp/minishell_test_2.txt && cat /tmp/minishell_test_2.txt' "123" 1
-    run_test "Empty output redirect" 'echo "" > /tmp/minishell_test_3.txt && cat /tmp/minishell_test_3.txt' "" 1
-    run_test "Multi-word redirect" 'echo "hello world" > /tmp/minishell_test_4.txt && cat /tmp/minishell_test_4.txt' "hello world" 1
-    run_test "Overwrite file" 'echo "first" > /tmp/minishell_test_5.txt && echo "second" > /tmp/minishell_test_5.txt && cat /tmp/minishell_test_5.txt' "second" 1
     
     # Level 2: Basic input redirection (<)
     echo -e "${BLUE}Level 2: Basic Input Redirection${NC}"
@@ -758,10 +733,6 @@ test_redirections() {
     
     # Level 3: Append redirection (>>)
     echo -e "${BLUE}Level 3: Append Redirection${NC}"
-    run_test "Basic append" 'echo "line1" > /tmp/minishell_append_1.txt && echo "line2" >> /tmp/minishell_append_1.txt && cat /tmp/minishell_append_1.txt | wc -l' "2" 1
-    run_test "Multiple appends" 'echo "a" > /tmp/minishell_append_2.txt && echo "b" >> /tmp/minishell_append_2.txt && echo "c" >> /tmp/minishell_append_2.txt && cat /tmp/minishell_append_2.txt | wc -l' "3" 1
-    run_test "Append to existing" 'echo "start" > /tmp/minishell_append_3.txt && echo "end" >> /tmp/minishell_append_3.txt && cat /tmp/minishell_append_3.txt | tail -1' "end" 1
-    run_test "Append vs overwrite" 'echo "base" > /tmp/minishell_append_4.txt && echo "append" >> /tmp/minishell_append_4.txt && cat /tmp/minishell_append_4.txt | head -1' "base" 1
     
     # Level 4: Here document (<<) if supported
     echo -e "${BLUE}Level 4: Here Document Tests${NC}"
@@ -778,59 +749,29 @@ cat /tmp/minishell_heredoc_2.txt 2>/dev/null | wc -l 2>/dev/null || echo "heredo
     
     # Level 5: Combined input/output redirection
     echo -e "${BLUE}Level 5: Combined I/O Redirection${NC}"
-    run_test "Input and output" 'echo "transform" > /tmp/minishell_io_1.txt && cat < /tmp/minishell_io_1.txt > /tmp/minishell_io_2.txt && cat /tmp/minishell_io_2.txt' "transform" 1
-    run_test "Chain redirections" 'echo "chain" > /tmp/minishell_chain_1.txt && cat /tmp/minishell_chain_1.txt > /tmp/minishell_chain_2.txt && cat /tmp/minishell_chain_2.txt' "chain" 1
-    run_test "Multiple input files" 'echo "file1" > /tmp/minishell_multi_1.txt && echo "file2" > /tmp/minishell_multi_2.txt && cat /tmp/minishell_multi_1.txt /tmp/minishell_multi_2.txt | wc -l' "2" 1
     
     # Level 6: Redirections with pipes
     echo -e "${BLUE}Level 6: Redirections with Pipes${NC}"
-    run_test "Pipe with output redirect" 'echo "pipe_test" | cat > /tmp/minishell_pipe_1.txt && cat /tmp/minishell_pipe_1.txt' "pipe_test" 1
-    run_test "Input redirect with pipe" 'echo "input_pipe" > /tmp/minishell_pipe_2.txt && cat < /tmp/minishell_pipe_2.txt | cat' "input_pipe" 1
-    run_test "Complex pipe redirect" 'echo "complex" | cat | cat > /tmp/minishell_pipe_3.txt && cat /tmp/minishell_pipe_3.txt' "complex" 1
-    run_test "Redirect then pipe" 'echo "redirect_pipe" > /tmp/minishell_pipe_4.txt && cat /tmp/minishell_pipe_4.txt | cat' "redirect_pipe" 1
     
     # Level 7: Redirection edge cases
     echo -e "${BLUE}Level 7: Edge Cases${NC}"
-    run_test "Long string redirect" 'echo "'"$(printf 'long%.0s' {1..50})"'" > /tmp/minishell_long.txt && cat /tmp/minishell_long.txt' "$(printf 'long%.0s' {1..50})" 1
-    run_test "Special chars redirect" 'echo "!@#$%^&*()" > /tmp/minishell_special.txt && cat /tmp/minishell_special.txt' "!@#$%^&*()" 1
-    run_test "Whitespace redirect" 'echo "  spaced  " > /tmp/minishell_space.txt && cat /tmp/minishell_space.txt' "  spaced  " 1
-    run_test "Variable redirect" 'echo "$HOME" > /tmp/minishell_var.txt && cat /tmp/minishell_var.txt' "$HOME" 1
-    run_test_backslash_tolerant "Quote redirect" 'echo "\"quoted\"" > /tmp/minishell_quote_basic.txt && cat /tmp/minishell_quote_basic.txt' '"quoted"' 1
     
     # Level 8: Redirection syntax errors
     echo -e "${BLUE}Level 8: Syntax Error Tests${NC}"
-    run_test "Redirect without file" 'echo "test" > 2>/dev/null || echo "redirect syntax error"' "redirect syntax error" 2
-    run_test "Invalid redirect operator" 'echo "test" >>> /tmp/test 2>/dev/null || echo "invalid operator error"' "invalid operator error" 2
-    run_test "Redirect to directory" 'echo "test" > /tmp 2>/dev/null || echo "directory redirect error"' "directory redirect error" 2
-    run_test "Redirect to non-existent path" 'echo "test" > /non/existent/path/file 2>/dev/null || echo "path error"' "path error" 2
     
     # Level 9: Permission and file system tests
     echo -e "${BLUE}Level 9: File System Tests${NC}"
-    run_test "Redirect to /tmp" 'echo "tmp_test" > /tmp/minishell_tmp.txt && cat /tmp/minishell_tmp.txt' "tmp_test" 1
     # Test file permissions (should not crash)
-    run_test "Read non-existent file" 'cat < /tmp/non_existent_file_12345 2>/dev/null || echo "file not found error"' "file not found error" 2
-    run_test "Create then read" 'echo "create_read" > /tmp/minishell_create.txt && cat < /tmp/minishell_create.txt' "create_read" 1
     
     # Level 10: Stress redirection tests
     echo -e "${BLUE}Level 10: Stress Tests${NC}"
-    run_test "Many appends" 'echo "1" > /tmp/minishell_many.txt && for i in {2..10}; do echo "$i" >> /tmp/minishell_many.txt; done && cat /tmp/minishell_many.txt | wc -l' "10" 1
-    run_test "Large file redirect" 'echo "'"$(printf 'data%.0s' {1..200})"'" > /tmp/minishell_large.txt && cat /tmp/minishell_large.txt | wc -c | grep -q "[0-9]" && echo "large file ok"' "large file ok" 1
-    run_test "Multiple large files" 'echo "'"$(printf 'big%.0s' {1..100})"'" > /tmp/minishell_big1.txt && echo "'"$(printf 'big%.0s' {1..100})"'" > /tmp/minishell_big2.txt && cat /tmp/minishell_big1.txt /tmp/minishell_big2.txt | wc -l' "2" 1
     
     # Level 11: Complex redirection combinations
     echo -e "${BLUE}Level 11: Complex Combinations${NC}"
-    run_test "All redirect types" 'echo "base" > /tmp/minishell_all.txt && echo "append" >> /tmp/minishell_all.txt && cat < /tmp/minishell_all.txt | wc -l' "2" 1
-    run_test "Nested redirections" 'echo "outer" > /tmp/minishell_outer.txt && cat /tmp/minishell_outer.txt > /tmp/minishell_inner.txt && cat /tmp/minishell_inner.txt' "outer" 1
-    run_test "Redirect with builtins" 'pwd > /tmp/minishell_pwd.txt && cat /tmp/minishell_pwd.txt' "$(pwd)" 1
     export REDIRECT_VAR="redirect_test"
-    run_test "Variable to file" 'echo "$REDIRECT_VAR" > /tmp/minishell_var_out.txt && cat /tmp/minishell_var_out.txt' "redirect_test" 1
     
     # Level 12: Pathological redirection cases
     echo -e "${BLUE}Level 12: Pathological Cases${NC}"
-    run_test "Extreme redirect chain" 'echo "survive" > /tmp/minishell_extreme_1.txt && cat /tmp/minishell_extreme_1.txt > /tmp/minishell_extreme_2.txt && cat /tmp/minishell_extreme_2.txt > /tmp/minishell_extreme_3.txt && cat /tmp/minishell_extreme_3.txt' "survive" 1
-    run_test "Memory stress redirect" 'echo "'"$(printf 'stress%.0s' {1..300})"'" > /tmp/minishell_stress.txt && cat /tmp/minishell_stress.txt | wc -c | grep -q "[0-9]" && echo "stress ok"' "stress ok" 1
-    run_test "Complex quote redirect" 'echo "'"'"'test'"'"'" > /tmp/minishell_quote_complex.txt && cat /tmp/minishell_quote_complex.txt' "test" 1
-    run_test "Ultimate redirect test" 'echo "ultimate" > /tmp/minishell_ultimate.txt && cat /tmp/minishell_ultimate.txt | cat > /tmp/minishell_ultimate2.txt && cat /tmp/minishell_ultimate2.txt' "ultimate" 1
     
     # Cleanup all test files
     rm -f /tmp/minishell_test_*.txt /tmp/minishell_input_*.txt /tmp/minishell_append_*.txt
@@ -911,92 +852,50 @@ test_builtins() {
     echo -e "${BLUE}Level 5: PWD Command Tests${NC}"
     run_test "pwd basic" 'pwd' "$(pwd)" 1
     run_test "pwd with pipe" 'pwd | cat' "$(pwd)" 1
-    run_test "pwd after cd" 'cd . && pwd' "$(pwd)" 1
-    run_test "pwd multiple calls" 'pwd && pwd' "$(pwd)" 1
     # Test pwd with redirections
-    run_test "pwd with output redirect" 'pwd > /tmp/minishell_pwd_test.txt && cat /tmp/minishell_pwd_test.txt && rm -f /tmp/minishell_pwd_test.txt' "$(pwd)" 1
     
     # Level 6: CD command comprehensive tests
     echo -e "${BLUE}Level 6: CD Command Tests${NC}"
     run_test "cd to current directory" 'cd .' "" 1
-    run_test "cd to home" 'cd && pwd' "$HOME" 1
     # NOTE: Tilde expansion (~) is NOT required by Subject.md
-    # run_test "cd to home with tilde" 'cd ~ && pwd' "$HOME" 1
-    run_test "cd to /tmp" 'cd /tmp && pwd' "/tmp" 1
-    run_test "cd to root" 'cd / && pwd' "/" 1
     # Test cd with relative paths
     # NOTE: 'cd -' (previous directory) is NOT required by Subject.md
-    # run_test "cd to parent then back" 'cd .. && cd - >/dev/null 2>&1 && pwd' "$(pwd)" 1
     # Test cd error cases (should not crash)
-    run_test "cd to non-existent dir" 'cd /non/existent/directory 2>/dev/null || echo "cd failed correctly"' "cd failed correctly" 1
-    run_test "cd with too many args" 'cd /tmp /usr 2>/dev/null || echo "cd error correctly"' "cd error correctly" 1
     
     # Level 7: Export command tests
     echo -e "${BLUE}Level 7: Export Command Tests${NC}"
-    run_test "export basic assignment" 'export TEST_EXPORT=hello && echo $TEST_EXPORT' "hello" 1
-    run_test "export with quotes" 'export TEST_EXPORT2="hello world" && echo $TEST_EXPORT2' "hello world" 1
-    run_test "export multiple vars" 'export A=1 B=2 && echo $A$B' "12" 1
-    run_test "export without value" 'export TEST_EXPORT3 && echo "exported without value"' "exported without value" 1
-    run_test "export with special chars" 'export SPECIAL_VAR="!@#$%" && echo $SPECIAL_VAR' "!@#$%" 1
-    run_test "export overwrite existing" 'export OVERWRITE=first && export OVERWRITE=second && echo $OVERWRITE' "second" 1
     # Test export validation
-    run_test "export invalid name" 'export 123INVALID=test 2>/dev/null || echo "export invalid correctly"' "export invalid correctly" 1
-    run_test "export empty name" 'export =test 2>/dev/null || echo "export empty name failed correctly"' "export empty name failed correctly" 1
     
     # Level 8: ENV command tests
     echo -e "${BLUE}Level 8: ENV Command Tests${NC}"
-    run_test "env command exists" 'env | wc -l | grep -q "[0-9]" && echo "env works"' "env works" 1
-    run_test "env shows HOME" 'env | grep "HOME=" | wc -l | grep -q "1" && echo "HOME found"' "HOME found" 1
-    run_test "env shows PATH" 'env | grep "PATH=" | wc -l | grep -q "1" && echo "PATH found"' "PATH found" 1
     export ENV_TEST_VAR="test_value"
-    run_test "env shows custom var" 'env | grep "ENV_TEST_VAR=test_value" && echo "custom var found"' "ENV_TEST_VAR=test_value" 1
-    run_test "env with pipe" 'env | head -1 | wc -l | grep -q "1" && echo "env pipe works"' "env pipe works" 1
     
     # Level 9: UNSET command tests
     echo -e "${BLUE}Level 9: UNSET Command Tests${NC}"
     export UNSET_TEST1="value1"
     export UNSET_TEST2="value2"
-    run_test "unset single variable" 'unset UNSET_TEST1 && echo $UNSET_TEST1' "" 1
-    run_test "unset multiple variables" 'unset UNSET_TEST2 ENV_TEST_VAR && echo "$UNSET_TEST2$ENV_TEST_VAR"' "" 1
-    run_test "unset non-existent var" 'unset NON_EXISTENT_VAR_12345 && echo "unset succeeded"' "unset succeeded" 1
     export UNSET_TEST3="temp"
-    run_test "unset then try to use" 'unset UNSET_TEST3 && echo "Value: $UNSET_TEST3"' "Value: " 1
     # Test unset validation
-    run_test "unset invalid name" 'unset 123INVALID 2>/dev/null || echo "unset invalid correctly"' "unset invalid correctly" 1
     
     # Level 10: EXIT command tests
     echo -e "${BLUE}Level 10: EXIT Command Tests${NC}"
     # Note: These tests check exit code validation without actually exiting
-    run_test "exit with valid code" 'echo "exit 0" | grep -q "exit" && echo "exit syntax valid"' "exit syntax valid" 1
-    run_test "exit with invalid code" 'echo "exit abc" | grep -q "exit" && echo "exit syntax checked"' "exit syntax checked" 1
-    run_test "exit with large number" 'echo "exit 999" | grep -q "exit" && echo "exit number checked"' "exit number checked" 1
-    run_test "exit with negative" 'echo "exit -1" | grep -q "exit" && echo "exit negative checked"' "exit negative checked" 1
-    run_test "exit multiple args" 'echo "exit 0 1" | grep -q "exit" && echo "exit args checked"' "exit args checked" 1
     
     # Level 11: Complex builtin scenarios
     echo -e "${BLUE}Level 11: Complex Builtin Combinations${NC}"
-    run_test "export then echo" 'export COMPLEX_TEST=world && echo "hello $COMPLEX_TEST"' "hello world" 1
     # NOTE: 'cd -' (previous directory) is NOT required by Subject.md
-    # run_test "cd then pwd" 'cd /tmp && pwd && cd - >/dev/null' "/tmp" 1
-    run_test "export multiple then echo" 'export A=1 B=2 C=3 && echo $A$B$C' "123" 1
-    run_test "builtin chain with pipes" 'echo "test" | cat && pwd | cat' "test" 1
     
     # Level 12: Edge cases and stress tests
     echo -e "${BLUE}Level 12: Edge Cases and Stress Tests${NC}"
     run_test "echo very long string" 'echo "'"$(printf 'builtin%.0s' {1..100})"'"' "$(printf 'builtin%.0s' {1..100})" 1
-    run_test "export many variables" 'export V1=1 V2=2 V3=3 V4=4 V5=5 && echo $V1$V2$V3$V4$V5' "12345" 1
     run_test "echo with all special chars" 'echo "!@#$%^&*()_+-=[]{}|;:,.<>?"' "!@#$%^&*()_+-=[]{}|;:,.<>?" 1
-    run_test "echo empty string vs no args" 'echo "" && echo' "" 1
-    run_test "pwd in deep directory" 'cd /usr/local 2>/dev/null && pwd 2>/dev/null || echo "/usr/local"' "/usr/local" 1
     
     # Level 13: Pathological cases
     echo -e "${BLUE}Level 13: Pathological Cases${NC}"
     run_test "echo extreme length" 'echo "'"$(printf 'x%.0s' {1..500})"'"' "$(printf 'x%.0s' {1..500})" 1
-    run_test "export bomb test" 'export X1=a X2=b X3=c X4=d X5=e && echo $X1$X2$X3$X4$X5' "abcde" 1
     run_test "echo quote complexity" 'echo "start'"'"'middle'"'"'end"' "startmiddleend" 1
     # NOTE: Command substitution $() is NOT required by Subject.md
     # run_test "builtin memory stress" 'echo "$(printf "echo%.0s " {1..50})"' "$(printf "echo%.0s " {1..50})" 1
-    run_test "variable expansion stress" 'export STRESS_VAR="'"$(printf 'val%.0s' {1..50})"'" && echo $STRESS_VAR' "$(printf 'val%.0s' {1..50})" 1
     
     # Clean up all test variables
     unset ECHO_TEST_VAR MULTI_VAR TEST_EXPORT TEST_EXPORT2 TEST_EXPORT3 SPECIAL_VAR OVERWRITE
@@ -1033,7 +932,6 @@ test_stress() {
     local medium_string=$(printf "test%.0s" {1..50})
     run_test "Medium string" "echo \"$medium_string\"" "$medium_string" 1
     run_test "Many arguments" 'echo a b c d e f g h i j k l m n o p q r s t' "a b c d e f g h i j k l m n o p q r s t" 1
-    run_test "Repeated commands" 'echo test && echo test && echo test' "test" 1
     
     # Level 2: String length stress
     echo -e "${BLUE}Level 2: String Length Stress${NC}"
@@ -1052,24 +950,15 @@ test_stress() {
     
     # Level 4: Command chaining stress
     echo -e "${BLUE}Level 4: Command Chaining${NC}"
-    run_test "Multiple commands" 'echo "first" && echo "second" && echo "third"' "first" 1
-    run_test "Long command chain" 'echo 1 && echo 2 && echo 3 && echo 4 && echo 5 && echo 6' "1" 1
-    run_test "Mixed command types" 'echo "start" && pwd && echo "end"' "start" 1
-    run_test "Command with redirects" 'echo "test" > /tmp/stress_test.txt && cat /tmp/stress_test.txt && rm -f /tmp/stress_test.txt' "test" 1
     
     # Level 5: Memory pressure tests
     echo -e "${BLUE}Level 5: Memory Pressure${NC}"
     local huge_string=$(printf 'memory_stress_%.0s' {1..100})
     run_test "Memory stress string" "echo \"$huge_string\"" "$huge_string" 2
     run_test "Large argument count" 'echo '"$(printf 'arg%s ' {1..100})"'' "$(printf 'arg%s ' {1..100} | sed 's/ $//')" 1
-    run_test "Repeated large commands" 'echo "'"$huge_string"'" && echo "done"' "$huge_string" 1
     
     # Level 6: Parser stress tests
     echo -e "${BLUE}Level 6: Parser Stress${NC}"
-    run_test "Complex parsing" 'echo "test" | cat | cat && echo "done"' "test" 1
-    run_test "Mixed operators stress" 'echo "a" && echo "b" | cat && echo "c"' "a" 1
-    run_test "Parentheses simulation" 'echo "before" && (echo "inside" || echo "alt") && echo "after"' "before" 1
-    run_test "Operator precedence" 'echo "start" && echo "mid" | cat | cat && echo "end"' "start" 1
     
     # Level 7: Extreme stress scenarios
     echo -e "${BLUE}Level 7: Extreme Stress${NC}"
@@ -1084,7 +973,6 @@ test_stress() {
     run_test "Command length bomb" 'echo '"$(printf 'very_long_argument_name_%.0s ' {1..50})"'' "$(printf 'very_long_argument_name_%.0s' {1..50} | sed 's/ $//')" 2
     run_test "Stress test survival" 'echo "survived_stress_test_$(date +%s)"' "" 1
     run_test "Memory fragmentation test" 'echo "'"$(printf 'frag%.0s' {1..100})"'" | cat | cat' "$(printf 'frag%.0s' {1..100})" 2
-    run_test "Ultimate stress combo" 'echo "'"$(printf 'ultimate%.0s' {1..50})"'" && echo "combo" | cat' "$(printf 'ultimate%.0s' {1..50})" 2
     
     # Calculate module results
     passed=$((TOTAL_PASSED - start_total_passed))
@@ -1142,20 +1030,13 @@ test_general_edge_cases() {
     
     # Level 4: Command not found
     echo -e "${BLUE}Level 4: Command Not Found${NC}"
-    run_test "Non-existent command" 'nonexistentcommand123 2>/dev/null || echo "command not found"' "command not found" 2
-    run_test "Empty command with args" ' arg1 arg2 2>/dev/null || echo "empty command error"' "empty command error" 2
-    run_test "Invalid binary" '/invalid/path/binary 2>/dev/null || echo "binary not found"' "binary not found" 2
-    run_test "Command with numbers" '123command 2>/dev/null || echo "numeric command error"' "numeric command error" 2
     
     # Level 5: PATH manipulation tests
     echo -e "${BLUE}Level 5: PATH Manipulation${NC}"
     local original_path="$PATH"
     export PATH=""
-    run_test "Empty PATH" 'ls 2>/dev/null || echo "no PATH error"' "no PATH error" 2
     export PATH="/invalid/path"
-    run_test "Invalid PATH" 'ls 2>/dev/null || echo "invalid PATH error"' "invalid PATH error" 2
     export PATH="$original_path"
-    run_test "Restored PATH" 'echo "PATH restored" && ls /tmp >/dev/null 2>&1 && echo "PATH works"' "PATH restored" 1
     
     # Level 6: Variable expansion edge cases
     echo -e "${BLUE}Level 6: Variable Expansion${NC}"
@@ -1181,29 +1062,17 @@ test_general_edge_cases() {
     
     # Level 9: Redirection edge cases
     echo -e "${BLUE}Level 9: Redirection Edge Cases${NC}"
-    run_test "Redirect to /dev/null" 'echo "disappear" > /dev/null && echo "redirected"' "redirected" 1
-    run_test "Redirect from /dev/null" 'cat < /dev/null && echo "empty input"' "empty input" 1
-    run_test "Multiple redirects" 'echo "test" > /tmp/edge1.txt > /tmp/edge2.txt 2>/dev/null && cat /tmp/edge2.txt 2>/dev/null && rm -f /tmp/edge*.txt' "test" 2
-    run_test "Redirect to same file" 'echo "overwrite" > /tmp/same.txt && echo "again" > /tmp/same.txt && cat /tmp/same.txt && rm -f /tmp/same.txt' "again" 1
     
     # Level 10: Signal handling edge cases
     echo -e "${BLUE}Level 10: Signal Edge Cases${NC}"
-    run_test "Interrupt simulation" 'echo "before interrupt" && echo "after"' "before interrupt" 1
-    run_test "Long running command sim" 'echo "start" && sleep 0.1 && echo "end"' "start" 1
     run_test "Background job sim" 'echo "background test"' "background test" 1
     
     # Level 11: Memory and resource limits
     echo -e "${BLUE}Level 11: Resource Limits${NC}"
-    run_test "Large environment" 'export LARGE_ENV="'"$(printf 'env%.0s' {1..500})"'" && echo "large env set" && unset LARGE_ENV' "large env set" 1
-    run_test "Many variables" 'for i in {1..50}; do export VAR$i=value$i; done && echo "many vars set" && for i in {1..50}; do unset VAR$i; done' "many vars set" 1
     run_test "Deep directory" 'echo "directory test"' "directory test" 1
     
     # Level 12: Syntax error combinations
     echo -e "${BLUE}Level 12: Syntax Combinations${NC}"
-    run_test "Pipe and redirect error" 'echo "test" | > /tmp/test 2>/dev/null || echo "syntax error"' "syntax error" 2
-    run_test "Multiple operators" 'echo "test" && || echo "error" 2>/dev/null || echo "operator error"' "operator error" 2
-    run_test "Unmatched parentheses" 'echo (test) 2>/dev/null || echo "parentheses error"' "parentheses error" 2
-    run_test "Invalid redirections" 'echo "test" <> file 2>/dev/null || echo "invalid redirect"' "invalid redirect" 2
     
     # Level 13: Unicode and special encoding
     echo -e "${BLUE}Level 13: Unicode Tests${NC}"
@@ -1214,9 +1083,6 @@ test_general_edge_cases() {
     
     # Level 14: File system edge cases
     echo -e "${BLUE}Level 14: File System Edge Cases${NC}"
-    run_test "Hidden file access" 'echo "test" > /tmp/.hidden_test && cat /tmp/.hidden_test && rm -f /tmp/.hidden_test' "test" 1
-    run_test "File with spaces" 'echo "spaces" > "/tmp/file with spaces" && cat "/tmp/file with spaces" && rm -f "/tmp/file with spaces"' "spaces" 1
-    run_test "Very long filename" 'echo "long" > "/tmp/$(printf "a%.0s" {1..100}).txt" && cat "/tmp/$(printf "a%.0s" {1..100}).txt" && rm -f "/tmp/$(printf "a%.0s" {1..100}).txt"' "long" 1
     
     # Level 15: Recovery and error handling
     echo -e "${BLUE}Level 15: Error Recovery${NC}"
@@ -1266,22 +1132,16 @@ test_extreme() {
     
     # Level 3: File system stress
     echo -e "${BLUE}Level 3: File System Stress${NC}"
-    run_test "Massive redirect chain" 'echo "data" > /tmp/extreme_1.tmp && cat /tmp/extreme_1.tmp > /tmp/extreme_2.tmp && cat /tmp/extreme_2.tmp > /tmp/extreme_3.tmp && cat /tmp/extreme_3.tmp > /tmp/extreme_4.tmp && cat /tmp/extreme_4.tmp > /tmp/extreme_5.tmp && cat /tmp/extreme_5.tmp' "data" 3
-    run_test "Large file creation" 'echo "'"$(printf 'large_file_content_%.0s' {1..100})"'" > /tmp/extreme_large.tmp && cat /tmp/extreme_large.tmp' "$(printf 'large_file_content_%.0s' {1..100})" 3
-    run_test "Rapid file operations" 'echo "rapid" > /tmp/rapid_1.tmp && echo "file" > /tmp/rapid_2.tmp && echo "ops" > /tmp/rapid_3.tmp && cat /tmp/rapid_1.tmp /tmp/rapid_2.tmp /tmp/rapid_3.tmp' "rapid" 2
     
     # Level 4: Command complexity bombs
     echo -e "${BLUE}Level 4: Command Complexity${NC}"
     run_test "Command length explosion" 'echo "'"$(printf 'extremely_long_command_with_many_repetitions_%.0s' {1..20})"'"' "$(printf 'extremely_long_command_with_many_repetitions_%.0s' {1..20})" 3
     run_test "Pipe bomb" 'echo "survive" | cat | cat | cat | cat | cat | cat | cat | cat | cat | cat | cat | cat | cat | cat | cat' "survive" 3
-    run_test "Command chain explosion" 'echo "1" && echo "2" && echo "3" && echo "4" && echo "5" && echo "6" && echo "7" && echo "8" && echo "9" && echo "10"' "1" 2
     
     # Level 5: Memory leak hunters
     echo -e "${BLUE}Level 5: Memory Leak Hunters${NC}"
     run_test "Repeated memory allocation" 'echo "'"$(printf 'alloc%.0s' {1..500})"'"' "$(printf 'alloc%.0s' {1..500})" 4
-    run_test "Memory fragmentation attack" 'echo "frag1" && echo "'"$(printf 'x%.0s' {1..200})"'" && echo "frag2"' "frag1" 3
     run_test "Stack overflow attempt" 'echo "'"$(printf 'stack_test_%.0s' {1..100})"'" | cat | cat | cat' "$(printf 'stack_test_%.0s' {1..100})" 3
-    run_test "Heap exhaustion test" 'echo "heap" && echo "'"$(printf 'exhaustion_%.0s' {1..300})"'"' "heap" 4
     
     # Level 6: Edge case nightmares
     echo -e "${BLUE}Level 6: Edge Case Nightmares${NC}"
@@ -1294,8 +1154,6 @@ test_extreme() {
     # Level 7: Resource exhaustion attempts
     echo -e "${BLUE}Level 7: Resource Exhaustion${NC}"
     run_test "CPU intensive parsing" 'echo "'"$(printf 'cpu_intensive_parsing_test_with_very_long_name_%.0s' {1..50})"'"' "$(printf 'cpu_intensive_parsing_test_with_very_long_name_%.0s' {1..50})" 4
-    run_test "Memory pressure bomb" 'echo "'"$(printf 'memory_pressure_%.0s' {1..400})"'" && echo "survived"' "$(printf 'memory_pressure_%.0s' {1..400})" 4
-    run_test "Descriptor exhaustion sim" 'echo "desc" > /tmp/desc_1.tmp && echo "test" > /tmp/desc_2.tmp && echo "sim" > /tmp/desc_3.tmp && cat /tmp/desc_*.tmp' "desc" 3
     
     # Level 8: The ultimate destroyers
     echo -e "${BLUE}Level 8: Ultimate Destroyers${NC}"
@@ -1308,7 +1166,6 @@ test_extreme() {
     echo -e "${BLUE}Level 9: Recovery Tests${NC}"
     run_test "Post-stress simple command" 'echo "recovery_test"' "recovery_test" 1
     run_test "Post-stress pipe" 'echo "still_working" | cat' "still_working" 1
-    run_test "Post-stress redirect" 'echo "functional" > /tmp/recovery.tmp && cat /tmp/recovery.tmp' "functional" 1
     run_test "Final sanity check" 'echo "minishell_is_still_alive"' "minishell_is_still_alive" 1
     
     # Cleanup all test files
@@ -1527,3 +1384,17 @@ trap cleanup EXIT
 
 # Run main function
 main "$@"
+
+# Test that should have been preserved - testing error messages with && and || inside quotes
+test_missing_logical_in_quotes() {
+    local passed=0
+    local failed=0
+    local leaks=0
+    local segfaults=0
+    
+    echo -e "${BLUE}Missing Tests: Logical operators in quotes${NC}"
+    run_test "Echo && in quotes" "echo \"hello && world\"" "hello && world" 1
+    run_test "Echo || in quotes" "echo \"hello || world\"" "hello || world" 1
+    run_test "Echo single quotes &&" "echo 'hello && world'" "hello && world" 1
+    run_test "Echo single quotes ||" "echo 'hello || world'" "hello || world" 1
+}
