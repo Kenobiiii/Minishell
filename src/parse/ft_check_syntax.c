@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 17:29:43 by paromero          #+#    #+#             */
-/*   Updated: 2025/05/27 19:26:06 by paromero         ###   ########.fr       */
+/*   Updated: 2025/06/02 17:33:46 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,14 @@ static int	check_redir_syntax(char *line, int *i)
 	return (1);
 }
 
+static int	check_logical_operators(char *line, int i)
+{
+	if ((line[i] == '&' && line[i + 1] == '&')
+		|| (line[i] == '|' && line[i + 1] == '|'))
+		return (0);
+	return (1);
+}
+
 int	check_syntax(char *line)
 {
 	int		i;
@@ -77,13 +85,15 @@ int	check_syntax(char *line)
 		handle_syntax_quotes(line, &i, &in_quote, &quote_type);
 		if (!in_quote)
 		{
-			if (line[i] == '|' && !check_pipe_syntax(line, &i))
+			if (!check_logical_operators(line, i))
+				return (0);
+			if (line[i] == '|' && line[i + 1] != '|' && !check_pipe_syntax(line, &i))
 				return (0);
 			else if ((line[i] == '<' || line[i] == '>')
 				&& !check_redir_syntax(line, &i))
 				return (0);
 		}
-		if (line[i] && !(line[i] == '|' && !in_quote))
+		if (line[i] && !(line[i] == '|' && line[i + 1] != '|' && !in_quote))
 			i++;
 	}
 	return (1);

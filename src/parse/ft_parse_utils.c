@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 18:47:59 by paromero          #+#    #+#             */
-/*   Updated: 2025/05/27 19:26:06 by paromero         ###   ########.fr       */
+/*   Updated: 2025/06/02 17:33:46 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,7 @@
 
 int	ft_dobletype(t_type	type)
 {
-	if (type == REDOUT2 || type == REDIN2
-		|| type == AND || type == OR)
+	if (type == REDOUT2 || type == REDIN2)
 		return (1);
 	return (0);
 }

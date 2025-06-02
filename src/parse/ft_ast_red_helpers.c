@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/31 10:02:36 by paromero          #+#    #+#             */
-/*   Updated: 2025/05/31 10:02:36 by paromero         ###   ########.fr       */
+/*   Updated: 2025/06/02 17:33:46 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,23 +15,8 @@
 //? Finds and returns the logical operator to preserve in the AST
 t_ast	*find_logical_op_to_preserve(t_ast *root)
 {
-	t_ast	*current;
-	t_ast	*last_logical_op;
-
-	if (!root)
-		return (NULL);
-	current = root;
-	last_logical_op = NULL;
-	while (current)
-	{
-		if (current->type == AND || current->type == OR)
-			last_logical_op = current;
-		if (current->right && (current->right->type == AND
-				|| current->right->type == OR))
-			last_logical_op = current->right;
-		current = current->right;
-	}
-	return (last_logical_op);
+	(void)root;
+	return (NULL);
 }
 
 //? Creates and handles the redirection node based on type

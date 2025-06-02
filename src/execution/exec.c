@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/20 17:42:48 by anggalle          #+#    #+#             */
-/*   Updated: 2025/05/31 12:45:20 by paromero         ###   ########.fr       */
+/*   Updated: 2025/06/02 17:33:46 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,8 +98,4 @@ void	exec_ast(t_data *data, t_ast *node)
 		exec_redirect_append(data, node);
 	else if (node->type == PIPE)
 		exec_pipe(data, node);
-	else if (node->type == AND)
-		exec_logical_and(data, node);
-	else if (node->type == OR)
-		exec_logical_or(data, node);
 }

@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 17:52:10 by paromero          #+#    #+#             */
-/*   Updated: 2025/04/01 11:43:39 by paromero         ###   ########.fr       */
+/*   Updated: 2025/06/02 17:33:46 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,10 +90,7 @@ char	*ft_mask_operator(char *str)
 		return (NULL);
 	while (str[i])
 	{
-		if ((str[i] == '&' && str[i + 1] == '&') || (str[i] == '|'
-				&& str[i + 1] == '|'))
-			result[j++] = '\x01';
-		else if (str[i] == '|' || str[i] == '>' || str[i] == '<')
+		if (str[i] == '|' || str[i] == '>' || str[i] == '<')
 			result[j++] = '\x01';
 		result[j++] = str[i++];
 	}

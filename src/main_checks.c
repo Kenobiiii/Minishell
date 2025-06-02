@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 00:00:00 by anggalle          #+#    #+#             */
-/*   Updated: 2025/05/27 19:26:06 by paromero         ###   ########.fr       */
+/*   Updated: 2025/06/02 17:33:46 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ int	check_line_errors(t_data *data)
 	if (!check_syntax(data->line))
 	{
 		data->wstatus = 2;
+		syntax_error();
 		return (0);
 	}
 	return (1);

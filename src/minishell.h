@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 19:06:45 by paromero          #+#    #+#             */
-/*   Updated: 2025/05/31 13:12:31 by paromero         ###   ########.fr       */
+/*   Updated: 2025/06/02 17:33:46 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,9 +49,7 @@ typedef enum e_type
 	REDIRECT_IN,
 	REDIN2,
 	REDOUT2,
-	PIPE,
-	AND,
-	OR
+	PIPE
 }	t_type;
 
 typedef struct s_ast

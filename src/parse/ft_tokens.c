@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 20:08:34 by paromero          #+#    #+#             */
-/*   Updated: 2025/05/30 20:47:07 by paromero         ###   ########.fr       */
+/*   Updated: 2025/06/02 17:33:46 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,6 @@ int	ft_types(char	*value)
 		return (REDIN2);
 	if (value[0] == '<')
 		return (REDIRECT_IN);
-	if (value[0] == '&' && value[1] == '&')
-		return (AND);
-	if (value[0] == '|' && value[1] == '|')
-		return (OR);
 	if (value[0] == '2' && value[1] == '>')
 		return (REDIRECT_OUT);
 	return (CMD);
@@ -41,7 +37,7 @@ static int	process_single_token(t_data *data, t_tokens **current,
 
 	type = ft_types(token_array[i - 1]);
 	(*current)->type = type;
-	if (type == PIPE || type == AND || type == OR)
+	if (type == PIPE)
 		data->only_redirections = 0;
 	(*current)->next = ft_new_token(token_array[i]);
 	if (!(*current)->next)
@@ -60,7 +56,7 @@ static void	finalize_last_token(t_data *data, t_tokens *current,
 
 	type = ft_types(token_array[i - 1]);
 	current->type = type;
-	if (type == PIPE || type == AND || type == OR)
+	if (type == PIPE)
 		data->only_redirections = 0;
 }
 
