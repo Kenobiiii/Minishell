@@ -102,10 +102,8 @@ typedef struct s_data
 	char		*prompt;
 	char		*cwd;
 	int			exit;
-	int			last_exit_status;
 	int			wstatus;
 	int			only_redirections;
-	pid_t		pid;
 	t_env		*env;
 	t_tokens	*tokens;
 	t_ast		*ast; //- puntero a estructura ast (Abstract Syntax Tree)
@@ -120,14 +118,6 @@ typedef struct s_data
 int			init_data(t_data *data, char **env);
 int			init_env(t_data *data, char *env[]);
 t_env		*create_env_node(const char *value);
-void		reset_redirection_fds(t_data *data);
-void		close_redirection_fds(t_data *data);
-int			apply_redirections_for_builtin(t_data *data);
-void		restore_redirections_for_builtin(t_data *data,
-				int saved_stdin, int saved_stdout);
-
-//! ft_init_utils.c //
-void		reset_redirection_fds(t_data *data);
 void		close_redirection_fds(t_data *data);
 int			apply_redirections_for_builtin(t_data *data);
 void		restore_redirections_for_builtin(t_data *data,

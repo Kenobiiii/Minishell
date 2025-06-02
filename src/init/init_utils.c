@@ -16,8 +16,6 @@ void	init_basic_values(t_data *data)
 {
 	data->line = NULL;
 	data->exit = 0;
-	data->last_exit_status = 0;
-	data->pid = -1;
 	data->prompt = "$Minishell> ";
 	data->tokens = NULL;
 	data->ast = NULL;
@@ -26,13 +24,6 @@ void	init_basic_values(t_data *data)
 }
 
 void	init_redirection_fds(t_data *data)
-{
-	data->input_redir_fd = -1;
-	data->output_redir_fd = -1;
-	data->heredoc_pipe_fd = -1;
-}
-
-void	reset_redirection_fds(t_data *data)
 {
 	data->input_redir_fd = -1;
 	data->output_redir_fd = -1;

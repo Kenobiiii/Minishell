@@ -28,19 +28,6 @@ int	ft_isspace(char	*line)
 	return (0);
 }
 
-char	*deletefirstspaces(char *line)
-{
-	char	*new_line;
-	int		i;
-
-	i = 0;
-	while (line[i] == ' ')
-		i++;
-	new_line = ft_strdup(line + i);
-	free(line);
-	return (new_line);
-}
-
 int	openquotes(char	*line)
 {
 	int	i;

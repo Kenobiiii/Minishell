@@ -12,34 +12,6 @@
 
 #include "../minishell.h"
 
-int	ft_dobletype(t_type	type)
-{
-	if (type == REDOUT2 || type == REDIN2)
-		return (1);
-	return (0);
-}
-
-size_t	ft_spacestrlen(char *line)
-{
-	int	i;
-	int	j;
-
-	j = 0;
-	i = 0;
-	while (line[i] != '\0')
-	{
-		j++;
-		if (ft_types(line + i) != CMD)
-		{
-			j += 2;
-			if (line[i + 1] && line[i + 1] == line[i])
-				i++;
-		}
-		i++;
-	}
-	return (j);
-}
-
 char	*check_access(char *cmd)
 {
 	if (access(cmd, F_OK) == 0)

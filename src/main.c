@@ -82,7 +82,7 @@ int	minishell(char **env)
 		free_while(&data);
 	}
 	free_minishell(&data);
-	return (data.last_exit_status);
+	return (data.wstatus);
 }
 
 int	main(int ac, char **av, char **env)

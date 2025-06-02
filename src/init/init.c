@@ -81,8 +81,6 @@ int	init_data(t_data *data, char **env)
 
 	data->line = NULL;
 	data->exit = 0;
-	data->last_exit_status = 0;
-	data->pid = -1;
 	data->prompt = ft_strdup("$Minishell> ");
 	data->cwd = ft_strdup(getcwd(cwd, sizeof(cwd)));
 	data->tokens = NULL;
