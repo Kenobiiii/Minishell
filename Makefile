@@ -8,7 +8,6 @@ USER = paromero
 OBJ_DIR = objs
 SRCS = src/main.c \
 		src/main_utils.c \
-		src/main_checks.c \
 		src/init/init.c \
 		src/init/init_utils.c \
 		src/init/init_restore.c \
@@ -44,12 +43,13 @@ SRCS = src/main.c \
 		src/execution/pipe.c \
 		src/execution/redirections.c \
 		src/execution/redirections_utils.c \
-		src/execution/redirections_multi.c \
 		src/execution/redirections_helpers.c \
 		src/execution/redirections_process.c \
+		src/execution/redirections_multi.c \
 		src/execution/redirect_utils.c \
 		src/execution/heredoc.c \
 		src/execution/heredoc_utils.c \
+		src/main_checks.c \
 		src/builts_ins/echo_builtin.c \
 		src/builts_ins/builtin.c \
 		src/builts_ins/pwd_builtin.c \

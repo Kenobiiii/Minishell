@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/28 17:00:00 by paromero          #+#    #+#             */
-/*   Updated: 2025/05/28 17:00:00 by paromero         ###   ########.fr       */
+/*   Created: 2025/06/03 10:00:00 by paromero          #+#    #+#             */
+/*   Updated: 2025/06/03 10:30:07 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,17 @@ static int	validate_redirect_node(t_data *data, t_ast *node)
 	if (!node || !node->right)
 	{
 		ft_printf("No hay archivo de salida\n");
+		data->wstatus = 2;
+		return (-1);
+	}
+	return (0);
+}
+
+int	validate_input_redirect_node(t_data *data, t_ast *node)
+{
+	if (!node->right)
+	{
+		ft_printf("No hay archivo de entrada\n");
 		data->wstatus = 2;
 		return (-1);
 	}
@@ -56,17 +67,6 @@ int	handle_input_redirect_open(t_data *data, char *filename)
 	if (data->input_redir_fd != -1)
 		close(data->input_redir_fd);
 	data->input_redir_fd = fd;
-	return (0);
-}
-
-int	validate_input_redirect_node(t_data *data, t_ast *node)
-{
-	if (!node->right)
-	{
-		ft_printf("No hay archivo de entrada\n");
-		data->wstatus = 2;
-		return (-1);
-	}
 	return (0);
 }
 

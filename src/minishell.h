@@ -312,7 +312,6 @@ void		execute_command_after_redirections(t_data *data, t_ast *node);
 void		exec_heredoc(t_data	*data, t_ast *node);
 
 //! redirect_utils.c //
-t_ast		*find_cmd_node(t_ast *node);
 int			check_file_permissions(t_ast *current, t_data *data);
 void		apply_last_redirect(t_ast *redirect, t_ast *cmd, t_data *data);
 int			handle_heredoc_result(int result, t_data *data, int pipefd[2],
@@ -376,12 +375,12 @@ int			line_syntax(t_data *data);
 int			handle_signal_states(t_data *data);
 int			handle_readline_result(t_data *data);
 int			is_builtin_command(char *cmd);
-int			is_only_empty_var(char *line);
-int			is_empty_var_with_cmd(t_data *data, char *line);
 void		execute_builtin_with_redirections(t_data *data);
 
 //! main_checks.c //
 int			check_line_errors(t_data *data);
+int			is_only_empty_var(char *line);
+int			is_empty_var_with_cmd(t_data *data, char *line);
 
 #endif
 /**
