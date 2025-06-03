@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 17:13:17 by paromero          #+#    #+#             */
-/*   Updated: 2025/06/03 10:31:47 by paromero         ###   ########.fr       */
+/*   Updated: 2025/06/03 10:59:06 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,6 @@ void	handle_redirection(t_ast **root, t_ast **cmd,
 
 	if (!last_op || !*last_op)
 		return ;
-	params.logical_op_to_preserve = find_logical_op_to_preserve(*root);
 	params.original_cmd = *cmd;
 	new_node = create_redirection_node(cmd, last_op, tokens);
 	cleanup_unused_node(new_node, last_op);
