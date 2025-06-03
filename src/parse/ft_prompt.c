@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 18:42:01 by paromero          #+#    #+#             */
-/*   Updated: 2025/05/29 16:41:04 by paromero         ###   ########.fr       */
+/*   Updated: 2025/06/03 18:34:32 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	update_prompt(t_data *data)
 
 	last_component = get_last_component(data->cwd);
 	prompt_size = ft_strlen("$Minishell()> ")
-		+ ft_strlen(last_component) + 40;
+		+ ft_strlen(last_component) + 52;
 	new_prompt = malloc(prompt_size);
 	if (!new_prompt)
 		return ;

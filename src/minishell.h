@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 19:06:45 by paromero          #+#    #+#             */
-/*   Updated: 2025/06/03 10:49:30 by paromero         ###   ########.fr       */
+/*   Updated: 2025/06/03 18:24:27 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,10 +31,10 @@
 # include <linux/limits.h>
 # include "../libft/libft.h"
 
-# define ANSI_COLOR_GREEN "\e[1;96m"
-# define ANSI_COLOR_RED "\e[1;91m"
-# define ANSI_COLOR_RESET "\e[0m"
-# define ANSI_COLOR_BLUE "\e[1;34m"
+# define ANSI_COLOR_GREEN "\001\e[1;96m\002"
+# define ANSI_COLOR_RED "\001\e[1;91m\002"
+# define ANSI_COLOR_RESET "\001\e[0m\002"
+# define ANSI_COLOR_BLUE "\001\e[1;34m\002"
 
 # define STATE_PROMPT_NORMAL 0
 # define STATE_PROMPT_INTERRUPTED 1
