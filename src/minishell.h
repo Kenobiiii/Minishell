@@ -128,6 +128,14 @@ void		restore_redirections_for_builtin(t_data *data,
 //! ft_check_syntax.c //
 int			check_syntax(char *line);
 
+//! ft_syntax_helpers.c //
+int			check_operator_syntax(char *line, int *i, char operator);
+int			check_logical_operators(char *line, int i);
+void		handle_syntax_quotes(char *line, int *i, int *in_quote,
+				char *quote_type);
+int			check_syntax_loop(char *line, int *i, int *in_quote,
+				char *quote_type);
+
 //! ft_line_utils.c //
 char		*deletefirstspaces(char *line);
 int			ft_isspace(char	*line);

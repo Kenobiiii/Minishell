@@ -13,6 +13,7 @@ SRCS = src/main.c \
 		src/init/init_utils.c \
 		src/init/init_restore.c \
 		src/parse/ft_check_syntax.c \
+		src/parse/ft_syntax_helpers.c \
 		src/parse/ft_line_utils.c \
 		src/parse/ft_parse_utils.c \
 		src/parse/ft_prompt.c \
