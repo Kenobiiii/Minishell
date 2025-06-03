@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 19:06:45 by paromero          #+#    #+#             */
-/*   Updated: 2025/06/02 17:33:46 by paromero         ###   ########.fr       */
+/*   Updated: 2025/06/03 10:49:30 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -221,7 +221,6 @@ int			handle_redirect_node(t_ast **root, t_ast **last_op,
 
 //! ft_ast_red_utils.c //
 int			is_redirect_token(t_tokens *tokens);
-int			handle_redirect_operator(t_ast_args *args);
 
 //! ft_ast_red_helpers.c //
 t_ast		*find_logical_op_to_preserve(t_ast *root);
@@ -272,10 +271,6 @@ void		exec_simple_cmd(t_data *data, t_ast *node);
 
 //! variable_expansion.c //
 void		expand_command_variables(t_data *data, t_ast *node);
-
-//! logical_and_or.c //
-void		exec_logical_and(t_data *data, t_ast *node);
-void		exec_logical_or(t_data *data, t_ast *node);
 
 //!	exec_utils.c //
 char		**list_to_array(t_env *head);
@@ -341,8 +336,6 @@ void		exec_pipe(t_data *data, t_ast *node);
 
 //! export_builtint.c //
 int			export_builtin(t_data *data);
-void		print_env_sorted(char **env_matrix);
-void		sort_matrix(char **matrix);
 
 //! export_utils.c //
 void		print_env_sorted(char **env_matrix);

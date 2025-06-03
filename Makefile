@@ -38,7 +38,6 @@ SRCS = src/main.c \
 		src/execution/exec.c \
 		src/execution/exec_utils.c \
 		src/execution/variable_expansion.c \
-		src/execution/logical_and_or.c \
 		src/execution/signals.c \
 		src/execution/pipe.c \
 		src/execution/redirections.c \
