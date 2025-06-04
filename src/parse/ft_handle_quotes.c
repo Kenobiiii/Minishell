@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 12:33:32 by paromero          #+#    #+#             */
-/*   Updated: 2025/06/04 12:59:16 by paromero         ###   ########.fr       */
+/*   Updated: 2025/06/04 13:46:31 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,12 +87,12 @@ int	ft_detect_quote_type(t_data *data, char **matrix, int count_x, int count_y)
 		return (-1);
 	}
 	temp = build_new_string(matrix[count_x], new_line, count_y, end);
-	printf("new_line(%s), QuoteType(%c), Og(%s)\n", temp, quote_type, matrix[count_x]);
 	free(matrix[count_x]);
 	matrix[count_x] = temp;
+	int new_pos = count_y + ft_strlen(new_line);
 	free(new_line);
 	free(processed_part);
-	return (end + ft_strlen(new_line) - 4);
+	return (new_pos);
 }
 
 int	ft_find_quotes_in_line(t_data *data, char **matrix, int count_x)
@@ -109,7 +109,6 @@ int	ft_find_quotes_in_line(t_data *data, char **matrix, int count_x)
 		if (new_position != -1)
 		{
 			quote_found = 1;
-			printf("%d, new_line(%s)\n", new_position, &matrix[count_x][new_position]);
 			count_y = new_position;
 		}
 		else
