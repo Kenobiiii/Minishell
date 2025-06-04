@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 12:33:32 by paromero          #+#    #+#             */
-/*   Updated: 2025/06/04 13:46:31 by paromero         ###   ########.fr       */
+/*   Updated: 2025/06/04 13:52:48 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,10 +89,10 @@ int	ft_detect_quote_type(t_data *data, char **matrix, int count_x, int count_y)
 	temp = build_new_string(matrix[count_x], new_line, count_y, end);
 	free(matrix[count_x]);
 	matrix[count_x] = temp;
-	int new_pos = count_y + ft_strlen(new_line);
+	end = count_y + ft_strlen(new_line);
 	free(new_line);
 	free(processed_part);
-	return (new_pos);
+	return (end);
 }
 
 int	ft_find_quotes_in_line(t_data *data, char **matrix, int count_x)
