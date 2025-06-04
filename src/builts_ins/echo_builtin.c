@@ -25,27 +25,6 @@ static void	ft_putstatus_fd(char *status, int fd)
 	free (status);
 }
 
-char	*remove_mask(char *str)
-{
-	char	*cleaned;
-	int		i;
-	int		j;
-
-	cleaned = malloc(ft_strlen(str) + 1);
-	if (!cleaned)
-		return (NULL);
-	i = 0;
-	j = 0;
-	while (str[i])
-	{
-		if (str[i] != '\x01')
-			cleaned[j++] = str[i];
-		i++;
-	}
-	cleaned[j] = '\0';
-	return (cleaned);
-}
-
 static int	check_n_option(char *arg)
 {
 	int	j;
@@ -64,20 +43,16 @@ static int	check_n_option(char *arg)
 
 static void	print_arg(t_data *data, char *arg, int has_next)
 {
-	char	*cleaned_arg;
-
 	if (ft_strncmp(arg, "$?", 2) == 0)
 		ft_putstatus_fd(ft_itoa(data->wstatus), STDOUT_FILENO);
 	else
 	{
-		cleaned_arg = remove_mask(arg);
-		if (cleaned_arg && cleaned_arg[0] != '\0')
+		if (arg && arg[0] != '\0')
 		{
-			ft_putstr_fd(cleaned_arg, STDOUT_FILENO);
+			ft_putstr_fd(arg, STDOUT_FILENO);
 			if (has_next)
 				ft_putstr_fd(" ", STDOUT_FILENO);
 		}
-		free(cleaned_arg);
 	}
 }
 

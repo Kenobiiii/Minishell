@@ -63,25 +63,3 @@ int	handle_invslash_pcomma(char *line)
 	}
 	return (1);
 }
-
-char	*ft_mask_operator(char *str)
-{
-	char	*result;
-	int		i;
-	int		j;
-
-	i = 0;
-	j = 0;
-	result = malloc(ft_strlen(str) * 2 + 1);
-	if (!result)
-		return (NULL);
-	while (str[i])
-	{
-		if (str[i] == '|' || str[i] == '>' || str[i] == '<')
-			result[j++] = '\x01';
-		result[j++] = str[i++];
-	}
-	result[j] = '\0';
-	free(str);
-	return (result);
-}

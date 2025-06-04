@@ -99,8 +99,6 @@ t_tokens	*ft_new_token(char *str)
 	processed_str = ft_strdup(str);
 	if (!processed_str)
 		return (NULL);
-	if (processed_str[0] == '\x01')
-		ft_memmove(processed_str, processed_str + 1, ft_strlen(processed_str));
 	new_node = malloc(sizeof(t_tokens));
 	if (!new_node)
 	{

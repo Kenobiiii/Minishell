@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 19:06:45 by paromero          #+#    #+#             */
-/*   Updated: 2025/06/03 18:24:27 by paromero         ###   ########.fr       */
+/*   Updated: 2025/06/04 12:26:49 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,7 +140,6 @@ char		*deletefirstspaces(char *line);
 int			ft_isspace(char	*line);
 int			openquotes(char	*line);
 int			handle_invslash_pcomma(char *line);
-char		*ft_mask_operator(char *str);
 
 //! ft_prompt.c //
 int			update_pwd(t_data	*data);
