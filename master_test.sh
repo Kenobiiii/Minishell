@@ -471,7 +471,7 @@ test_quotes() {
     # Level 3: Mixed quotes
     echo -e "${BLUE}Level 3: Mixed Quotes${NC}"
     run_test "Mixed quotes simple" 'echo "hello" '"'"'world'"'"'' "hello world" 1
-    run_test "Nested quotes" 'echo "outer '"'"'inner'"'"' quotes"' "outer inner quotes" 1
+    run_test "Nested quotes" 'echo "outer '"'"'inner'"'"' quotes"' "outer 'inner' quotes" 1
     run_test "Adjacent quotes" 'echo "first""second"' "firstsecond" 1
     run_test "Triple quote mix" 'echo '"'"'single'"'"'"double"'"'"'single'"'"'' "singledoublesingle" 1
     
@@ -490,7 +490,7 @@ test_quotes() {
     
     # Level 6: Stress test quotes
     echo -e "${BLUE}Level 6: Quote Stress Tests${NC}"
-    run_test "Many nested quotes" 'echo "a'"'"'b'"'"'c'"'"'d'"'"'e"' "abcde" 1
+    run_test "Many nested quotes" 'echo "a'"'"'b'"'"'c'"'"'d'"'"'e"' "a'b'c'd'e" 1
     run_test "Complex quote chain" 'echo '"'"'start'"'"'"middle"'"'"'end'"'"'' "startmiddleend" 1
     run_test "Quote with special chars" 'echo "!@#$%^&*()"' "!@#$%^&*()" 1
     run_test "Unicode in quotes" 'echo "café naïve résumé"' "café naïve résumé" 1
