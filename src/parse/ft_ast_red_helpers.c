@@ -31,7 +31,8 @@ t_ast	*create_redirection_node(t_ast **cmd, t_ast **last_op,
 //? Cleans up unused redirection nodes
 void	cleanup_unused_node(t_ast *new_node, t_ast **last_op)
 {
-	if (new_node && !is_heredoc_operator(last_op) && (*last_op)->right != new_node)
+	if (new_node && !is_heredoc_operator(last_op)
+		&& (*last_op)->right != new_node)
 	{
 		if (new_node->value)
 			free(new_node->value);
@@ -41,11 +42,11 @@ void	cleanup_unused_node(t_ast *new_node, t_ast **last_op)
 	}
 }
 
-//? Finalizes the AST structure after redirection handling
 void	finalize_redirection_ast(t_ast **root, t_ast **cmd,
 		t_ast **last_op, t_finalize_params *params)
 {
 	t_ast	*pipe_to_preserve;
+	t_ast	*current;
 
 	if (!(*last_op)->left && params->original_cmd)
 		(*last_op)->left = params->original_cmd;
@@ -55,7 +56,7 @@ void	finalize_redirection_ast(t_ast **root, t_ast **cmd,
 	pipe_to_preserve = NULL;
 	if (*root)
 	{
-		t_ast *current = *root;
+		current = *root;
 		while (current && current->right)
 		{
 			if (current->type == PIPE)

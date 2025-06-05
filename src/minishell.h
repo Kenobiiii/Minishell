@@ -238,8 +238,8 @@ void		copy_args(char **new_args, t_ast *cmd_node, int i, char *arg);
 
 //! ft_redin2_cases.c //
 int			is_heredoc_operator(t_ast **last_operator);
-void		handle_heredoc_special_case(t_ast **current_cmd, t_ast **last_operator,
-				t_ast *new_node, t_tokens *tokens);
+void		handle_heredoc_special_case(t_ast **current_cmd,
+				t_ast **last_operator, t_ast *new_node, t_tokens *tokens);
 
 //! ft_errors.c //
 int			fd_error(t_data *data);
