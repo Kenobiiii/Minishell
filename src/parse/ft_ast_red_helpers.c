@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 10:35:00 by paromero          #+#    #+#             */
-/*   Updated: 2025/06/03 11:00:48 by paromero         ###   ########.fr       */
+/*   Updated: 2025/06/05 17:50:29 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,10 +45,28 @@ void	cleanup_unused_node(t_ast *new_node, t_ast **last_op)
 void	finalize_redirection_ast(t_ast **root, t_ast **cmd,
 		t_ast **last_op, t_finalize_params *params)
 {
+	t_ast	*pipe_to_preserve;
+
 	if (!(*last_op)->left && params->original_cmd)
 		(*last_op)->left = params->original_cmd;
 	if (!*root)
 		*root = *last_op;
 	*cmd = *last_op;
-	*last_op = NULL;
+	pipe_to_preserve = NULL;
+	if (*root)
+	{
+		t_ast *current = *root;
+		while (current && current->right)
+		{
+			if (current->type == PIPE)
+				pipe_to_preserve = current;
+			else if (current->right->type == PIPE)
+				pipe_to_preserve = current->right;
+			current = current->right;
+		}
+	}
+	if (pipe_to_preserve)
+		*last_op = pipe_to_preserve;
+	else
+		*last_op = NULL;
 }
