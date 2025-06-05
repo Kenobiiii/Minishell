@@ -833,7 +833,7 @@ test_builtins() {
     echo -e "${BLUE}Level 3: Echo Complex Quoting${NC}"
     run_test "echo double quotes" 'echo "quoted string"' "quoted string" 1
     run_test "echo single quotes" "echo 'single quoted'" "single quoted" 1
-    run_test "echo mixed quotes" 'echo "double'"'"'single'"'"'double"' "doublesingledouble" 1
+    run_test "echo mixed quotes" 'echo "double'"'"'single'"'"'double"' "double'single'double" 1
     run_test "echo quotes with spaces" 'echo "hello world" "test string"' "hello world test string" 1
     run_test_backslash_tolerant "echo escaped quotes" 'echo "He said \"hello\""' 'He said "hello"' 1
     
@@ -893,7 +893,7 @@ test_builtins() {
     # Level 13: Pathological cases
     echo -e "${BLUE}Level 13: Pathological Cases${NC}"
     run_test "echo extreme length" 'echo "'"$(printf 'x%.0s' {1..500})"'"' "$(printf 'x%.0s' {1..500})" 1
-    run_test "echo quote complexity" 'echo "start'"'"'middle'"'"'end"' "startmiddleend" 1
+    run_test "echo quote complexity" 'echo "start'"'"'middle'"'"'end"' "start'middle'end" 1
     # NOTE: Command substitution $() is NOT required by Subject.md
     # run_test "builtin memory stress" 'echo "$(printf "echo%.0s " {1..50})"' "$(printf "echo%.0s " {1..50})" 1
     
@@ -943,7 +943,7 @@ test_stress() {
     
     # Level 3: Quote complexity stress
     echo -e "${BLUE}Level 3: Quote Complexity${NC}"
-    run_test "Complex mixed quotes" 'echo "start'"'"'middle'"'"'end"' "startmiddleend" 1
+    run_test "Complex mixed quotes" 'echo "start'"'"'middle'"'"'end"' "start'middle'end" 1
     run_test "Nested quote stress" 'echo '"'"'outer'"'"'"inner"'"'"'outer'"'"'' "outerinnerouter" 1
     run_test "Quote chain stress" 'echo "a""b""c""d""e""f""g""h"' "abcdefgh" 1
     run_test "Variable quote mix" 'echo "$HOME""test""$USER"' "${HOME}test${USER}" 1
