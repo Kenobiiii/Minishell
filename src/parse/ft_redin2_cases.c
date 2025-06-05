@@ -6,14 +6,14 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 13:19:35 by paromero          #+#    #+#             */
-/*   Updated: 2025/05/31 09:09:12 by paromero         ###   ########.fr       */
+/*   Updated: 2025/06/05 18:11:24 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
 //? Checks if the last operator is a heredoc operator (<<)
-int	is_redin2(t_ast **last_operator)
+int	is_heredoc_operator(t_ast **last_operator)
 {
 	if (last_operator && *last_operator)
 	{
@@ -48,7 +48,7 @@ static void	handle_additional_args(t_ast **current_cmd, t_ast *new_node,
 }
 
 //? Handles the special case of heredoc (<<) with node configurations
-void	redin2(t_ast **current_cmd, t_ast **last_operator,
+void	handle_heredoc_special_case(t_ast **current_cmd, t_ast **last_operator,
 		t_ast *new_node, t_tokens *tokens)
 {
 	if (!last_operator || !*last_operator || !new_node || !tokens)

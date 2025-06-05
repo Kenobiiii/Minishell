@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 12:33:32 by paromero          #+#    #+#             */
-/*   Updated: 2025/06/04 13:52:48 by paromero         ###   ########.fr       */
+/*   Updated: 2025/06/05 18:11:24 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,13 +20,13 @@ static char	*process_quote_content(t_data *data, char *processed_part,
 
 	if (quote_type == '\'')
 	{
-		temp = ft_handle_type_quote(processed_part, '\'');
+		temp = remove_quote_delimiters(processed_part, '\'');
 		new_line = temp;
 	}
 	else if (quote_type == '"')
 	{
-		temp = ft_handle_type_quote(processed_part, '"');
-		new_line = ft_handledollar(data, temp);
+		temp = remove_quote_delimiters(processed_part, '"');
+		new_line = expand_dollar_variables(data, temp);
 		free(temp);
 	}
 	else

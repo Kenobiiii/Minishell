@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 11:06:52 by paromero          #+#    #+#             */
-/*   Updated: 2025/05/27 19:45:20 by paromero         ###   ########.fr       */
+/*   Updated: 2025/06/05 18:11:24 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ static void	process_dollar_expansion(t_data *data, t_expansion *exp)
 		exp->result[(*exp->j)++] = exp->line[(*exp->i)++];
 }
 
-char	*ft_handledollar(t_data *data, char *line)
+char	*expand_dollar_variables(t_data *data, char *line)
 {
 	char		*result;
 	int			i;

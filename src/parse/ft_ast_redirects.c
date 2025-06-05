@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 16:30:00 by paromero          #+#    #+#             */
-/*   Updated: 2025/05/30 20:41:03 by paromero         ###   ########.fr       */
+/*   Updated: 2025/06/05 18:11:24 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,7 +118,7 @@ int	handle_redirect_node(t_ast **root,
 			*last_op = current;
 			break ;
 		}
-		if (current->right && is_red(&current))
+		if (current->right && is_redirection_operator(&current))
 			current = current->right;
 		else
 			break ;

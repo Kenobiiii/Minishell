@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 17:26:30 by paromero          #+#    #+#             */
-/*   Updated: 2025/05/31 12:57:39 by paromero         ###   ########.fr       */
+/*   Updated: 2025/06/05 18:11:24 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void	ft_handle_command_node(t_ast **root, t_ast **cmd,
 	t_ast	*cmd_redir;
 
 	cmd_redir = NULL;
-	if (is_red(last_op))
+	if (is_redirection_operator(last_op))
 	{
 		if (*cmd && (*cmd)->type == CMD)
 			cmd_redir = *cmd;

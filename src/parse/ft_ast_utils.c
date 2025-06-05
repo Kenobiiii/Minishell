@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 18:26:41 by paromero          #+#    #+#             */
-/*   Updated: 2025/05/31 09:12:03 by paromero         ###   ########.fr       */
+/*   Updated: 2025/06/05 18:11:24 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ t_ast	*ft_create_ast_node(t_type type, char *value)
 
 //? Connects a new operator with the current command node 
 //? and updates the AST root
-void	connect_operator(t_ast **root, t_ast **cmd,
+void	connect_operator_to_ast(t_ast **root, t_ast **cmd,
 	t_ast **last_op, t_ast *new_op)
 {
 	new_op->left = *cmd;
@@ -44,7 +44,7 @@ void	connect_operator(t_ast **root, t_ast **cmd,
 	else
 		*root = new_op;
 	*last_op = new_op;
-	if (!is_red(last_op))
+	if (!is_redirection_operator(last_op))
 		*cmd = NULL;
 }
 
@@ -56,7 +56,7 @@ void	handle_new_node(t_ast **root, t_ast **cmd,
 		return ;
 	if (*cmd)
 	{
-		connect_operator(root, cmd, last_op, new_op);
+		connect_operator_to_ast(root, cmd, last_op, new_op);
 	}
 	else
 	{

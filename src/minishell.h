@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 19:06:45 by paromero          #+#    #+#             */
-/*   Updated: 2025/06/04 12:26:49 by paromero         ###   ########.fr       */
+/*   Updated: 2025/06/05 18:11:24 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,7 +151,7 @@ char		*check_access(char *cmd);
 int			handle_special_chars(char **array, char const *s, size_t *i);
 
 //! ft_quotesplit.c //
-char		**ft_quotesplit(char const *s, char c,	t_data	*data);
+char		**split_with_quote_awareness(char const *s, char c,	t_data	*data);
 
 //! ft_quotesplit_utils.c //
 void		process_quotes(const char *s, size_t *i, char *quote);
@@ -163,12 +163,12 @@ void		ft_process_all_quotes(t_data	*data, char	**matrix);
 int			ft_find_quotes_in_line(t_data *data, char **matrix, int count_x);
 
 //! ft_handle_quotes_utils.c //
-char		*ft_handle_type_quote(char *line, char quote_char);
-int			ft_quotelen(char	*line, char quote);
+char		*remove_quote_delimiters(char *line, char quote_char);
+int			calculate_quote_content_length(char	*line, char quote);
 void		ft_process_all_quotes(t_data	*data, char	**matrix);
 
 //! ft_handle_dollar.c //
-char		*ft_handledollar(t_data *data, char *line);
+char		*expand_dollar_variables(t_data *data, char *line);
 char		*find_envvar(t_data *data, const char *dollarline);
 
 //! ft_handle_dollar_size.c //
@@ -198,7 +198,7 @@ void		ft_add_argument(t_ast *cmd_node, char *arg);
 t_ast		*ft_create_ast_node(t_type type, char *value);
 void		handle_redirection(t_ast **root, t_ast **cmd,
 				t_ast **last_op, t_tokens *tokens);
-void		connect_operator(t_ast **root, t_ast **cmd,
+void		connect_operator_to_ast(t_ast **root, t_ast **cmd,
 				t_ast **last_op, t_ast *new_op);
 void		handle_new_node(t_ast **root, t_ast **cmd,
 				t_ast **last_op, t_ast *new_op);
@@ -208,7 +208,7 @@ void		ft_handle_command_node(t_ast **root, t_ast **cmd,
 				t_ast **last_op, t_tokens *tokens);
 int			process_token(t_data *data, t_ast_args *args);
 int			ft_handle_operator_node(t_data *data, t_ast_args *args);
-int			is_red(t_ast **last_op);
+int			is_redirection_operator(t_ast **last_op);
 
 //! ft_ast_redirects.c //
 int			handle_file_access(t_data *data, char *filename, int type);
@@ -237,8 +237,8 @@ void		handle_command_as_arg(t_ast **cmd, t_ast **redirect,
 void		copy_args(char **new_args, t_ast *cmd_node, int i, char *arg);
 
 //! ft_redin2_cases.c //
-int			is_redin2(t_ast **last_operator);
-void		redin2(t_ast **current_cmd, t_ast **last_operator,
+int			is_heredoc_operator(t_ast **last_operator);
+void		handle_heredoc_special_case(t_ast **current_cmd, t_ast **last_operator,
 				t_ast *new_node, t_tokens *tokens);
 
 //! ft_errors.c //

@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/03 10:35:00 by paromero          #+#    #+#             */
-/*   Updated: 2025/06/05 17:50:29 by paromero         ###   ########.fr       */
+/*   Updated: 2025/06/05 18:11:24 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,8 @@ t_ast	*create_redirection_node(t_ast **cmd, t_ast **last_op,
 	new_node = ft_create_ast_node(CMD, tokens->value);
 	if (!new_node)
 		return (NULL);
-	if (is_redin2(last_op))
-		redin2(cmd, last_op, new_node, tokens);
+	if (is_heredoc_operator(last_op))
+		handle_heredoc_special_case(cmd, last_op, new_node, tokens);
 	else
 		(*last_op)->right = new_node;
 	return (new_node);
@@ -31,7 +31,7 @@ t_ast	*create_redirection_node(t_ast **cmd, t_ast **last_op,
 //? Cleans up unused redirection nodes
 void	cleanup_unused_node(t_ast *new_node, t_ast **last_op)
 {
-	if (new_node && !is_redin2(last_op) && (*last_op)->right != new_node)
+	if (new_node && !is_heredoc_operator(last_op) && (*last_op)->right != new_node)
 	{
 		if (new_node->value)
 			free(new_node->value);

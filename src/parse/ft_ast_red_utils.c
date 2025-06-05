@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 17:13:17 by paromero          #+#    #+#             */
-/*   Updated: 2025/06/03 10:59:06 by paromero         ###   ########.fr       */
+/*   Updated: 2025/06/05 18:11:24 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int	is_redirect_token(t_tokens *tokens)
 }
 
 //? Checks if the operator is a redirection operator
-int	is_red(t_ast **last_op)
+int	is_redirection_operator(t_ast **last_op)
 {
 	if (last_op && *last_op && ((*last_op)->type == REDIN2
 			|| (*last_op)->type == REDOUT2

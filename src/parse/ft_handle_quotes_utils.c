@@ -6,13 +6,13 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 17:00:00 by paromero          #+#    #+#             */
-/*   Updated: 2025/05/30 20:39:00 by paromero         ###   ########.fr       */
+/*   Updated: 2025/06/05 18:11:24 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-char	*ft_handle_type_quote(char *line, char quote_char)
+char	*remove_quote_delimiters(char *line, char quote_char)
 {
 	char	*new_line;
 	int		i;
@@ -38,7 +38,7 @@ char	*ft_handle_type_quote(char *line, char quote_char)
 	return (new_line);
 }
 
-int	ft_quotelen(char	*line, char quote)
+int	calculate_quote_content_length(char	*line, char quote)
 {
 	int	i;
 	int	count;
@@ -67,7 +67,7 @@ void	ft_process_all_quotes(t_data	*data, char	**matrix)
 		quote_found = ft_find_quotes_in_line(data, matrix, count_x);
 		if (!quote_found)
 		{
-			new_line = ft_handledollar(data, matrix[count_x]);
+			new_line = expand_dollar_variables(data, matrix[count_x]);
 			free(matrix[count_x]);
 			matrix[count_x] = new_line;
 		}

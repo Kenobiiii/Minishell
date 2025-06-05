@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 16:00:00 by paromero          #+#    #+#             */
-/*   Updated: 2025/05/30 16:36:20 by paromero         ###   ########.fr       */
+/*   Updated: 2025/06/05 18:11:24 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void	expand_command_variables(t_data *data, t_ast *node)
 	{
 		if (ft_strchr(node->args[i], '$'))
 		{
-			expanded = ft_handledollar(data, node->args[i]);
+			expanded = expand_dollar_variables(data, node->args[i]);
 			if (expanded)
 			{
 				free(node->args[i]);
