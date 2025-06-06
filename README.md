@@ -1,37 +1,37 @@
-# Minishell Project
+# Proyecto Minishell
 
-## Overview
-Minishell is a simplified shell implementation written in C that recreates core functionality of bash. This project demonstrates understanding of system programming concepts including process management, file descriptors, signal handling, and parsing complex command structures.
+## Descripción General
+Minishell es una implementación simplificada de shell escrita en C que recrea las funcionalidades principales de bash. Este proyecto demuestra la comprensión de conceptos de programación de sistemas incluyendo gestión de procesos, descriptores de archivos, manejo de señales y análisis de estructuras de comandos complejas.
 
-## Table of Contents
-1. [Project Structure](#project-structure)
-2. [Core Data Structures](#core-data-structures)
-3. [Part 1: Parsing](#part-1-parsing)
-4. [Part 2: Execution](#part-2-execution)
-5. [Built-in Commands](#built-in-commands)
-6. [Memory Management](#memory-management)
-7. [Signal Handling](#signal-handling)
-8. [Usage Examples](#usage-examples)
+## Tabla de Contenidos
+1. [Estructura del Proyecto](#estructura-del-proyecto)
+2. [Estructuras de Datos Principales](#estructuras-de-datos-principales)
+3. [Parte 1: Análisis Sintáctico](#parte-1-análisis-sintáctico)
+4. [Parte 2: Ejecución](#parte-2-ejecución)
+5. [Comandos Built-in](#comandos-built-in)
+6. [Gestión de Memoria](#gestión-de-memoria)
+7. [Manejo de Señales](#manejo-de-señales)
+8. [Ejemplos de Uso](#ejemplos-de-uso)
 
-## Project Structure
+## Estructura del Proyecto
 
 ```
 Minishell/
 ├── src/
-│   ├── main.c                    # Entry point and main loop
-│   ├── minishell.h              # Header with all structures and prototypes
-│   ├── parse/                   # Parsing module
-│   │   ├── ft_ast.c            # AST construction
-│   │   ├── ft_tokens.c         # Tokenization
-│   │   ├── ft_handle_quotes.c  # Quote handling
-│   │   ├── ft_expansion.c      # Variable expansion
-│   │   └── ft_redirections.c   # Redirection parsing
-│   ├── exec/                   # Execution module
-│   │   ├── exec.c             # Main execution logic
-│   │   ├── pipe.c             # Pipeline execution
-│   │   ├── heredoc.c          # Here-document handling
-│   │   └── redirections.c     # I/O redirection
-│   ├── builtins/              # Built-in commands
+│   ├── main.c                    # Punto de entrada y bucle principal
+│   ├── minishell.h              # Cabecera con todas las estructuras y prototipos
+│   ├── parse/                   # Módulo de análisis sintáctico
+│   │   ├── ft_ast.c            # Construcción del AST
+│   │   ├── ft_tokens.c         # Tokenización
+│   │   ├── ft_handle_quotes.c  # Manejo de comillas
+│   │   ├── ft_expansion.c      # Expansión de variables
+│   │   └── ft_redirections.c   # Análisis de redirecciones
+│   ├── exec/                   # Módulo de ejecución
+│   │   ├── exec.c             # Lógica principal de ejecución
+│   │   ├── pipe.c             # Ejecución de pipelines
+│   │   ├── heredoc.c          # Manejo de here-documents
+│   │   └── redirections.c     # Redirección de E/S
+│   ├── builtins/              # Comandos built-in
 │   │   ├── ft_echo.c
 │   │   ├── ft_cd.c
 │   │   ├── ft_pwd.c
@@ -39,166 +39,166 @@ Minishell/
 │   │   ├── ft_unset.c
 │   │   ├── ft_env.c
 │   │   └── ft_exit.c
-│   └── utils/                 # Utility functions
-└── libft/                     # Custom C library
+│   └── utils/                 # Funciones de utilidad
+└── libft/                     # Biblioteca C personalizada
 ```
 
-## Core Data Structures
+## Estructuras de Datos Principales
 
-### t_data - Main Program State
+### t_data - Estado Principal del Programa
 ```c
 typedef struct s_data
 {
-    char        *line;              // Current input line
-    char        *prompt;            // Shell prompt string
-    char        *cwd;              // Current working directory
-    int         exit;              // Exit flag
-    int         wstatus;           // Last command exit status
-    int         only_redirections; // Flag for redirection-only commands
-    t_env       *env;              // Environment variables linked list
-    t_tokens    *tokens;           // Tokenized input
-    t_ast       *ast;              // Abstract Syntax Tree
-    int         input_redir_fd;    // Input redirection file descriptor
-    int         output_redir_fd;   // Output redirection file descriptor
-    int         heredoc_pipe_fd;   // Here-document pipe file descriptor
+    char        *line;              // Línea de entrada actual
+    char        *prompt;            // Cadena del prompt del shell
+    char        *cwd;              // Directorio de trabajo actual
+    int         exit;              // Bandera de salida
+    int         wstatus;           // Estado de salida del último comando
+    int         only_redirections; // Bandera para comandos solo de redirección
+    t_env       *env;              // Lista enlazada de variables de entorno
+    t_tokens    *tokens;           // Entrada tokenizada
+    t_ast       *ast;              // Árbol Sintáctico Abstracto
+    int         input_redir_fd;    // Descriptor de archivo de redirección de entrada
+    int         output_redir_fd;   // Descriptor de archivo de redirección de salida
+    int         heredoc_pipe_fd;   // Descriptor de archivo de pipe de here-document
 } t_data;
 ```
 
-### t_ast - Abstract Syntax Tree Node
+### t_ast - Nodo del Árbol Sintáctico Abstracto
 ```c
 typedef struct s_ast
 {
-    t_type          type;    // Node type (CMD, PIPE, REDIRECT_IN, etc.)
-    char            *value;  // Command or operator value
-    char            **args;  // Command arguments array
-    struct s_ast    *left;   // Left child node
-    struct s_ast    *right;  // Right child node
+    t_type          type;    // Tipo de nodo (CMD, PIPE, REDIRECT_IN, etc.)
+    char            *value;  // Valor del comando u operador
+    char            **args;  // Array de argumentos del comando
+    struct s_ast    *left;   // Nodo hijo izquierdo
+    struct s_ast    *right;  // Nodo hijo derecho
 } t_ast;
 ```
 
-### t_tokens - Token Linked List
+### t_tokens - Lista Enlazada de Tokens
 ```c
 typedef struct s_tokens
 {
-    t_type          type;    // Token type
-    char            *value;  // Token string value
-    struct s_tokens *next;   // Next token in list
+    t_type          type;    // Tipo de token
+    char            *value;  // Valor string del token
+    struct s_tokens *next;   // Siguiente token en la lista
 } t_tokens;
 ```
 
-### t_type - Token/Node Types
+### t_type - Tipos de Token/Nodo
 ```c
 typedef enum e_type
 {
-    CMD,           // Command
-    REDIRECT_OUT,  // > (output redirection)
-    REDIRECT_IN,   // < (input redirection)
+    CMD,           // Comando
+    REDIRECT_OUT,  // > (redirección de salida)
+    REDIRECT_IN,   // < (redirección de entrada)
     REDIN2,        // << (here-document)
-    REDOUT2,       // >> (append redirection)
+    REDOUT2,       // >> (redirección de anexado)
     PIPE           // | (pipe)
 } t_type;
 ```
 
-## Part 1: Parsing
+## Parte 1: Análisis Sintáctico
 
-The parsing module transforms user input into an Abstract Syntax Tree (AST) that represents the command structure. This process involves several stages:
+El módulo de análisis sintáctico transforma la entrada del usuario en un Árbol Sintáctico Abstracto (AST) que representa la estructura del comando. Este proceso involucra varias etapas:
 
-### 1. Tokenization (`ft_tokens.c`)
+### 1. Tokenización (`ft_tokens.c`)
 
-**Purpose**: Break down the input string into meaningful tokens.
+**Propósito**: Dividir la cadena de entrada en tokens significativos.
 
-**Process**:
-1. **Lexical Analysis**: Scan the input character by character
-2. **Token Identification**: Recognize operators (`|`, `>`, `<`, `>>`, `<<`) and commands
-3. **Quote Handling**: Preserve spaces and special characters within quotes
-4. **Token Creation**: Create linked list of tokens with type and value
+**Proceso**:
+1. **Análisis Léxico**: Escanear la entrada carácter por carácter
+2. **Identificación de Tokens**: Reconocer operadores (`|`, `>`, `<`, `>>`, `<<`) y comandos
+3. **Manejo de Comillas**: Preservar espacios y caracteres especiales dentro de comillas
+4. **Creación de Tokens**: Crear lista enlazada de tokens con tipo y valor
 
-**Key Functions**:
-- `tokenize()`: Main tokenization function
-- `create_token()`: Creates individual token nodes
-- `add_token()`: Adds token to linked list
+**Funciones Clave**:
+- `tokenize()`: Función principal de tokenización
+- `create_token()`: Crea nodos de token individuales
+- `add_token()`: Añade token a la lista enlazada
 
-**Example**:
+**Ejemplo**:
 ```bash
-Input: echo "hello world" | grep hello > output.txt
+Entrada: echo "hello world" | grep hello > output.txt
 Tokens: [CMD:"echo"] [CMD:"hello world"] [PIPE:"|"] [CMD:"grep"] [CMD:"hello"] [REDIRECT_OUT:">"] [CMD:"output.txt"]
 ```
 
-### 2. Syntax Checking (`ft_check_syntax.c`)
+### 2. Verificación de Sintaxis (`ft_check_syntax.c`)
 
-**Purpose**: Validate command syntax before AST construction.
+**Propósito**: Validar la sintaxis del comando antes de la construcción del AST.
 
-**Checks**:
-- Proper quote closure
-- Valid operator placement
-- Correct pipe usage
-- Proper redirection syntax
+**Verificaciones**:
+- Cierre apropiado de comillas
+- Colocación válida de operadores
+- Uso correcto de pipes
+- Sintaxis adecuada de redirecciones
 
-**Key Functions**:
-- `check_syntax()`: Main syntax validation
-- `check_operator_syntax()`: Validates operator placement
-- `openquotes()`: Checks for unclosed quotes
+**Funciones Clave**:
+- `check_syntax()`: Validación principal de sintaxis
+- `check_operator_syntax()`: Valida la colocación de operadores
+- `openquotes()`: Verifica comillas sin cerrar
 
-### 3. Quote Handling (`ft_handle_quotes.c`)
+### 3. Manejo de Comillas (`ft_handle_quotes.c`)
 
-**Purpose**: Process quoted strings correctly, preserving content and removing quote characters.
+**Propósito**: Procesar cadenas entre comillas correctamente, conservando el contenido y eliminando los caracteres de comillas.
 
-**Types of Quotes**:
-- **Single quotes (`'`)**: Preserve everything literally, no expansion
-- **Double quotes (`"`)**: Allow variable expansion but preserve spaces
-- **No quotes**: Normal parsing with expansion
+**Tipos de Comillas**:
+- **Comillas simples (`'`)**: Preservar todo literalmente, sin expansión
+- **Comillas dobles (`"`)**: Permitir expansión de variables pero preservar espacios
+- **Sin comillas**: Análisis normal con expansión
 
-**Key Functions**:
-- `handle_quotes()`: Main quote processing function
-- `process_quoted_content()`: Extracts content from quotes
-- `remove_quotes()`: Removes quote characters after processing
+**Funciones Clave**:
+- `handle_quotes()`: Función principal de procesamiento de comillas
+- `process_quoted_content()`: Extrae contenido de las comillas
+- `remove_quotes()`: Elimina caracteres de comillas después del procesamiento
 
-### 4. Variable Expansion (`ft_expansion.c`)
+### 4. Expansión de Variables (`ft_expansion.c`)
 
-**Purpose**: Replace environment variables and special variables with their values.
+**Propósito**: Reemplazar variables de entorno y variables especiales con sus valores.
 
-**Expansion Types**:
-- **Environment variables**: `$VAR` → value of VAR
-- **Exit status**: `$?` → last command exit status
-- **Process ID**: `$$` → current shell PID
+**Tipos de Expansión**:
+- **Variables de entorno**: `$VAR` → valor de VAR
+- **Estado de salida**: `$?` → estado de salida del último comando
+- **ID de proceso**: `$$` → PID del shell actual
 
-**Process**:
-1. Scan for `$` character
-2. Extract variable name
-3. Look up value in environment
-4. Replace `$VAR` with actual value
+**Proceso**:
+1. Buscar carácter `$`
+2. Extraer nombre de variable
+3. Buscar valor en el entorno
+4. Reemplazar `$VAR` con el valor real
 
-**Key Functions**:
-- `expand_variables()`: Main expansion function
-- `get_env_value()`: Retrieves environment variable value
-- `expand_exit_status()`: Handles `$?` expansion
+**Funciones Clave**:
+- `expand_variables()`: Función principal de expansión
+- `get_env_value()`: Obtiene valor de variable de entorno
+- `expand_exit_status()`: Maneja expansión de `$?`
 
-### 5. AST Construction (`ft_ast.c`)
+### 5. Construcción del AST (`ft_ast.c`)
 
-**Purpose**: Build a binary tree representing command structure and operator precedence.
+**Propósito**: Construir un árbol binario que represente la estructura del comando y la precedencia de operadores.
 
-**AST Structure**:
-- **Internal nodes**: Operators (pipes, redirections)
-- **Leaf nodes**: Commands and arguments
-- **Tree structure**: Represents execution order and data flow
+**Estructura del AST**:
+- **Nodos internos**: Operadores (pipes, redirecciones)
+- **Nodos hoja**: Comandos y argumentos
+- **Estructura de árbol**: Representa el orden de ejecución y flujo de datos
 
-**Construction Process**:
-1. **Parse by precedence**: Pipes have lowest precedence
-2. **Handle redirections**: Attach to command nodes
-3. **Build command nodes**: Group command with its arguments
-4. **Link nodes**: Create parent-child relationships
+**Proceso de Construcción**:
+1. **Analizar por precedencia**: Los pipes tienen la menor precedencia
+2. **Manejar redirecciones**: Adjuntar a nodos de comando
+3. **Construir nodos de comando**: Agrupar comando con sus argumentos
+4. **Enlazar nodos**: Crear relaciones padre-hijo
 
-**Key Functions**:
-- `build_ast()`: Main AST construction function
-- `handle_pipe()`: Creates pipe nodes
-- `handle_redirections()`: Processes redirection operators
-- `create_cmd_node()`: Creates command nodes
+**Funciones Clave**:
+- `build_ast()`: Función principal de construcción del AST
+- `handle_pipe()`: Crea nodos de pipe
+- `handle_redirections()`: Procesa operadores de redirección
+- `create_cmd_node()`: Crea nodos de comando
 
-**AST Example**:
+**Ejemplo de AST**:
 ```bash
-Command: echo hello | grep h > output.txt
+Comando: echo hello | grep h > output.txt
 
-AST Structure:
+Estructura del AST:
         PIPE
        /    \
     CMD      REDIRECT_OUT
@@ -210,260 +210,260 @@ AST Structure:
         "h"
 ```
 
-### 6. Redirection Parsing (`ft_redirections.c`)
+### 6. Análisis de Redirecciones (`ft_redirections.c`)
 
-**Purpose**: Handle input/output redirection operators and file specifications.
+**Propósito**: Manejar operadores de redirección de entrada/salida y especificaciones de archivos.
 
-**Redirection Types**:
-- **`>`**: Redirect stdout to file (overwrite)
-- **`>>`**: Redirect stdout to file (append)
-- **`<`**: Redirect stdin from file
-- **`<<`**: Here-document (multi-line input)
+**Tipos de Redirección**:
+- **`>`**: Redirigir stdout a archivo (sobrescribir)
+- **`>>`**: Redirigir stdout a archivo (anexar)
+- **`<`**: Redirigir stdin desde archivo
+- **`<<`**: Here-document (entrada multi-línea)
 
-**Key Functions**:
-- `parse_redirections()`: Main redirection parser
-- `handle_input_redirect()`: Processes input redirections
-- `handle_output_redirect()`: Processes output redirections
-- `setup_heredoc()`: Handles here-document setup
+**Funciones Clave**:
+- `parse_redirections()`: Analizador principal de redirecciones
+- `handle_input_redirect()`: Procesa redirecciones de entrada
+- `handle_output_redirect()`: Procesa redirecciones de salida
+- `setup_heredoc()`: Maneja configuración de here-document
 
-## Part 2: Execution
+## Parte 2: Ejecución
 
-The execution module interprets the AST and executes commands, handling pipes, redirections, and built-in commands.
+El módulo de ejecución interpreta el AST y ejecuta comandos, manejando pipes, redirecciones y comandos built-in.
 
-### 1. AST Interpretation (`exec.c`)
+### 1. Interpretación del AST (`exec.c`)
 
-**Purpose**: Traverse the AST and execute commands according to the tree structure.
+**Propósito**: Recorrer el AST y ejecutar comandos según la estructura del árbol.
 
-**Execution Strategy**:
-- **Post-order traversal**: Execute children before parent
-- **Type-based dispatch**: Different handling for each node type
-- **Context preservation**: Maintain file descriptors and environment
+**Estrategia de Ejecución**:
+- **Recorrido post-orden**: Ejecutar hijos antes que el padre
+- **Despacho basado en tipo**: Manejo diferente para cada tipo de nodo
+- **Preservación de contexto**: Mantener descriptores de archivos y entorno
 
-**Key Functions**:
-- `execute_ast()`: Main AST execution function
-- `execute_command()`: Executes command nodes
-- `execute_pipe()`: Handles pipe nodes
-- `execute_redirection()`: Processes redirection nodes
+**Funciones Clave**:
+- `execute_ast()`: Función principal de ejecución del AST
+- `execute_command()`: Ejecuta nodos de comando
+- `execute_pipe()`: Maneja nodos de pipe
+- `execute_redirection()`: Procesa nodos de redirección
 
-### 2. Command Execution
+### 2. Ejecución de Comandos
 
-**Process Creation**:
-1. **Fork process**: Create child process for external commands
-2. **Setup environment**: Pass environment variables
-3. **Handle redirections**: Set up file descriptors
-4. **Execute command**: Call `execve()` with command path
-5. **Wait for completion**: Parent waits for child to finish
+**Creación de Procesos**:
+1. **Fork de proceso**: Crear proceso hijo para comandos externos
+2. **Configurar entorno**: Pasar variables de entorno
+3. **Manejar redirecciones**: Configurar descriptores de archivos
+4. **Ejecutar comando**: Llamar `execve()` con la ruta del comando
+5. **Esperar finalización**: El padre espera que termine el hijo
 
-**Path Resolution**:
-1. Check if command is built-in
-2. Check if command contains `/` (absolute/relative path)
-3. Search in `PATH` environment variable
-4. Return error if command not found
+**Resolución de Rutas**:
+1. Verificar si el comando es built-in
+2. Verificar si el comando contiene `/` (ruta absoluta/relativa)
+3. Buscar en la variable de entorno `PATH`
+4. Devolver error si no se encuentra el comando
 
-### 3. Pipeline Execution (`pipe.c`)
+### 3. Ejecución de Pipelines (`pipe.c`)
 
-**Purpose**: Connect multiple commands through pipes, enabling data flow between processes.
+**Propósito**: Conectar múltiples comandos a través de pipes, permitiendo flujo de datos entre procesos.
 
-**Pipeline Process**:
-1. **Create pipes**: Establish communication channels
-2. **Fork processes**: Create process for each command
-3. **Connect pipes**: Set up stdin/stdout redirections
-4. **Execute commands**: Run each command in its process
-5. **Close descriptors**: Clean up pipe file descriptors
-6. **Wait for all**: Wait for all processes to complete
+**Proceso de Pipeline**:
+1. **Crear pipes**: Establecer canales de comunicación
+2. **Fork de procesos**: Crear proceso para cada comando
+3. **Conectar pipes**: Configurar redirecciones de stdin/stdout
+4. **Ejecutar comandos**: Ejecutar cada comando en su proceso
+5. **Cerrar descriptores**: Limpiar descriptores de archivos de pipes
+6. **Esperar todos**: Esperar que todos los procesos terminen
 
-**Key Functions**:
-- `execute_pipeline()`: Main pipeline execution
-- `setup_pipe_fds()`: Configure file descriptors for pipes
-- `close_pipe_fds()`: Clean up pipe file descriptors
+**Funciones Clave**:
+- `execute_pipeline()`: Ejecución principal de pipeline
+- `setup_pipe_fds()`: Configurar descriptores de archivos para pipes
+- `close_pipe_fds()`: Limpiar descriptores de archivos de pipes
 
-**Pipeline Example**:
+**Ejemplo de Pipeline**:
 ```bash
-Command: cat file.txt | grep pattern | sort | head -10
+Comando: cat file.txt | grep pattern | sort | head -10
 
-Execution:
-Process 1: cat file.txt    → pipe1 →
-Process 2: grep pattern    → pipe2 →
-Process 3: sort            → pipe3 →
-Process 4: head -10        → stdout
+Ejecución:
+Proceso 1: cat file.txt    → pipe1 →
+Proceso 2: grep pattern    → pipe2 →
+Proceso 3: sort            → pipe3 →
+Proceso 4: head -10        → stdout
 ```
 
-### 4. Here-document Handling (`heredoc.c`)
+### 4. Manejo de Here-documents (`heredoc.c`)
 
-**Purpose**: Handle multi-line input terminated by a delimiter.
+**Propósito**: Manejar entrada multi-línea terminada por un delimitador.
 
-**Here-document Process**:
-1. **Read input**: Collect lines until delimiter found
-2. **Create pipe**: Set up temporary pipe for data
-3. **Write to pipe**: Send collected input to pipe
-4. **Redirect stdin**: Connect command stdin to pipe read end
+**Proceso de Here-document**:
+1. **Leer entrada**: Recopilar líneas hasta encontrar el delimitador
+2. **Crear pipe**: Configurar pipe temporal para datos
+3. **Escribir a pipe**: Enviar entrada recopilada al pipe
+4. **Redirigir stdin**: Conectar stdin del comando al extremo de lectura del pipe
 
-**Key Functions**:
-- `handle_heredoc()`: Main here-document handler
-- `read_heredoc_input()`: Collects input lines
-- `setup_heredoc_pipe()`: Creates and configures pipe
+**Funciones Clave**:
+- `handle_heredoc()`: Manejador principal de here-document
+- `read_heredoc_input()`: Recopila líneas de entrada
+- `setup_heredoc_pipe()`: Crea y configura pipe
 
-**Example**:
+**Ejemplo**:
 ```bash
 cat << EOF
-This is line 1
-This is line 2
+Esta es la línea 1
+Esta es la línea 2
 EOF
 ```
 
-### 5. I/O Redirection (`redirections.c`)
+### 5. Redirección de E/S (`redirections.c`)
 
-**Purpose**: Redirect command input/output to/from files.
+**Propósito**: Redirigir entrada/salida de comandos hacia/desde archivos.
 
-**Redirection Implementation**:
-- **File opening**: Open target files with appropriate modes
-- **Descriptor duplication**: Use `dup2()` to redirect stdin/stdout
-- **Error handling**: Check file permissions and existence
-- **Cleanup**: Close file descriptors after execution
+**Implementación de Redirección**:
+- **Apertura de archivos**: Abrir archivos objetivo con modos apropiados
+- **Duplicación de descriptores**: Usar `dup2()` para redirigir stdin/stdout
+- **Manejo de errores**: Verificar permisos y existencia de archivos
+- **Limpieza**: Cerrar descriptores de archivos después de la ejecución
 
-**Key Functions**:
-- `setup_redirections()`: Main redirection setup
-- `redirect_input()`: Handles input redirection
-- `redirect_output()`: Handles output redirection
-- `cleanup_redirections()`: Closes file descriptors
+**Funciones Clave**:
+- `setup_redirections()`: Configuración principal de redirecciones
+- `redirect_input()`: Maneja redirección de entrada
+- `redirect_output()`: Maneja redirección de salida
+- `cleanup_redirections()`: Cierra descriptores de archivos
 
-## Built-in Commands
+## Comandos Built-in
 
-Built-in commands are executed directly by the shell without creating new processes:
+Los comandos built-in se ejecutan directamente por el shell sin crear nuevos procesos:
 
-### 1. `echo` - Display Text
-- **Purpose**: Print arguments to stdout
-- **Options**: `-n` (no newline)
-- **Implementation**: Direct output, handle escape sequences
+### 1. `echo` - Mostrar Texto
+- **Propósito**: Imprimir argumentos a stdout
+- **Opciones**: `-n` (sin salto de línea)
+- **Implementación**: Salida directa, manejar secuencias de escape
 
-### 2. `cd` - Change Directory
-- **Purpose**: Change current working directory
-- **Features**: Handle `~` (home), `-` (previous directory)
-- **Implementation**: Use `chdir()`, update `PWD` and `OLDPWD`
+### 2. `cd` - Cambiar Directorio
+- **Propósito**: Cambiar directorio de trabajo actual
+- **Características**: Manejar `~` (inicio), `-` (directorio anterior)
+- **Implementación**: Usar `chdir()`, actualizar `PWD` y `OLDPWD`
 
-### 3. `pwd` - Print Working Directory
-- **Purpose**: Display current directory path
-- **Implementation**: Use `getcwd()` or `PWD` environment variable
+### 3. `pwd` - Imprimir Directorio de Trabajo
+- **Propósito**: Mostrar ruta del directorio actual
+- **Implementación**: Usar `getcwd()` o variable de entorno `PWD`
 
-### 4. `export` - Set Environment Variables
-- **Purpose**: Create or modify environment variables
-- **Features**: Variable assignment, display current variables
-- **Implementation**: Update internal environment list
+### 4. `export` - Establecer Variables de Entorno
+- **Propósito**: Crear o modificar variables de entorno
+- **Características**: Asignación de variables, mostrar variables actuales
+- **Implementación**: Actualizar lista interna de entorno
 
-### 5. `unset` - Remove Environment Variables
-- **Purpose**: Delete environment variables
-- **Implementation**: Remove from internal environment list
+### 5. `unset` - Eliminar Variables de Entorno
+- **Propósito**: Eliminar variables de entorno
+- **Implementación**: Remover de la lista interna de entorno
 
-### 6. `env` - Display Environment
-- **Purpose**: Show all environment variables
-- **Implementation**: Iterate through environment list
+### 6. `env` - Mostrar Entorno
+- **Propósito**: Mostrar todas las variables de entorno
+- **Implementación**: Iterar a través de la lista de entorno
 
-### 7. `exit` - Terminate Shell
-- **Purpose**: Exit the shell with optional status code
-- **Implementation**: Set exit flag, cleanup resources
+### 7. `exit` - Terminar Shell
+- **Propósito**: Salir del shell con código de estado opcional
+- **Implementación**: Establecer bandera de salida, limpiar recursos
 
-## Memory Management
+## Gestión de Memoria
 
-### Strategy
-1. **Allocation tracking**: Keep track of all dynamic allocations
-2. **Cleanup functions**: Dedicated functions for freeing structures
-3. **Error handling**: Cleanup on errors to prevent leaks
-4. **Resource management**: Close file descriptors, free memory
+### Estrategia
+1. **Seguimiento de asignaciones**: Mantener registro de todas las asignaciones dinámicas
+2. **Funciones de limpieza**: Funciones dedicadas para liberar estructuras
+3. **Manejo de errores**: Limpieza en errores para prevenir fugas
+4. **Gestión de recursos**: Cerrar descriptores de archivos, liberar memoria
 
-### Key Cleanup Functions
-- `free_tokens()`: Free token linked list
-- `free_ast()`: Free AST nodes recursively
-- `free_env()`: Free environment variable list
-- `cleanup_data()`: Complete data structure cleanup
+### Funciones Clave de Limpieza
+- `free_tokens()`: Liberar lista enlazada de tokens
+- `free_ast()`: Liberar nodos del AST recursivamente
+- `free_env()`: Liberar lista de variables de entorno
+- `cleanup_data()`: Limpieza completa de estructura de datos
 
-## Signal Handling
+## Manejo de Señales
 
-### Signals Handled
-- **SIGINT (Ctrl+C)**: Interrupt current operation
-- **SIGQUIT (Ctrl+\)**: Ignored in interactive mode
-- **SIGTERM**: Graceful termination
+### Señales Manejadas
+- **SIGINT (Ctrl+C)**: Interrumpir operación actual
+- **SIGQUIT (Ctrl+\)**: Ignorado en modo interactivo
+- **SIGTERM**: Terminación elegante
 
-### Implementation
-- **Signal handlers**: Custom signal handling functions
-- **State management**: Different behavior based on shell state
-- **Process groups**: Proper signal propagation in pipelines
+### Implementación
+- **Manejadores de señales**: Funciones personalizadas de manejo de señales
+- **Gestión de estado**: Comportamiento diferente basado en el estado del shell
+- **Grupos de procesos**: Propagación adecuada de señales en pipelines
 
-## Usage Examples
+## Ejemplos de Uso
 
-### Basic Commands
+### Comandos Básicos
 ```bash
-$ echo "Hello, World!"
-Hello, World!
+$ echo "¡Hola, Mundo!"
+¡Hola, Mundo!
 
 $ pwd
-/home/user/minishell
+/home/usuario/minishell
 
 $ ls -la
-[directory listing]
+[listado de directorio]
 ```
 
 ### Pipes
 ```bash
-$ cat file.txt | grep pattern | sort
-[filtered and sorted output]
+$ cat archivo.txt | grep patrón | sort
+[salida filtrada y ordenada]
 
 $ ps aux | grep minishell | head -5
-[process information]
+[información de procesos]
 ```
 
-### Redirections
+### Redirecciones
 ```bash
-$ echo "Hello" > output.txt
-$ cat < input.txt
-$ echo "Append this" >> output.txt
+$ echo "Hola" > salida.txt
+$ cat < entrada.txt
+$ echo "Anexar esto" >> salida.txt
 $ wc -l << EOF
-line 1
-line 2
-line 3
+línea 1
+línea 2
+línea 3
 EOF
 ```
 
-### Complex Commands
+### Comandos Complejos
 ```bash
-$ export VAR="test"
-$ echo $VAR | tr 'a-z' 'A-Z' > upper.txt
-$ cat upper.txt
-TEST
+$ export VAR="prueba"
+$ echo $VAR | tr 'a-z' 'A-Z' > mayusculas.txt
+$ cat mayusculas.txt
+PRUEBA
 
 $ cd /tmp && pwd && cd - && pwd
 /tmp
-/home/user/minishell
+/home/usuario/minishell
 ```
 
-### Error Handling
+### Manejo de Errores
 ```bash
-$ nonexistent_command
-minishell: nonexistent_command: command not found
+$ comando_inexistente
+minishell: comando_inexistente: command not found
 
-$ cat nonexistent_file.txt
-cat: nonexistent_file.txt: No such file or directory
+$ cat archivo_inexistente.txt
+cat: archivo_inexistente.txt: No such file or directory
 
-$ echo "unclosed quote
+$ echo "comilla sin cerrar
 minishell: syntax error: unclosed quote
 ```
 
-## Technical Highlights
+## Aspectos Técnicos Destacados
 
-### 1. Recursive AST Processing
-The AST is processed recursively, allowing for complex nested structures and proper operator precedence.
+### 1. Procesamiento Recursivo del AST
+El AST se procesa de forma recursiva, permitiendo estructuras anidadas complejas y precedencia adecuada de operadores.
 
-### 2. Proper File Descriptor Management
-All file descriptors are carefully managed to prevent leaks and ensure proper I/O redirection.
+### 2. Gestión Adecuada de Descriptores de Archivos
+Todos los descriptores de archivos se gestionan cuidadosamente para prevenir fugas y asegurar redirección de E/S adecuada.
 
-### 3. Signal-Safe Operations
-Signal handling is implemented to work correctly with ongoing operations and child processes.
+### 3. Operaciones Seguras con Señales
+El manejo de señales está implementado para funcionar correctamente con operaciones en curso y procesos hijo.
 
-### 4. Memory Efficiency
-Dynamic allocation is used judiciously, with comprehensive cleanup to prevent memory leaks.
+### 4. Eficiencia de Memoria
+La asignación dinámica se usa de forma juiciosa, con limpieza integral para prevenir fugas de memoria.
 
-### 5. Error Recovery
-The shell handles errors gracefully and continues operation after syntax or execution errors.
+### 5. Recuperación de Errores
+El shell maneja errores de forma elegante y continúa operando después de errores de sintaxis o ejecución.
 
 ---
 
-This minishell implementation demonstrates a deep understanding of Unix system programming concepts and provides a solid foundation for understanding how shells work internally. The modular design makes it easy to extend with additional features while maintaining code clarity and reliability.
+Esta implementación de minishell demuestra una comprensión profunda de los conceptos de programación de sistemas Unix y proporciona una base sólida para entender cómo funcionan los shells internamente. El diseño modular facilita la extensión con características adicionales mientras mantiene la claridad del código y la confiabilidad.
