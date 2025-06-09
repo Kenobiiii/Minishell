@@ -10,7 +10,7 @@ This document summarizes all the function renamings performed to improve code cl
 |----------------------|----------------------|-------------|
 | `ft_handle_type_quote()` | `remove_quote_delimiters()` | Removes quote delimiters from quoted strings |
 | `ft_quotelen()` | `calculate_quote_content_length()` | Calculates the length of content within quotes |
-| `ft_quotesplit()` | `split_with_quote_awareness()` | Splits strings while respecting quoted sections |
+| `ft_quotesplit()` | `ft_quotesplit()` | Splits strings while respecting quoted sections |
 
 ### AST Utility Functions
 

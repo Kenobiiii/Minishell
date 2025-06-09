@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 20:08:34 by paromero          #+#    #+#             */
-/*   Updated: 2025/06/05 18:11:24 by paromero         ###   ########.fr       */
+/*   Updated: 2025/06/09 19:59:40 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ int	ft_tokens(t_data *data, char *str)
 	char		**token_array;
 	int			i;
 
-	token_array = split_with_quote_awareness(str, ' ', data);
+	token_array = ft_quotesplit(str, ' ', data);
 	if (!token_array)
 		return (0);
 	data->tokens = ft_new_token(token_array[0]);

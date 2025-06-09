@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 19:06:45 by paromero          #+#    #+#             */
-/*   Updated: 2025/06/05 18:11:24 by paromero         ###   ########.fr       */
+/*   Updated: 2025/06/09 19:59:40 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,7 +151,7 @@ char		*check_access(char *cmd);
 int			handle_special_chars(char **array, char const *s, size_t *i);
 
 //! ft_quotesplit.c //
-char		**split_with_quote_awareness(char const *s, char c,	t_data	*data);
+char		**ft_quotesplit(char const *s, char c,	t_data	*data);
 
 //! ft_quotesplit_utils.c //
 void		process_quotes(const char *s, size_t *i, char *quote);

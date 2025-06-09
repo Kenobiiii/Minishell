@@ -151,7 +151,7 @@ La tokenización divide la línea de entrada en tokens individuales.
 
 #### **Proceso de Tokenización**
 
-1. **Split con awareness de comillas**: `split_with_quote_awareness()`
+1. **Split con awareness de comillas**: `ft_quotesplit()`
 2. **Identificación de tipos**: `ft_types()`
 3. **Creación de tokens**: `ft_new_token()`
 
@@ -163,7 +163,7 @@ int ft_tokens(t_data *data, char *str)
     int         i;
 
     // 1. Split respetando comillas
-    array = split_with_quote_awareness(str, ' ', data);
+    array = ft_quotesplit(str, ' ', data);
     
     // 2. Procesar comillas en cada elemento
     ft_process_all_quotes(data, array);
