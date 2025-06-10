@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 12:32:49 by anggalle          #+#    #+#             */
-/*   Updated: 2025/06/10 15:24:33 by paromero         ###   ########.fr       */
+/*   Updated: 2025/06/10 20:02:57 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,11 @@
 
 static int	cd_handle_no_args(t_data *data)
 {
-	const char	*home_dir;
+	char	*home_dir;
 
 	if (!data)
 		return (1);
-	home_dir = getenv("HOME");
+	home_dir = find_variable_in_env(data, "HOME=");
 	if (home_dir == NULL)
 	{
 		ft_putstr_fd("minishell: cd: HOME not set\n", STDERR_FILENO);
@@ -30,8 +30,10 @@ static int	cd_handle_no_args(t_data *data)
 		ft_putstr_fd("minishell: cd: ", STDERR_FILENO);
 		perror(home_dir);
 		data->wstatus = 1;
+		free(home_dir);
 		return (1);
 	}
+	free(home_dir);
 	data->wstatus = 0;
 	return (1);
 }
