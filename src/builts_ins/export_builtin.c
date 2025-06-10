@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/23 13:34:49 by anggalle          #+#    #+#             */
-/*   Updated: 2025/06/10 15:24:33 by paromero         ###   ########.fr       */
+/*   Updated: 2025/06/10 20:31:29 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,29 +32,44 @@ t_env	*exist_identifier(t_env **env, char *args)
 	return (NULL);
 }
 
-static void	add_new_env_node(t_env **env, char *args)
+static void	handle_append_assignment(t_env **env, char *args)
 {
-	t_env	*new_node;
-	t_env	*last;
+	char	*var_name;
+	char	*append_value;
+	char	*search_key;
+	t_env	*env_node;
 
-	new_node = create_env_node(args);
-	if (!*env)
+	var_name = get_var_name_from_append(args);
+	append_value = get_append_value(args);
+	if (!var_name || !append_value)
 	{
-		*env = new_node;
+		free(var_name);
+		free(append_value);
+		return ;
 	}
+	search_key = ft_strjoin(var_name, "=");
+	if (!search_key)
+	{
+		free(append_value);
+		return ;
+	}
+	env_node = exist_identifier(env, search_key);
+	if (env_node)
+		handle_existing_env_append(env_node, search_key, append_value);
 	else
-	{
-		last = *env;
-		while (last->next)
-			last = last->next;
-		last->next = new_node;
-	}
+		handle_new_env_append(env, search_key, append_value);
+	free(append_value);
 }
 
 void	add_or_update_env(t_env	**env, char *args)
 {
 	t_env	*env_node;
 
+	if (is_append_assignment(args))
+	{
+		handle_append_assignment(env, args);
+		return ;
+	}
 	env_node = exist_identifier(env, args);
 	if ((env_node))
 	{

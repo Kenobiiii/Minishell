@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 19:06:45 by paromero          #+#    #+#             */
-/*   Updated: 2025/06/10 19:56:31 by paromero         ###   ########.fr       */
+/*   Updated: 2025/06/10 20:31:29 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -361,6 +361,18 @@ int				export_builtin(t_data *data);
 void			print_env_sorted(char **env_matrix);
 void			sort_matrix(char **matrix);
 int				is_valid_identifier(char *arg);
+void			handle_new_env_append(t_env **env, char *search_key,
+					char *append_value);
+void			add_new_env_node(t_env **env, char *args);
+
+//! export_append.c //
+int				is_append_assignment(char *args);
+char			*get_var_name_from_append(char *args);
+char			*get_append_value(char *args);
+char			*handle_existing_var_append(t_env *env_node,
+					char *append_value);
+void			handle_existing_env_append(t_env *env_node, char *search_key,
+					char *append_value);
 
 //! env_builtin.c //
 int				print_env(t_env *env);

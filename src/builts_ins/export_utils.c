@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/09 18:23:14 by paromero          #+#    #+#             */
-/*   Updated: 2025/05/31 11:31:52 by paromero         ###   ########.fr       */
+/*   Updated: 2025/06/10 20:31:29 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,11 +63,42 @@ int	is_valid_identifier(char *arg)
 	if (!ft_isalpha(arg[0]) && arg[0] != '_')
 		return (0);
 	i = 1;
-	while (arg[i] && arg[i] != '=')
+	while (arg[i] && arg[i] != '=' && !(arg[i] == '+' && arg[i + 1] == '='))
 	{
 		if (!ft_isalnum(arg[i]) && arg[i] != '_')
 			return (0);
 		i++;
 	}
 	return (1);
+}
+
+void	handle_new_env_append(t_env **env, char *search_key, char *append_value)
+{
+	char	*new_value;
+
+	new_value = ft_strjoin(search_key, append_value);
+	if (new_value)
+	{
+		add_new_env_node(env, new_value);
+		free(new_value);
+	}
+}
+
+void	add_new_env_node(t_env **env, char *args)
+{
+	t_env	*new_node;
+	t_env	*last;
+
+	new_node = create_env_node(args);
+	if (!*env)
+	{
+		*env = new_node;
+	}
+	else
+	{
+		last = *env;
+		while (last->next)
+			last = last->next;
+		last->next = new_node;
+	}
 }
