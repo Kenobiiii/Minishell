@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 18:42:47 by anggalle          #+#    #+#             */
-/*   Updated: 2025/05/30 12:13:04 by paromero         ###   ########.fr       */
+/*   Updated: 2025/06/10 14:42:07 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,9 +61,9 @@ void	configure_signals(int mode)
 		signal(SIGINT, SIG_DFL);
 		signal(SIGQUIT, SIG_DFL);
 	}
-	else if (mode == 2)
+	else if(mode == 2)
 	{
-		signal(SIGINT, SIG_IGN);
+		signal(SIGINT, handle_sigint);
 		signal(SIGQUIT, SIG_IGN);
 	}
 }

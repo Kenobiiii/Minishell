@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 22:14:52 by paromero          #+#    #+#             */
-/*   Updated: 2025/05/31 11:40:25 by paromero         ###   ########.fr       */
+/*   Updated: 2025/06/10 14:40:46 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,7 @@ void	exec_heredoc(t_data *data, t_ast *node)
 	t_ast	*cmd_node;
 
 	count = 0;
+	configure_signals(2);
 	if (!node || !node->right || !node->right->value)
 	{
 		ft_putstr_fd("syntax error: missing delimiter for <<\n", STDERR_FILENO);
