@@ -117,6 +117,7 @@ typedef struct s_data
 int			init_data(t_data *data, char **env);
 int			init_env(t_data *data, char *env[]);
 t_env		*create_env_node(const char *value);
+void		init_data_fields(t_data *data);
 void		close_redirection_fds(t_data *data);
 int			apply_redirections_for_builtin(t_data *data);
 void		restore_redirections_for_builtin(t_data *data,
@@ -319,6 +320,9 @@ int			read_heredoc_lines(int pipefd, char *delim);
 //!	builtin.c //
 int			is_builtins(t_data *data, char *line);
 
+//! builtin_utils.c //
+void		ft_putstatus_fd(char *status, int fd);
+
 //! echo_builtin.c //
 int			echo_builtin(t_data *data);
 
@@ -337,6 +341,7 @@ int			export_builtin(t_data *data);
 //! export_utils.c //
 void		print_env_sorted(char **env_matrix);
 void		sort_matrix(char **matrix);
+int			is_valid_identifier(char *arg);
 
 //! env_builtin.c //
 int			print_env(t_env *env);

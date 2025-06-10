@@ -77,3 +77,20 @@ int	apply_redirections_for_builtin(t_data *data)
 	}
 	return (redirections_applied);
 }
+
+void	init_data_fields(t_data *data)
+{
+	char	cwd[PATH_MAX];
+
+	data->line = NULL;
+	data->exit = 0;
+	data->prompt = ft_strdup("$Minishell> ");
+	data->cwd = ft_strdup(getcwd(cwd, sizeof(cwd)));
+	data->tokens = NULL;
+	data->ast = NULL;
+	data->only_redirections = 1;
+	data->wstatus = 0;
+	data->input_redir_fd = -1;
+	data->output_redir_fd = -1;
+	data->heredoc_pipe_fd = -1;
+}

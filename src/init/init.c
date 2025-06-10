@@ -29,12 +29,28 @@ t_env	*create_env_node(const char *value)
 	return (new_node);
 }
 
-void	increment_shlvl(t_env *env)
+static void	update_shlvl_value(t_env *current)
 {
-	t_env	*current;
 	char	*new_value;
 	int		shlvl;
 	char	*shell_level;
+
+	shlvl = ft_atoi(current->value + 6);
+	shlvl++;
+	shell_level = ft_itoa(shlvl);
+	if (!shell_level)
+		return ;
+	new_value = ft_strcat("SHLVL=", shell_level);
+	free(shell_level);
+	if (!new_value)
+		return ;
+	free(current->value);
+	current->value = new_value;
+}
+
+void	increment_shlvl(t_env *env)
+{
+	t_env	*current;
 
 	if (!env)
 		return ;
@@ -43,17 +59,7 @@ void	increment_shlvl(t_env *env)
 	{
 		if (current->value && ft_strncmp(current->value, "SHLVL=", 6) == 0)
 		{
-			shlvl = ft_atoi(current->value + 6);
-			shlvl++;
-			shell_level = ft_itoa(shlvl);
-			if (!shell_level)
-				return ;
-			new_value = ft_strcat("SHLVL=", shell_level);
-			free(shell_level);
-			if (!new_value)
-				return ;
-			free(current->value);
-			current->value = new_value;
+			update_shlvl_value(current);
 			return ;
 		}
 		current = current->next;
@@ -83,19 +89,7 @@ int	init_env(t_data *data, char *env[])
 
 int	init_data(t_data *data, char **env)
 {
-	char	cwd[PATH_MAX];
-
-	data->line = NULL;
-	data->exit = 0;
-	data->prompt = ft_strdup("$Minishell> ");
-	data->cwd = ft_strdup(getcwd(cwd, sizeof(cwd)));
-	data->tokens = NULL;
-	data->ast = NULL;
-	data->only_redirections = 1;
-	data->wstatus = 0;
-	data->input_redir_fd = -1;
-	data->output_redir_fd = -1;
-	data->heredoc_pipe_fd = -1;
+	init_data_fields(data);
 	rl_clear_history();
 	if (!init_env(data, env))
 	{

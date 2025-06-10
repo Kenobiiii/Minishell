@@ -53,3 +53,21 @@ void	print_env_sorted(char **env_matrix)
 		i ++;
 	}
 }
+
+int	is_valid_identifier(char *arg)
+{
+	int	i;
+
+	if (!arg || !arg[0])
+		return (0);
+	if (!ft_isalpha(arg[0]) && arg[0] != '_')
+		return (0);
+	i = 1;
+	while (arg[i] && arg[i] != '=')
+	{
+		if (!ft_isalnum(arg[i]) && arg[i] != '_')
+			return (0);
+		i++;
+	}
+	return (1);
+}

@@ -52,22 +52,6 @@ static void	remove_variable(t_env **env, char *var)
 	}
 }
 
-static int	is_valid_identifier(char *var)
-{
-	int	i;
-
-	if (!var || (!ft_isalpha(var[0]) && var[0] != '_'))
-		return (0);
-	i = 1;
-	while (var[i])
-	{
-		if (!ft_isalnum(var[i]) && var[i] != '_')
-			return (0);
-		i++;
-	}
-	return (1);
-}
-
 int	unset_builtin(t_data *data)
 {
 	int	i;

@@ -51,6 +51,7 @@ SRCS = src/main.c \
 		src/main_checks.c \
 		src/builts_ins/echo_builtin.c \
 		src/builts_ins/builtin.c \
+		src/builts_ins/builtin_utils.c \
 		src/builts_ins/pwd_builtin.c \
 		src/builts_ins/cd_builtin.c \
 		src/builts_ins/export_builtin.c \

@@ -46,33 +46,38 @@ void	collect_heredoc_chain(t_ast *node, t_ast **heredocs, int *count)
 		heredocs[(*count)++] = node;
 }
 
-void	process_heredoc_loop(t_data *data, t_ast **heredocs, int count)
+static int	process_single_heredoc(t_data *data, t_ast *heredoc, int is_last)
 {
-	int		i;
 	char	*delim;
 	int		pipefd[2];
+
+	if (!heredoc || !heredoc->right || !heredoc->right->value)
+		return (0);
+	delim = heredoc->right->value;
+	if (ft_setup_heredoc_pipe(data, pipefd, delim) == -1)
+		return (-1);
+	if (!is_last)
+		close(pipefd[0]);
+	else
+	{
+		if (data->heredoc_pipe_fd != -1)
+			close(data->heredoc_pipe_fd);
+		data->heredoc_pipe_fd = pipefd[0];
+	}
+	return (1);
+}
+
+void	process_heredoc_loop(t_data *data, t_ast **heredocs, int count)
+{
+	int	i;
 
 	if (!data || !heredocs || count <= 0)
 		return ;
 	i = 0;
 	while (i < count)
 	{
-		if (!heredocs[i] || !heredocs[i]->right || !heredocs[i]->right->value)
-		{
-			i++;
-			continue ;
-		}
-		delim = heredocs[i]->right->value;
-		if (ft_setup_heredoc_pipe(data, pipefd, delim) == -1)
+		if (process_single_heredoc(data, heredocs[i], i == count - 1) == -1)
 			return ;
-		if (i < count - 1)
-			close(pipefd[0]);
-		else
-		{
-			if (data->heredoc_pipe_fd != -1)
-				close(data->heredoc_pipe_fd);
-			data->heredoc_pipe_fd = pipefd[0];
-		}
 		i++;
 	}
 }

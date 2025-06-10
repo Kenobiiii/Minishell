@@ -12,19 +12,6 @@
 
 #include "../minishell.h"
 
-static void	ft_putstatus_fd(char *status, int fd)
-{
-	int	i;
-
-	i = 0;
-	if (status != NULL)
-	{
-		while (status[i])
-			write (fd, &status[i++], 1);
-	}
-	free (status);
-}
-
 static int	check_n_option(char *arg)
 {
 	int	j;
@@ -56,6 +43,31 @@ static void	print_arg(t_data *data, char *arg, int has_next)
 	}
 }
 
+static int	process_n_options(t_data *data, int *print_new_line)
+{
+	int	i;
+
+	i = 1;
+	while (data->ast->args[i] && check_n_option(data->ast->args[i]))
+	{
+		*print_new_line = 0;
+		i++;
+	}
+	return (i);
+}
+
+static void	print_echo_args(t_data *data, int start_index)
+{
+	int	i;
+
+	i = start_index;
+	while (data->ast->args[i])
+	{
+		print_arg(data, data->ast->args[i], data->ast->args[i + 1] != NULL);
+		i++;
+	}
+}
+
 int	echo_builtin(t_data *data)
 {
 	int	i;
@@ -64,22 +76,13 @@ int	echo_builtin(t_data *data)
 	if (!data || !data->ast || !data->ast->args)
 		return (0);
 	print_new_line = 1;
-	i = 1;
 	if (!data->ast->args[1])
 	{
 		ft_putstr_fd("\n", STDOUT_FILENO);
 		return (1);
 	}
-	while (data->ast->args[i] && check_n_option(data->ast->args[i]))
-	{
-		print_new_line = 0;
-		i++;
-	}
-	while (data->ast->args[i])
-	{
-		print_arg(data, data->ast->args[i], data->ast->args[i + 1] != NULL);
-		i++;
-	}
+	i = process_n_options(data, &print_new_line);
+	print_echo_args(data, i);
 	if (print_new_line)
 		ft_putstr_fd("\n", STDOUT_FILENO);
 	data->wstatus = 0;

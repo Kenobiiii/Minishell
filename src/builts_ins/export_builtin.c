@@ -12,24 +12,6 @@
 
 #include "../minishell.h"
 
-int	is_valid_identifier(char *arg)
-{
-	int	i;
-
-	if (!arg || arg[0] == '\0')
-		return (0);
-	i = 1;
-	if (!ft_isalpha(arg[0]) && arg[0] != '_')
-		return (0);
-	while (arg[i] && arg[i] != '=')
-	{
-		if (!ft_isalnum(arg[i]) && arg[i] != '_')
-			return (0);
-		i++;
-	}
-	return (1);
-}
-
 t_env	*exist_identifier(t_env **env, char *args)
 {
 	t_env	*current;
@@ -38,19 +20,8 @@ t_env	*exist_identifier(t_env **env, char *args)
 	if (!env || !args)
 		return (NULL);
 	equal_pos = 0;
-	while (args[equal_pos])
-	{
-		if (args[equal_pos] == '=')
-			break ;
-		equal_pos ++;
-	}
-	equal_pos = 0;
-	while (args[equal_pos])
-	{
-		if (args[equal_pos] == '=')
-			break ;
-		equal_pos ++;
-	}
+	while (args[equal_pos] && args[equal_pos] != '=')
+		equal_pos++;
 	current = *env;
 	while (current)
 	{
@@ -61,11 +32,28 @@ t_env	*exist_identifier(t_env **env, char *args)
 	return (NULL);
 }
 
+static void	add_new_env_node(t_env **env, char *args)
+{
+	t_env	*new_node;
+	t_env	*last;
+
+	new_node = create_env_node(args);
+	if (!*env)
+	{
+		*env = new_node;
+	}
+	else
+	{
+		last = *env;
+		while (last->next)
+			last = last->next;
+		last->next = new_node;
+	}
+}
+
 void	add_or_update_env(t_env	**env, char *args)
 {
 	t_env	*env_node;
-	t_env	*new_node;
-	t_env	*last;
 
 	env_node = exist_identifier(env, args);
 	if ((env_node))
@@ -75,18 +63,7 @@ void	add_or_update_env(t_env	**env, char *args)
 	}
 	else
 	{
-		new_node = create_env_node(args);
-		if (!*env)
-		{
-			*env = new_node;
-		}
-		else
-		{
-			last = *env;
-			while (last->next)
-				last = last->next;
-			last->next = new_node;
-		}
+		add_new_env_node(env, args);
 	}
 }
 

@@ -61,7 +61,7 @@ void	configure_signals(int mode)
 		signal(SIGINT, SIG_DFL);
 		signal(SIGQUIT, SIG_DFL);
 	}
-	else if(mode == 2)
+	else if (mode == 2)
 	{
 		signal(SIGINT, handle_sigint);
 		signal(SIGQUIT, SIG_IGN);
