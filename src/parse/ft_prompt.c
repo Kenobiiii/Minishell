@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 18:42:01 by paromero          #+#    #+#             */
-/*   Updated: 2025/06/10 15:24:36 by paromero         ###   ########.fr       */
+/*   Updated: 2025/06/10 15:29:41 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,22 @@ char	*get_last_component(char *path)
 		return (path);
 }
 
+static void	build_prompt_string(char *new_prompt,
+	char *last_component, size_t prompt_size)
+{
+	ft_strlcat(new_prompt, ANSI_COLOR_GREEN, prompt_size);
+	ft_strlcat(new_prompt, "$Minishell", prompt_size);
+	ft_strlcat(new_prompt, ANSI_COLOR_BLUE, prompt_size);
+	ft_strlcat(new_prompt, "(", prompt_size);
+	ft_strlcat(new_prompt, ANSI_COLOR_RED, prompt_size);
+	ft_strlcat(new_prompt, last_component, prompt_size);
+	ft_strlcat(new_prompt, ANSI_COLOR_BLUE, prompt_size);
+	ft_strlcat(new_prompt, ")", prompt_size);
+	ft_strlcat(new_prompt, ANSI_COLOR_GREEN, prompt_size);
+	ft_strlcat(new_prompt, "> ", prompt_size);
+	ft_strlcat(new_prompt, ANSI_COLOR_RESET, prompt_size);
+}
+
 void	update_prompt(t_data *data)
 {
 	char	*new_prompt;
@@ -40,17 +56,7 @@ void	update_prompt(t_data *data)
 	if (!new_prompt)
 		return ;
 	new_prompt[0] = '\0';
-	ft_strlcat(new_prompt, ANSI_COLOR_GREEN, prompt_size);
-	ft_strlcat(new_prompt, "$Minishell", prompt_size);
-	ft_strlcat(new_prompt, ANSI_COLOR_BLUE, prompt_size);
-	ft_strlcat(new_prompt, "(", prompt_size);
-	ft_strlcat(new_prompt, ANSI_COLOR_RED, prompt_size);
-	ft_strlcat(new_prompt, last_component, prompt_size);
-	ft_strlcat(new_prompt, ANSI_COLOR_BLUE, prompt_size);
-	ft_strlcat(new_prompt, ")", prompt_size);
-	ft_strlcat(new_prompt, ANSI_COLOR_GREEN, prompt_size);
-	ft_strlcat(new_prompt, "> ", prompt_size);
-	ft_strlcat(new_prompt, ANSI_COLOR_RESET, prompt_size);
+	build_prompt_string(new_prompt, last_component, prompt_size);
 	if (data->prompt)
 		free(data->prompt);
 	data->prompt = new_prompt;

@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 17:54:48 by paromero          #+#    #+#             */
-/*   Updated: 2025/06/10 15:24:37 by paromero         ###   ########.fr       */
+/*   Updated: 2025/06/10 15:26:35 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,8 @@ void	process_command_line(t_data *data)
 		}
 		g_shell_state = STATE_EXECUTING;
 		configure_signals(0);
-		if (data->ast && data->ast->value && is_builtin_command(data->ast->value))
+		if (data->ast && data->ast->value
+			&& is_builtin_command(data->ast->value))
 			execute_builtin_with_redirections(data);
 		else
 		{
