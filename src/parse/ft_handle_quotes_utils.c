@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/27 17:00:00 by paromero          #+#    #+#             */
-/*   Updated: 2025/06/05 18:11:24 by paromero         ###   ########.fr       */
+/*   Updated: 2025/06/10 18:09:25 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,12 +58,19 @@ int	calculate_quote_content_length(char	*line, char quote)
 void	ft_process_all_quotes(t_data	*data, char	**matrix)
 {
 	char	*new_line;
+	char	*expanded_line;
 	int		count_x;
 	int		quote_found;
 
 	count_x = 0;
 	while (matrix[count_x])
 	{
+		expanded_line = expand_variables_outside_quotes(data, matrix[count_x]);
+		if (expanded_line)
+		{
+			free(matrix[count_x]);
+			matrix[count_x] = expanded_line;
+		}
 		quote_found = ft_find_quotes_in_line(data, matrix, count_x);
 		if (!quote_found)
 		{

@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 12:33:32 by paromero          #+#    #+#             */
-/*   Updated: 2025/06/10 15:24:35 by paromero         ###   ########.fr       */
+/*   Updated: 2025/06/10 18:09:25 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,7 @@ static char	*process_quote_content(t_data *data, char *processed_part,
 	else if (quote_type == '"')
 	{
 		temp = remove_quote_delimiters(processed_part, '"');
-		if (!temp)
-			return (NULL);
-		new_line = expand_dollar_variables(data, temp);
-		free(temp);
+		new_line = temp;
 	}
 	else
 		return (NULL);
@@ -120,3 +117,5 @@ int	ft_find_quotes_in_line(t_data *data, char **matrix, int count_x)
 	}
 	return (quote_found);
 }
+
+// Nueva función para expandir variables solo fuera de comillas
