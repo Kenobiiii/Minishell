@@ -19,7 +19,10 @@ static int	handle_eof_case(char *delim)
 	ft_putstr_fd("minishell: warning: here-document delimited by ",
 		STDERR_FILENO);
 	ft_putstr_fd("end-of-file (wanted `", STDERR_FILENO);
-	ft_putstr_fd(delim, STDERR_FILENO);
+	if (delim)
+		ft_putstr_fd(delim, STDERR_FILENO);
+	else
+		ft_putstr_fd("(null)", STDERR_FILENO);
 	ft_putstr_fd("`)\n", STDERR_FILENO);
 	return (0);
 }
@@ -49,6 +52,8 @@ static int	process_readline_result(char *line, char *delim)
 
 static int	check_delimiter_match(char *line, char *delim)
 {
+	if (!line || !delim)
+		return (0);
 	if (ft_strlen(line) == ft_strlen(delim)
 		&& ft_strncmp(line, delim, ft_strlen(delim)) == 0)
 	{

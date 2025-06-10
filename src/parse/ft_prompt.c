@@ -16,6 +16,8 @@ char	*get_last_component(char *path)
 {
 	char	*last_slash;
 
+	if (!path)
+		return ("unknown");
 	last_slash = ft_strrchr(path, '/');
 	if (last_slash)
 		return (last_slash + 1);
@@ -29,6 +31,8 @@ void	update_prompt(t_data *data)
 	size_t	prompt_size;
 	char	*last_component;
 
+	if (!data || !data->cwd)
+		return ;
 	last_component = get_last_component(data->cwd);
 	prompt_size = ft_strlen("$Minishell()> ")
 		+ ft_strlen(last_component) + 52;

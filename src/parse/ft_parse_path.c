@@ -17,6 +17,8 @@ char	*find_variable_in_env(t_data *data, char *var)
 	t_env	*aux_env;
 	char	*env_var;
 
+	if (!data || !var)
+		return (NULL);
 	aux_env = data->env;
 	while (aux_env && aux_env->value)
 	{
@@ -41,6 +43,8 @@ char	*find_valid_path(char **cmd_path, char *total_cmd)
 	char	*total_cmd_path;
 	int		i;
 
+	if (!cmd_path || !total_cmd)
+		return (NULL);
 	i = 0;
 	total_cmd_path = NULL;
 	while (cmd_path[i])

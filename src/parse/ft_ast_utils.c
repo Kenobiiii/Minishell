@@ -17,6 +17,8 @@ t_ast	*ft_create_ast_node(t_type type, char *value)
 {
 	t_ast	*node;
 
+	if (!value)
+		return (NULL);
 	node = malloc(sizeof(t_ast));
 	if (!node)
 		return (NULL);

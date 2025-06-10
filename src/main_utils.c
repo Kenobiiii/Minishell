@@ -60,6 +60,8 @@ int	handle_readline_result(t_data *data)
 
 int	is_builtin_command(char *cmd)
 {
+	if (!cmd)
+		return (0);
 	if (ft_strncmp(cmd, "echo", 5) == 0)
 		return (1);
 	if (ft_strncmp(cmd, "pwd", 4) == 0)
@@ -83,6 +85,8 @@ void	execute_builtin_with_redirections(t_data *data)
 	int	saved_stdout;
 	int	builtin_result;
 
+	if (!data || !data->ast || !data->ast->value)
+		return ;
 	saved_stdin = dup(STDIN_FILENO);
 	saved_stdout = dup(STDOUT_FILENO);
 	apply_redirections_for_builtin(data);

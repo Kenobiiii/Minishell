@@ -16,6 +16,8 @@ static int	cd_handle_no_args(t_data *data)
 {
 	const char	*home_dir;
 
+	if (!data)
+		return (1);
 	home_dir = getenv("HOME");
 	if (home_dir == NULL)
 	{
@@ -43,6 +45,8 @@ static int	cd_handle_too_many_args(t_data *data)
 
 static int	cd_handle_one_arg(t_data *data, char *path)
 {
+	if (!data || !path)
+		return (1);
 	if (chdir(path) == -1)
 	{
 		ft_putstr_fd("minishell: cd: ", STDERR_FILENO);
@@ -56,6 +60,8 @@ static int	cd_handle_one_arg(t_data *data, char *path)
 
 int	cd_builtin(t_data *data)
 {
+	if (!data || !data->ast || !data->ast->args)
+		return (1);
 	if (!data->ast->args[1])
 		return (cd_handle_no_args(data));
 	else if (data->ast->args[2])

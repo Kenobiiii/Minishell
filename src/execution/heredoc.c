@@ -16,6 +16,8 @@ static int	ft_setup_heredoc_pipe(t_data *data, int pipefd[2], char *delim)
 {
 	int	result;
 
+	if (!data || !delim || !pipefd)
+		return (-1);
 	if (pipe(pipefd) < 0)
 	{
 		perror("pipe");
@@ -36,11 +38,12 @@ static int	ft_setup_heredoc_pipe(t_data *data, int pipefd[2], char *delim)
 //? Helper function to collect all heredoc nodes in order
 void	collect_heredoc_chain(t_ast *node, t_ast **heredocs, int *count)
 {
-	if (!node || node->type != REDIN2)
+	if (!node || !heredocs || !count || node->type != REDIN2)
 		return ;
 	if (node->left && node->left->type == REDIN2)
 		collect_heredoc_chain(node->left, heredocs, count);
-	heredocs[(*count)++] = node;
+	if (*count < 10)
+		heredocs[(*count)++] = node;
 }
 
 void	process_heredoc_loop(t_data *data, t_ast **heredocs, int count)
@@ -49,9 +52,16 @@ void	process_heredoc_loop(t_data *data, t_ast **heredocs, int count)
 	char	*delim;
 	int		pipefd[2];
 
+	if (!data || !heredocs || count <= 0)
+		return ;
 	i = 0;
 	while (i < count)
 	{
+		if (!heredocs[i] || !heredocs[i]->right || !heredocs[i]->right->value)
+		{
+			i++;
+			continue ;
+		}
 		delim = heredocs[i]->right->value;
 		if (ft_setup_heredoc_pipe(data, pipefd, delim) == -1)
 			return ;
@@ -73,9 +83,11 @@ void	exec_heredoc(t_data *data, t_ast *node)
 	int		count;
 	t_ast	*cmd_node;
 
+	if (!data || !node)
+		return ;
 	count = 0;
 	configure_signals(2);
-	if (!node || !node->right || !node->right->value)
+	if (!node->right || !node->right->value)
 	{
 		ft_putstr_fd("syntax error: missing delimiter for <<\n", STDERR_FILENO);
 		data->wstatus = 2;

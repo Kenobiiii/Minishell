@@ -16,6 +16,8 @@ static int	check_start_pipe(char *line)
 {
 	int	i;
 
+	if (!line)
+		return (0);
 	i = 0;
 	while (line[i] == ' ')
 		i++;
@@ -30,6 +32,8 @@ int	check_syntax(char *line)
 	int		in_quote;
 	char	quote_type;
 
+	if (!line)
+		return (0);
 	i = 0;
 	in_quote = 0;
 	quote_type = 0;

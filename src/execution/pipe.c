@@ -18,6 +18,8 @@
  */
 static void	exec_pipe_left(t_data *data, t_ast *node, int pipefd[2])
 {
+	if (!data || !node || !node->left)
+		exit(EXIT_FAILURE);
 	configure_signals(1);
 	if (dup2(pipefd[1], STDOUT_FILENO) == -1)
 	{
@@ -39,6 +41,8 @@ static void	exec_pipe_left(t_data *data, t_ast *node, int pipefd[2])
  */
 static void	exec_pipe_right(t_data *data, t_ast *node, int pipefd[2])
 {
+	if (!data || !node || !node->right)
+		exit(EXIT_FAILURE);
 	configure_signals(1);
 	if (dup2(pipefd[0], STDIN_FILENO) == -1)
 	{
@@ -80,6 +84,8 @@ static void	handle_pipe_processes(t_data *data, t_ast *node, int pipefd[2])
 	pid_t	pid_left;
 	pid_t	pid_right;
 
+	if (!data || !node)
+		return ;
 	pid_left = handle_process_error(fork(), "fork");
 	if (pid_left == 0)
 		exec_pipe_left(data, node, pipefd);
@@ -100,6 +106,8 @@ void	exec_pipe(t_data *data, t_ast *node)
 {
 	int		pipefd[2];
 
+	if (!data || !node)
+		return ;
 	if (handle_process_error(pipe(pipefd), "pipe") < 0)
 		return ;
 	handle_pipe_processes(data, node, pipefd);

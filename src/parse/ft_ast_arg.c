@@ -17,6 +17,8 @@ void	copy_args(char **new_args, t_ast *cmd_node, int i, char *arg)
 {
 	int	j;
 
+	if (!new_args || !cmd_node || !arg)
+		return ;
 	j = 0;
 	if (cmd_node->args == NULL)
 	{
@@ -40,6 +42,8 @@ void	ft_add_argument(t_ast *cmd_node, char *arg)
 	int		i;
 	char	**new_args;
 
+	if (!cmd_node || !arg)
+		return ;
 	i = 0;
 	while (cmd_node->args && cmd_node->args[i])
 		i++;
@@ -57,12 +61,14 @@ void	handle_command_as_arg(t_ast **cmd, t_ast **redirect,
 {
 	t_ast	*new_node;
 
+	if (!cmd || !redirect || !tokens)
+		return ;
 	if (*cmd && (*cmd)->type == CMD)
 		ft_add_argument(*cmd, tokens->value);
 	else
 	{
 		new_node = ft_create_ast_node(CMD, tokens->value);
-		if (new_node)
+		if (new_node && *redirect)
 			(*redirect)->right = new_node;
 	}
 }

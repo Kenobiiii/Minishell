@@ -14,6 +14,8 @@
 
 static void	skip_quotes(const char *s, size_t *i, char c, char *quote)
 {
+	if (!s || !i || !quote)
+		return ;
 	while (s[*i] && (s[*i] != c || *quote))
 	{
 		if (s[*i] == '"' || s[*i] == '\'')
@@ -40,6 +42,8 @@ static int	count_substr(char const *s, char c)
 	size_t	count;
 	char	quote;
 
+	if (!s)
+		return (0);
 	i = 0;
 	count = 0;
 	quote = '\0';

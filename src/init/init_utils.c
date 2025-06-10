@@ -14,6 +14,8 @@
 
 void	init_basic_values(t_data *data)
 {
+	if (!data)
+		return ;
 	data->line = NULL;
 	data->exit = 0;
 	data->prompt = "$Minishell> ";
@@ -25,6 +27,8 @@ void	init_basic_values(t_data *data)
 
 void	init_redirection_fds(t_data *data)
 {
+	if (!data)
+		return ;
 	data->input_redir_fd = -1;
 	data->output_redir_fd = -1;
 	data->heredoc_pipe_fd = -1;
@@ -32,6 +36,8 @@ void	init_redirection_fds(t_data *data)
 
 void	close_redirection_fds(t_data *data)
 {
+	if (!data)
+		return ;
 	if (data->input_redir_fd != -1)
 	{
 		close(data->input_redir_fd);

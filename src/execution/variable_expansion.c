@@ -22,7 +22,7 @@ void	expand_command_variables(t_data *data, t_ast *node)
 	int		i;
 	char	*expanded;
 
-	if (!node || node->type != CMD || !node->args)
+	if (!data || !node || node->type != CMD || !node->args)
 		return ;
 	i = 0;
 	while (node->args[i])

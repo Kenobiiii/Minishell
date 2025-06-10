@@ -50,7 +50,7 @@ void	process_command_line(t_data *data)
 		}
 		g_shell_state = STATE_EXECUTING;
 		configure_signals(0);
-		if (is_builtin_command(data->ast->value))
+		if (data->ast && data->ast->value && is_builtin_command(data->ast->value))
 			execute_builtin_with_redirections(data);
 		else
 		{

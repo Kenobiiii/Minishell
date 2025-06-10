@@ -17,7 +17,11 @@ int	is_builtins(t_data *data, char *line)
 	int		ret;
 	char	*wstatus;
 
+	if (!data || !line)
+		return (0);
 	wstatus = ft_itoa(data->wstatus);
+	if (!wstatus)
+		return (0);
 	ret = 0;
 	if (ft_strncmp(line, "echo", 5) == 0)
 		ret = echo_builtin(data);

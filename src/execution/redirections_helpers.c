@@ -16,10 +16,13 @@ extern volatile sig_atomic_t	g_shell_state;
 
 static int	validate_redirect_node(t_data *data, t_ast *node)
 {
-	if (!node || !node->right)
+	if (!data || !node || !node->right)
 	{
-		ft_printf("No hay archivo de salida\n");
-		data->wstatus = 2;
+		if (data)
+		{
+			ft_printf("No hay archivo de salida\n");
+			data->wstatus = 2;
+		}
 		return (-1);
 	}
 	return (0);
@@ -27,10 +30,13 @@ static int	validate_redirect_node(t_data *data, t_ast *node)
 
 int	validate_input_redirect_node(t_data *data, t_ast *node)
 {
-	if (!node->right)
+	if (!data || !node || !node->right)
 	{
-		ft_printf("No hay archivo de entrada\n");
-		data->wstatus = 2;
+		if (data)
+		{
+			ft_printf("No hay archivo de entrada\n");
+			data->wstatus = 2;
+		}
 		return (-1);
 	}
 	return (0);
@@ -57,6 +63,8 @@ int	handle_input_redirect_open(t_data *data, char *filename)
 {
 	int	fd;
 
+	if (!data || !filename)
+		return (-1);
 	fd = open(filename, O_RDONLY);
 	if (fd == -1)
 	{
@@ -74,6 +82,8 @@ void	execute_redirect_helper(t_data *data, t_ast *node, int flags)
 {
 	char	*filename;
 
+	if (!data || !node)
+		return ;
 	if (validate_redirect_node(data, node) == -1)
 		return ;
 	if (count_output_redirections(node) > 1)
@@ -81,6 +91,8 @@ void	execute_redirect_helper(t_data *data, t_ast *node, int flags)
 		process_multiple_output_redirections(data, node);
 		return ;
 	}
+	if (!node->right || !node->right->value)
+		return ;
 	filename = node->right->value;
 	if (handle_output_redirect_open(data, filename, flags) == -1)
 		return ;

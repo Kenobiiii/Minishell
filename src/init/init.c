@@ -36,16 +36,22 @@ void	increment_shlvl(t_env *env)
 	int		shlvl;
 	char	*shell_level;
 
+	if (!env)
+		return ;
 	current = env;
 	while (current)
 	{
-		if (ft_strncmp(current->value, "SHLVL=", 6) == 0)
+		if (current->value && ft_strncmp(current->value, "SHLVL=", 6) == 0)
 		{
 			shlvl = ft_atoi(current->value + 6);
 			shlvl++;
 			shell_level = ft_itoa(shlvl);
+			if (!shell_level)
+				return ;
 			new_value = ft_strcat("SHLVL=", shell_level);
 			free(shell_level);
+			if (!new_value)
+				return ;
 			free(current->value);
 			current->value = new_value;
 			return ;

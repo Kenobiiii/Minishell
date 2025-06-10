@@ -16,6 +16,8 @@ int	is_valid_identifier(char *arg)
 {
 	int	i;
 
+	if (!arg || arg[0] == '\0')
+		return (0);
 	i = 1;
 	if (!ft_isalpha(arg[0]) && arg[0] != '_')
 		return (0);
@@ -33,6 +35,8 @@ t_env	*exist_identifier(t_env **env, char *args)
 	t_env	*current;
 	int		equal_pos;
 
+	if (!env || !args)
+		return (NULL);
 	equal_pos = 0;
 	while (args[equal_pos])
 	{

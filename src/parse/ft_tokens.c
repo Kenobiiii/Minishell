@@ -14,6 +14,8 @@
 
 int	ft_types(char	*value)
 {
+	if (!value || value[0] == '\0')
+		return (CMD);
 	if (value[0] == '|' && value[1] != '|')
 		return (PIPE);
 	if (value[0] == '>' && value[1] == '>')

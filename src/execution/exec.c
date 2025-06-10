@@ -14,6 +14,8 @@
 
 static void	setup_child_redirections(t_data *data)
 {
+	if (!data)
+		return ;
 	if (data->input_redir_fd != -1)
 	{
 		dup2(data->input_redir_fd, STDIN_FILENO);
@@ -33,10 +35,14 @@ static void	setup_child_redirections(t_data *data)
 
 static void	handle_child(t_data *data, char *path, t_ast *node)
 {
+	if (!data || !node)
+		exit(127);
 	configure_signals(1);
 	setup_child_redirections(data);
 	if (!path)
 		exit_minishell(data, node->value, 127);
+	if (!node->args)
+		exit_minishell(data, "No arguments for command", 126);
 	if (execve(path, node->args, (char **)list_to_array(data->env)) == -1)
 	{
 		free(path);
@@ -49,6 +55,8 @@ void	exec_simple_cmd(t_data *data, t_ast *node)
 	char	*path;
 	pid_t	pid;
 
+	if (!data || !node || !node->value)
+		return ;
 	path = get_cmd_path(data, node->value);
 	pid = fork();
 	if (pid == 0)
@@ -72,6 +80,8 @@ static void	exec_command_node(t_data *data, t_ast *node)
 {
 	t_ast	*original_ast;
 
+	if (!data || !node || !node->value)
+		return ;
 	expand_command_variables(data, node);
 	if (is_builtin_command(node->value))
 	{
@@ -86,6 +96,8 @@ static void	exec_command_node(t_data *data, t_ast *node)
 
 void	exec_ast(t_data *data, t_ast *node)
 {
+	if (!data || !node)
+		return ;
 	if (node->type == CMD)
 		exec_command_node(data, node);
 	else if (node->type == REDIRECT_OUT)

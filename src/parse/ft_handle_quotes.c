@@ -18,6 +18,8 @@ static char	*process_quote_content(t_data *data, char *processed_part,
 	char	*temp;
 	char	*new_line;
 
+	if (!data || !processed_part)
+		return (NULL);
 	if (quote_type == '\'')
 	{
 		temp = remove_quote_delimiters(processed_part, '\'');
@@ -26,6 +28,8 @@ static char	*process_quote_content(t_data *data, char *processed_part,
 	else if (quote_type == '"')
 	{
 		temp = remove_quote_delimiters(processed_part, '"');
+		if (!temp)
+			return (NULL);
 		new_line = expand_dollar_variables(data, temp);
 		free(temp);
 	}

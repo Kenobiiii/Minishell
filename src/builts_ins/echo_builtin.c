@@ -29,7 +29,7 @@ static int	check_n_option(char *arg)
 {
 	int	j;
 
-	if (ft_strncmp(arg, "-n", 2) != 0)
+	if (!arg || ft_strncmp(arg, "-n", 2) != 0)
 		return (0);
 	if (ft_strncmp(arg, "-n", ft_strlen(arg)) == 0)
 		return (1);
@@ -61,6 +61,8 @@ int	echo_builtin(t_data *data)
 	int	i;
 	int	print_new_line;
 
+	if (!data || !data->ast || !data->ast->args)
+		return (0);
 	print_new_line = 1;
 	i = 1;
 	if (!data->ast->args[1])

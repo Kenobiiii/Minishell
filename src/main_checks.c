@@ -36,6 +36,8 @@ int	check_line_errors(t_data *data)
 
 int	is_only_empty_var(char *line)
 {
+	if (!line)
+		return (0);
 	while (*line && (*line == ' ' || *line == '\t'))
 		line++;
 	if (ft_strncmp(line, "$EMPTY", 6) == 0)
@@ -56,6 +58,8 @@ int	is_empty_var_with_cmd(t_data *data, char *line)
 {
 	char	*temp;
 
+	if (!line || !data)
+		return (0);
 	while (*line && (*line == ' ' || *line == '\t'))
 		line++;
 	if (ft_strncmp(line, "$EMPTY", 6) == 0 && line[6] == ' ')

@@ -18,6 +18,8 @@ char	*find_envvar(t_data *data, const char *dollarline)
 	char	*name;
 	char	*value;
 
+	if (!data || !dollarline)
+		return (NULL);
 	var_len = get_var_name_len(dollarline, 1);
 	if (var_len == 0)
 		return (ft_strdup(""));
@@ -35,6 +37,8 @@ static int	copy_env_value(t_data *data,
 	char	*env_value;
 	int		k;
 
+	if (!data || !var_token || !result || !j)
+		return (0);
 	k = 0;
 	env_value = find_envvar(data, var_token);
 	if (env_value)
