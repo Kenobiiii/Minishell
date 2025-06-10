@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/31 12:33:32 by paromero          #+#    #+#             */
-/*   Updated: 2025/06/10 18:09:25 by paromero         ###   ########.fr       */
+/*   Updated: 2025/06/10 19:08:45 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,5 +117,3 @@ int	ft_find_quotes_in_line(t_data *data, char **matrix, int count_x)
 	}
 	return (quote_found);
 }
-
-// Nueva función para expandir variables solo fuera de comillas
