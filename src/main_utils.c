@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 00:00:00 by anggalle          #+#    #+#             */
-/*   Updated: 2025/06/03 10:31:05 by paromero         ###   ########.fr       */
+/*   Updated: 2025/06/10 14:20:47 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,6 @@ int	handle_signal_states(t_data *data)
 
 int	handle_readline_result(t_data *data)
 {
-	if (data->line == NULL && g_shell_state == STATE_PROMPT_INTERRUPTED)
-		return (0);
 	if (data->line == NULL)
 	{
 		printf("exit\n");
