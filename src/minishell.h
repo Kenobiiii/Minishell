@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 19:06:45 by paromero          #+#    #+#             */
-/*   Updated: 2025/06/10 20:31:29 by paromero         ###   ########.fr       */
+/*   Updated: 2025/06/10 20:50:20 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -351,11 +351,17 @@ int				pwd_builtin(t_data *data);
 //! cd_builtint.c //
 int				cd_builtin(t_data *data);
 
+//! cd_utils.c //
+char			*get_current_pwd(t_data *data);
+void			update_pwd_variables(t_data *data, char *old_pwd);
+int				cd_handle_too_many_args(t_data *data);
+
 //! exit_builtin.c //
 void			exec_pipe(t_data *data, t_ast *node);
 
 //! export_builtint.c //
 int				export_builtin(t_data *data);
+void			add_or_update_env(t_env **env, char *args);
 
 //! export_utils.c //
 void			print_env_sorted(char **env_matrix);
