@@ -35,17 +35,11 @@ static char	*find_env_match(t_env *env, const char *name)
 char	*get_env_value(t_data *data, const char *name)
 {
 	char	*result;
-	char	*preserved;
 
 	result = find_env_match(data->env, name);
 	if (result)
 		return (result);
-	preserved = malloc(ft_strlen(name) + 2);
-	if (!preserved)
-		return (ft_strdup(""));
-	preserved[0] = '$';
-	ft_strlcpy(preserved + 1, name, ft_strlen(name) + 1);
-	return (preserved);
+	return (ft_strdup(""));
 }
 
 int	get_var_name_len(const char *str, int start)
