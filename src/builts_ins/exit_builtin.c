@@ -21,7 +21,8 @@ static int	handle_exit_numeric_error(t_data *data, char *arg_str)
 		ft_putstr_fd("", STDERR_FILENO);
 	ft_putstr_fd(": numeric argument required\n", STDERR_FILENO);
 	data->wstatus = 2;
-	return (1);
+	free_minishell(data);
+	exit(2);
 }
 
 static int	validate_numeric_exit_arg(t_data *data, char *arg_str)
