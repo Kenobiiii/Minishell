@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/05 19:06:45 by paromero          #+#    #+#             */
-/*   Updated: 2025/06/10 18:18:11 by paromero         ###   ########.fr       */
+/*   Updated: 2025/06/10 19:56:31 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,8 @@
 # define STATE_PROMPT_INTERRUPTED 1
 # define STATE_EXECUTING 2
 # define STATE_EXECUTION_INTERRUPTED 3
-# define STATE_HEREDOC_INTERRUPTED 4
+# define STATE_EXECUTION_INTERRUPTED_SIGQUIT 4
+# define STATE_HEREDOC_INTERRUPTED 5
 
 typedef enum e_type
 {

@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/29 18:42:47 by anggalle          #+#    #+#             */
-/*   Updated: 2025/06/10 14:42:07 by paromero         ###   ########.fr       */
+/*   Updated: 2025/06/10 19:56:31 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,8 @@ void	handle_sigint(int sig)
 		rl_redisplay();
 	}
 	else if (g_shell_state == STATE_EXECUTING
-		|| g_shell_state == STATE_EXECUTION_INTERRUPTED)
+		|| g_shell_state == STATE_EXECUTION_INTERRUPTED
+		|| g_shell_state == STATE_EXECUTION_INTERRUPTED_SIGQUIT)
 	{
 		g_shell_state = STATE_EXECUTION_INTERRUPTED;
 	}
@@ -37,9 +38,10 @@ void	handle_sigquit(int sig)
 {
 	(void)sig;
 	if (g_shell_state == STATE_EXECUTING
-		|| g_shell_state == STATE_EXECUTION_INTERRUPTED)
+		|| g_shell_state == STATE_EXECUTION_INTERRUPTED
+		|| g_shell_state == STATE_EXECUTION_INTERRUPTED_SIGQUIT)
 	{
-		g_shell_state = STATE_EXECUTION_INTERRUPTED;
+		g_shell_state = STATE_EXECUTION_INTERRUPTED_SIGQUIT;
 	}
 }
 

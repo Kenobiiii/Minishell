@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/25 00:00:00 by anggalle          #+#    #+#             */
-/*   Updated: 2025/06/10 15:24:36 by paromero         ###   ########.fr       */
+/*   Updated: 2025/06/10 19:56:31 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 extern volatile sig_atomic_t	g_shell_state;
 
-static void	reset_line_and_state(t_data *data)
+static void	reset_line_and_state(t_data *data, int exit_status)
 {
-	data->wstatus = 130;
+	data->wstatus = exit_status;
 	if (data->line)
 	{
 		free(data->line);
@@ -29,10 +29,15 @@ static void	reset_line_and_state(t_data *data)
 int	handle_signal_states(t_data *data)
 {
 	if (g_shell_state == STATE_PROMPT_INTERRUPTED)
-		reset_line_and_state(data);
+		reset_line_and_state(data, 130);
 	else if (g_shell_state == STATE_EXECUTION_INTERRUPTED)
 	{
-		reset_line_and_state(data);
+		reset_line_and_state(data, 130);
+		return (1);
+	}
+	else if (g_shell_state == STATE_EXECUTION_INTERRUPTED_SIGQUIT)
+	{
+		reset_line_and_state(data, 131);
 		return (1);
 	}
 	else if (g_shell_state == STATE_EXECUTING)

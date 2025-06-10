@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 22:14:52 by paromero          #+#    #+#             */
-/*   Updated: 2025/06/10 15:24:36 by paromero         ###   ########.fr       */
+/*   Updated: 2025/06/10 19:56:31 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,8 @@ static int	process_readline_result(char *line, char *delim)
 {
 	if (!line)
 	{
-		if (g_shell_state == STATE_EXECUTION_INTERRUPTED)
+		if (g_shell_state == STATE_EXECUTION_INTERRUPTED
+			|| g_shell_state == STATE_EXECUTION_INTERRUPTED_SIGQUIT)
 		{
 			g_shell_state = STATE_HEREDOC_INTERRUPTED;
 			return (-1);
@@ -39,7 +40,8 @@ static int	process_readline_result(char *line, char *delim)
 		else
 			return (handle_eof_case(delim));
 	}
-	if (g_shell_state == STATE_EXECUTION_INTERRUPTED)
+	if (g_shell_state == STATE_EXECUTION_INTERRUPTED
+		|| g_shell_state == STATE_EXECUTION_INTERRUPTED_SIGQUIT)
 	{
 		free(line);
 		{
@@ -75,7 +77,8 @@ int	read_heredoc_lines(int pipefd, char *delim)
 	}
 	while (1)
 	{
-		if (g_shell_state == STATE_EXECUTION_INTERRUPTED)
+		if (g_shell_state == STATE_EXECUTION_INTERRUPTED
+			|| g_shell_state == STATE_EXECUTION_INTERRUPTED_SIGQUIT)
 			return (-1);
 		line = readline("> ");
 		result = process_readline_result(line, delim);
