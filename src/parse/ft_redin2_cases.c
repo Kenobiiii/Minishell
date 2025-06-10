@@ -6,7 +6,7 @@
 /*   By: paromero <paromero@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/04 13:19:35 by paromero          #+#    #+#             */
-/*   Updated: 2025/06/05 18:11:24 by paromero         ###   ########.fr       */
+/*   Updated: 2025/06/10 14:10:49 by paromero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,9 +63,7 @@ void	handle_heredoc_special_case(t_ast **current_cmd, t_ast **last_operator,
 		}
 		return ;
 	}
-	if (!(*last_operator)->left)
-		(*last_operator)->left = new_node;
-	else if (!(*last_operator)->right)
+	if (!(*last_operator)->right)
 		(*last_operator)->right = new_node;
 	else
 		handle_additional_args(current_cmd, new_node, tokens);
