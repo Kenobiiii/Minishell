@@ -104,6 +104,7 @@ typedef struct s_data
 	int			exit;
 	int			wstatus;
 	int			only_redirections;
+	char		*last_token;
 	t_env		*env;
 	t_tokens	*tokens;
 	t_ast		*ast; //- puntero a estructura ast (Abstract Syntax Tree)
@@ -196,7 +197,10 @@ int				calculate_expanded_size(t_data *data, char *line);
 char			*get_env_value(t_data *data, const char *name);
 int				get_var_name_len(const char *str, int start);
 char			*extract_var(const char *line, int *i);
+
+//! ft_handle_special_vars.c //
 void			handle_exit_status(t_data *data, char *result, int *j);
+void			handle_last_token(t_data *data, char *result, int *j);
 
 //! parse_path //
 void			free_cmd_path(char	**matrix,	char	*cmd);
@@ -270,6 +274,8 @@ void			exit_minishell(t_data *data, const char *error_message,
 int				free_while(t_data	*data);
 void			free_minishell(t_data	*data);
 void			ft_free_command_node(t_ast	*node, int flag);
+void			update_last_token(t_data *data, char *token);
+void			update_last_token_from_tokens(t_data *data, t_tokens *tokens);
 
 //! ft_free_parse.c //
 void			free_matrix(char **array);

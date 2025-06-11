@@ -40,6 +40,13 @@ static int	process_dollar_size(t_data *data, char *line, int *i)
 		*i += 2;
 		return (10);
 	}
+	else if (line[*i] == '$' && line[*i + 1] == '_')
+	{
+		*i += 2;
+		if (data->last_token)
+			return (ft_strlen(data->last_token));
+		return (0);
+	}
 	else if (line[*i] == '$' && ft_isalnum(line[*i + 1]))
 		return (calculate_var_size(data, line, i));
 	else

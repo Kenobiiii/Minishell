@@ -28,6 +28,7 @@ int	line_syntax(t_data	*data)
 	if (!check_line_errors(data))
 		return (0);
 	ft_tokens(data, data->line);
+	update_last_token_from_tokens(data, data->tokens);
 	data->ast = ft_build_ast(data, data->tokens);
 	if (data->ast == NULL)
 		return (free_while(data));

@@ -58,6 +58,11 @@ static void	process_dollar_expansion(t_data *data, t_expansion *exp)
 		handle_exit_status(data, exp->result, exp->j);
 		*exp->i += 2;
 	}
+	else if (exp->line[*exp->i] == '$' && exp->line[*exp->i + 1] == '_')
+	{
+		handle_last_token(data, exp->result, exp->j);
+		*exp->i += 2;
+	}
 	else if (exp->line[*exp->i] == '$' && ft_isalnum(exp->line[*exp->i + 1]))
 	{
 		copy_env_value(data, extract_var(exp->line, exp->i),

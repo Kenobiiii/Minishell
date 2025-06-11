@@ -34,5 +34,6 @@ t_expand_ctx	init_expand_context(t_data *data, char *line, char *result)
 int	should_expand_variable(char *line, int i, char in_quote)
 {
 	return (line[i] == '$' && in_quote != '\''
-		&& (ft_isalnum(line[i + 1]) || line[i + 1] == '?'));
+		&& (ft_isalnum(line[i + 1]) || line[i + 1] == '?'
+			|| line[i + 1] == '_'));
 }

@@ -86,6 +86,7 @@ void	init_data_fields(t_data *data)
 	data->exit = 0;
 	data->prompt = ft_strdup("$Minishell> ");
 	data->cwd = ft_strdup(getcwd(cwd, sizeof(cwd)));
+	data->last_token = NULL;
 	data->tokens = NULL;
 	data->ast = NULL;
 	data->only_redirections = 1;

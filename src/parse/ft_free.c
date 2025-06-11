@@ -43,6 +43,8 @@ void	free_minishell(t_data	*data)
 	free_while(data);
 	if (data->cwd)
 		free (data->cwd);
+	if (data->last_token)
+		free(data->last_token);
 	if (data->env)
 		ft_free_env(data->env);
 	rl_clear_history();
@@ -54,4 +56,35 @@ void	ft_free_command_node(t_ast	*node, int flag)
 		free(node->args);
 	free(node->value);
 	free(node);
+}
+
+void	update_last_token(t_data *data, char *token)
+{
+	if (!data || !token)
+		return ;
+	if (data->last_token)
+	{
+		free(data->last_token);
+		data->last_token = NULL;
+	}
+	data->last_token = ft_strdup(token);
+}
+
+void	update_last_token_from_tokens(t_data *data, t_tokens *tokens)
+{
+	t_tokens	*current;
+	t_tokens	*last_cmd_token;
+
+	if (!data || !tokens)
+		return ;
+	current = tokens;
+	last_cmd_token = NULL;
+	while (current)
+	{
+		if (current->type == CMD && current->value)
+			last_cmd_token = current;
+		current = current->next;
+	}
+	if (last_cmd_token && last_cmd_token->value)
+		update_last_token(data, last_cmd_token->value);
 }

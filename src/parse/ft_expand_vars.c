@@ -12,33 +12,42 @@
 
 #include "../minishell.h"
 
-static void	handle_variable_expansion(t_expand_ctx *ctx)
+static void	handle_env_var_expansion(t_expand_ctx *ctx)
 {
 	char	*expanded_var;
 	char	*var_value;
 	int		value_len;
 
+	expanded_var = extract_var(ctx->line, ctx->i);
+	if (expanded_var)
+	{
+		var_value = find_envvar(ctx->data, expanded_var);
+		if (var_value && ft_strlen(var_value) > 0)
+		{
+			value_len = ft_strlen(var_value);
+			ft_strlcpy(ctx->result + *ctx->j, var_value, value_len + 1);
+			*ctx->j += value_len;
+		}
+		if (var_value)
+			free(var_value);
+		free(expanded_var);
+	}
+}
+
+static void	handle_variable_expansion(t_expand_ctx *ctx)
+{
 	if (ctx->line[*ctx->i + 1] == '?')
 	{
 		handle_exit_status(ctx->data, ctx->result, ctx->j);
 		*ctx->i += 2;
 	}
-	else
+	else if (ctx->line[*ctx->i + 1] == '_')
 	{
-		expanded_var = extract_var(ctx->line, ctx->i);
-		if (expanded_var)
-		{
-			var_value = find_envvar(ctx->data, expanded_var);
-			if (var_value && ft_strlen(var_value) > 0)
-			{
-				value_len = ft_strlen(var_value);
-				ft_strlcpy(ctx->result + *ctx->j, var_value, value_len + 1);
-				*ctx->j += value_len;
-				free(var_value);
-			}
-			free(expanded_var);
-		}
+		handle_last_token(ctx->data, ctx->result, ctx->j);
+		*ctx->i += 2;
 	}
+	else
+		handle_env_var_expansion(ctx);
 }
 
 static int	handle_quote_char(t_expand_ctx *ctx)

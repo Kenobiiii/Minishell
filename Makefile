@@ -19,6 +19,7 @@ SRCS = src/main.c \
 		src/parse/ft_handle_dollar.c \
 		src/parse/ft_handle_dollar_size.c \
 		src/parse/ft_handle_dollar_utils.c \
+		src/parse/ft_handle_special_vars.c \
 		src/parse/ft_handle_quotes.c \
 		src/parse/ft_handle_quotes_utils.c \
 		src/parse/ft_expand_vars.c \

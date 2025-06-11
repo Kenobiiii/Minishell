@@ -64,21 +64,3 @@ char	*extract_var(const char *line, int *i)
 	*i += var_len + 1;
 	return (var_token);
 }
-
-void	handle_exit_status(t_data *data, char *result, int *j)
-{
-	char	*wstatus;
-	int		k;
-
-	wstatus = ft_itoa(data->wstatus);
-	if (!wstatus)
-		return ;
-	k = 0;
-	while (wstatus[k])
-	{
-		result[(*j)] = wstatus[k];
-		(*j)++;
-		k++;
-	}
-	free(wstatus);
-}
